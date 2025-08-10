@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using Daylog.Application.Abstractions.Messaging;
+using Daylog.Application.Features.Users.GetUserById;
+using Daylog.Application.Features.Users.GetUsers;
+using Daylog.Domain.Entities.Users;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Daylog.Api.Endpoints.Users;
 
@@ -57,17 +62,35 @@ public sealed class UserEndpoints : IEndpoint
         return TypedResults.Ok(user);
     }
 
-    public static async Task<Ok<string>> GetUsers()
+    public static async Task<Ok<IEnumerable<User>>> GetUsers(
+        [FromServices] IQueryHandler<GetUsersQuery, IEnumerable<User>> handler,
+        CancellationToken cancellationToken
+        )
     {
-        var users = await Task.FromResult("List of users");
+        var query = new GetUsersQuery();
+
+        //var users = await Task.FromResult("List of users");
+        var users = await handler.Handle(query, cancellationToken);
 
         return TypedResults.Ok(users);
     }
 
-    public static async Task<Ok<string>> GetUser(int id)
+    public static async Task<Results<Ok<User>, NotFound>> GetUser(
+        int userId,
+        [FromServices] IQueryHandler<GetUserByIdQuery, User?> handler,
+        CancellationToken cancellationToken
+        )
     {
-        var user = await Task.FromResult($"User with ID: {id}");
+        var query = new GetUserByIdQuery(userId);
 
-        return TypedResults.Ok(user);
+        //var user = await Task.FromResult($"User with ID: {id}");
+        var user = await handler.Handle(query, cancellationToken);
+
+        if (user is not null)
+        {
+            return TypedResults.Ok(user);
+        }
+
+        return TypedResults.NotFound();
     }
 }
