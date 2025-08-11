@@ -6,6 +6,8 @@ using Daylog.Infrastructure.Database.Factories.Creators;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
+using Microsoft.Extensions.Configuration;
+using Daylog.Application.Extensions;
 
 namespace Daylog.Infrastructure.Database.Factories;
 
@@ -19,10 +21,10 @@ public sealed class DatabaseFactory : IDatabaseFactory
 
     private readonly IServiceScopeFactory _serviceScopeFactory;
 
-    public DatabaseFactory(IConfigurationHelper configurationHelper, IServiceScopeFactory serviceScopeFactory)
+    public DatabaseFactory(IConfiguration configuration/*IConfigurationHelper configurationHelper*/, IServiceScopeFactory serviceScopeFactory)
     {
-        var databaseProvider = configurationHelper.GetDatabaseProvider();
-        var connectionString = configurationHelper.GetDatabaseConnectionString();
+        var databaseProvider = configuration.GetDatabaseProvider();//configurationHelper.GetDatabaseProvider();
+        var connectionString = configuration.GetDatabaseConnectionString();//configurationHelper.GetDatabaseConnectionString();
 
         if (databaseProvider is DatabaseProviderEnum.None)
             throw new Exception("Database provider not set.");

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Daylog.Application.Features.Users.GetUserById;
+namespace Daylog.Application.Features.Users.Queries.GetUserById;
 
 public sealed class GetUserByIdQueryValidator : AbstractValidator<GetUserByIdQuery>
 {

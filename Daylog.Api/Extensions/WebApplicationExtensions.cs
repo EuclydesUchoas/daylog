@@ -1,4 +1,5 @@
 ﻿using Daylog.Application.Enums;
+using Daylog.Application.Extensions;
 using Daylog.Application.Helpers.Configuration;
 using Scalar.AspNetCore;
 
@@ -8,11 +9,11 @@ public static class WebApplicationExtensions
 {
     public static WebApplication UseDocumentation(this WebApplication app)
     {
-        var configurationHelper = app.Services.GetRequiredService<IConfigurationHelper>();
+        //var configurationHelper = app.Services.GetRequiredService<IConfigurationHelper>();
 
         app.MapOpenApi();
 
-        var documentationProvider = configurationHelper.GetDocumentationProvider();
+        var documentationProvider = app.Configuration.GetDocumentationProvider();//configurationHelper.GetDocumentationProvider();
         switch (documentationProvider)
         {
             case DocumentationProviderEnum.Swagger:

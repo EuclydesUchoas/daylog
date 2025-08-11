@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Daylog.Application.Abstractions.Data;
+using Daylog.Domain.Entities.Users;
+using Microsoft.EntityFrameworkCore;
 
 namespace Daylog.Infrastructure.Database.Contexts;
 
-public sealed class AppDbContext : DbContext
+public sealed class AppDbContext : DbContext, IAppDbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> dbContextOptions)
         : base(dbContextOptions)
@@ -15,7 +17,7 @@ public sealed class AppDbContext : DbContext
         base.OnConfiguring(optionsBuilder);
 
         optionsBuilder.EnableSensitiveDataLogging();
-        optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+        //optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -29,4 +31,11 @@ public sealed class AppDbContext : DbContext
     {
         base.ConfigureConventions(configurationBuilder);
     }
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+    {
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
+    public DbSet<User> Users { get; init; }
 }

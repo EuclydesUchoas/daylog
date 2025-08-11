@@ -6,6 +6,8 @@ using Daylog.Infrastructure.Database.Factories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Daylog.Application.Abstractions.Data;
+using Daylog.Application.Extensions;
 
 namespace Daylog.Infrastructure;
 
@@ -22,10 +24,10 @@ public static class DependencyInjection
 
     private static IServiceCollection AddAppDbContextAndMigrationRunner(this IServiceCollection services, IConfiguration configuration)
     {
-        var configurationHelper = IConfigurationHelper.CreateDefaultInstance(configuration);
+        //var configurationHelper = IConfigurationHelper.CreateDefaultInstance(configuration);
 
-        var databaseProvider = configurationHelper.GetDatabaseProvider();
-        var connectionString = configurationHelper.GetDatabaseConnectionString();
+        var databaseProvider = configuration.GetDatabaseProvider();//configurationHelper.GetDatabaseProvider();
+        var connectionString = configuration.GetDatabaseConnectionString();//configurationHelper.GetDatabaseConnectionString();
 
         if (databaseProvider is DatabaseProviderEnum.None)
             throw new Exception("Database provider not set.");
@@ -33,7 +35,7 @@ public static class DependencyInjection
         if (string.IsNullOrWhiteSpace(connectionString))
             throw new Exception("Connection string not provided.");
 
-        services.AddDbContext<AppDbContext>(options =>
+        services.AddDbContext<IAppDbContext, AppDbContext>(options =>
         {
             _ = databaseProvider switch
             {

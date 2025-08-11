@@ -1,7 +1,10 @@
-﻿using Daylog.Application.Abstractions.Messaging;
-using Daylog.Application.Features.Users.GetUserById;
-using Daylog.Application.Features.Users.GetUsers;
+﻿using Daylog.Application.Dtos.Users;
+using Daylog.Application.Features.Users.Commands.CreateUser;
+using Daylog.Application.Features.Users.Queries.GetUserById;
+using Daylog.Application.Features.Users.Queries.GetUsers;
+using Daylog.Application.Mappings.Users;
 using Daylog.Domain.Entities.Users;
+using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,7 +34,7 @@ public sealed class UserEndpoints : IEndpoint
             .WithDescription("Delete a user by ID.");
 
         group
-            .MapGet("/users/{id}", GetUser)
+            .MapGet("/users/{userId}", GetUser)
             .WithSummary("Get User")
             .WithDescription("Get a user by ID.");
 
@@ -41,11 +44,17 @@ public sealed class UserEndpoints : IEndpoint
             .WithDescription("Get a list of all users.");
     }
 
-    public static async Task<Ok<string>> CreateUser()
+    public static async Task<Ok<UserDto>> CreateUser(
+        [FromBody] CreateUserCommand command,
+        [FromServices] ISender sender,
+        CancellationToken cancellationToken
+        )
     {
-        var user = await Task.FromResult("Create a new user");
+        var user = await sender.Send(command, cancellationToken);
 
-        return TypedResults.Ok(user);
+        var userDto = user.ToDto();
+
+        return TypedResults.Ok(userDto);
     }
 
     public static async Task<Ok<string>> UpdateUser(int id)
@@ -63,34 +72,32 @@ public sealed class UserEndpoints : IEndpoint
     }
 
     public static async Task<Ok<IEnumerable<User>>> GetUsers(
-        [FromServices] IQueryHandler<GetUsersQuery, IEnumerable<User>> handler,
+        [FromServices] ISender sender,
         CancellationToken cancellationToken
         )
     {
         var query = new GetUsersQuery();
 
-        //var users = await Task.FromResult("List of users");
-        var users = await handler.Handle(query, cancellationToken);
+        var users = await sender.Send(query, cancellationToken);
 
         return TypedResults.Ok(users);
     }
 
     public static async Task<Results<Ok<User>, NotFound>> GetUser(
         int userId,
-        [FromServices] IQueryHandler<GetUserByIdQuery, User?> handler,
+        [FromServices] ISender sender,
         CancellationToken cancellationToken
         )
     {
         var query = new GetUserByIdQuery(userId);
 
-        //var user = await Task.FromResult($"User with ID: {id}");
-        var user = await handler.Handle(query, cancellationToken);
+        var user = await sender.Send(query, cancellationToken);
 
-        if (user is not null)
+        if (user is null)
         {
-            return TypedResults.Ok(user);
+            return TypedResults.NotFound();
         }
 
-        return TypedResults.NotFound();
+        return TypedResults.Ok(user);
     }
 }
