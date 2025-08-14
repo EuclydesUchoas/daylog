@@ -6,5 +6,11 @@ public sealed record UserDto(
     string Email,
     string Password,
     int Profile,
-    DateTime CreatedAt
+    DateTime CreatedAt,
+    int? CreatedByUserId,
+    DateTime UpdatedAt,
+    int? UpdatedByUserId,
+    bool IsDeleted,
+    DateTime? DeletedAt,
+    int? DeletedByUserId
     ) : IDto;

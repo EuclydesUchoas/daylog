@@ -1,6 +1,6 @@
 ﻿namespace Daylog.Domain.Entities.Users;
 
-public sealed class User : IEntity, ISoftDeletable
+public sealed class User : IEntity, ICreatable, IUpdatable, ISoftDeletable
 {
     // Entity Framework
     private User() { }
@@ -13,35 +13,58 @@ public sealed class User : IEntity, ISoftDeletable
         Email = email;
         Password = password;
         Profile = profile;
-        CreatedAt = DateTime.UtcNow;
     }
 
     // Update
-    public User(int id, string name, string email, string password, int profile, DateTime createdAt)
+    public User(int id, string name, string email, int profile)
     {
         Id = id;
         Name = name;
         Email = email;
-        Password = password;
         Profile = profile;
-        CreatedAt = createdAt;
     }
 
-    public int Id { get; init; }
+    public void Update(User user)
+    {
+        Id = user.Id;
+        Name = user.Name;
+        Email = user.Email;
+        Profile = user.Profile;
+    }
 
-    public string Name { get; init; } = null!;
+    // UpdateBase And Delete
+    public User(int id)
+    {
+        Id = id;
+    }
 
-    public string Email { get; init; } = null!;
+    public int Id { get; private set; }
 
-    public string Password { get; init; } = null!;
+    public string Name { get; private set; } = null!;
 
-    public int Profile { get; init; }
+    public string Email { get; private set; } = null!;
 
-    public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
+    public string Password { get; private set; } = null!;
 
-    // Campos padrões
+    public int Profile { get; private set; }
+
+    // Creatable
+
+    public DateTime CreatedAt { get; private set; }
+
+    public int? CreatedByUserId { get; private set; }
+
+    // Updatable
+
+    public DateTime UpdatedAt { get; private set; }
+
+    public int? UpdatedByUserId { get; private set; }
+
+    // SoftDeletable
 
     public bool IsDeleted { get; private set; }
+
     public DateTime? DeletedAt { get; private set; }
+
     public int? DeletedByUserId { get; private set; }
 }

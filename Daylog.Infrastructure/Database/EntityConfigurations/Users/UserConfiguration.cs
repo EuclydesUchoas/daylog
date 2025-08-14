@@ -38,6 +38,18 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
             .HasColumnName("created_at")
             .IsRequired();
 
+        builder.Property(x => x.CreatedByUserId)
+            .HasColumnName("created_by_user_id")
+            .IsRequired(false);
+
+        builder.Property(x => x.UpdatedAt)
+            .HasColumnName("updated_at")
+            .IsRequired();
+
+        builder.Property(x => x.UpdatedByUserId)
+            .HasColumnName("updated_by_user_id")
+            .IsRequired(false);
+
         builder.Property(x => x.IsDeleted)
             .HasColumnName("is_deleted")
             .IsRequired(true);

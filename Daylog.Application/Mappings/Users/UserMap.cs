@@ -1,5 +1,7 @@
 ﻿using Daylog.Application.Dtos.Users;
 using Daylog.Application.Features.Users.Commands.CreateUser;
+using Daylog.Application.Features.Users.Commands.DeleteUser;
+using Daylog.Application.Features.Users.Commands.UpdateUser;
 using Daylog.Domain.Entities.Users;
 
 namespace Daylog.Application.Mappings.Users;
@@ -14,7 +16,13 @@ public static class UserMap
             user.Email,
             user.Password,
             user.Profile,
-            user.CreatedAt
+            user.CreatedAt,
+            user.CreatedByUserId,
+            user.UpdatedAt,
+            user.UpdatedByUserId,
+            user.IsDeleted,
+            user.DeletedAt,
+            user.DeletedByUserId
         ) : null;
     }
 
@@ -25,6 +33,23 @@ public static class UserMap
             createUserCommand.Email,
             createUserCommand.Password,
             createUserCommand.Profile
+        ) : null;
+    }
+
+    public static User? ToDomain(this UpdateUserCommand? updateUserCommand)
+    {
+        return updateUserCommand is not null ? new User(
+            updateUserCommand.Id,
+            updateUserCommand.Name,
+            updateUserCommand.Email,
+            updateUserCommand.Profile
+        ) : null;
+    }
+
+    public static User? ToDomain(this DeleteUserCommand? deleteUserCommand)
+    {
+        return deleteUserCommand is not null ? new User(
+            deleteUserCommand.UserId
         ) : null;
     }
 }

@@ -1,7 +1,6 @@
 ﻿using FluentMigrator.Runner;
 using FluentMigrator.Runner.Exceptions;
 using Daylog.Application.Enums;
-using Daylog.Application.Helpers.Configuration;
 using Daylog.Infrastructure.Database.Factories.Creators;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;

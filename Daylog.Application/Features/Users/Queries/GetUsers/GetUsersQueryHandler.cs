@@ -9,7 +9,7 @@ public sealed class GetUsersQueryHandler(
     IAppDbContext appDbContext
     ) : IRequestHandler<GetUsersQuery, IEnumerable<User>>
 {
-    public async Task<IEnumerable<User>> Handle(GetUsersQuery query, CancellationToken cancellationToken)
+    public async Task<IEnumerable<User>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
     {
         var users = await appDbContext.Users.AsNoTracking()
             .ToListAsync(cancellationToken);

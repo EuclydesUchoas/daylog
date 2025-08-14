@@ -1,5 +1,7 @@
 ﻿using Daylog.Application.Dtos.Users;
 using Daylog.Application.Features.Users.Commands.CreateUser;
+using Daylog.Application.Features.Users.Commands.DeleteUser;
+using Daylog.Application.Features.Users.Commands.UpdateUser;
 using Daylog.Application.Features.Users.Queries.GetUserById;
 using Daylog.Application.Features.Users.Queries.GetUsers;
 using Daylog.Application.Mappings.Users;
@@ -24,12 +26,12 @@ public sealed class UserEndpoints : IEndpoint
             .WithDescription("Create a new user.");
 
         group
-            .MapPut("/users/{id}", UpdateUser)
+            .MapPut("/users/{userId}", UpdateUser)
             .WithSummary("Update User")
             .WithDescription("Update an existing user by ID.");
 
         group
-            .MapDelete("/users/{id}", DeleteUser)
+            .MapDelete("/users/{userId}", DeleteUser)
             .WithSummary("Delete User")
             .WithDescription("Delete a user by ID.");
 
@@ -57,21 +59,39 @@ public sealed class UserEndpoints : IEndpoint
         return TypedResults.Ok(userDto);
     }
 
-    public static async Task<Ok<string>> UpdateUser(int id)
+    public static async Task<Ok<UserDto>> UpdateUser(
+        int userId,
+        [FromBody] UpdateUserCommand command,
+        [FromServices] ISender sender,
+        CancellationToken cancellationToken
+        )
     {
-        var user = await Task.FromResult($"Update user with ID: {id}");
+        command = command with { Id = userId };
+        var user = await sender.Send(command, cancellationToken);
 
-        return TypedResults.Ok(user);
+        var userDto = user.ToDto();
+
+        return TypedResults.Ok(userDto);
     }
 
-    public static async Task<Ok<string>> DeleteUser(int id)
+    public static async Task<Results<Ok<bool>, NotFound>> DeleteUser(
+        int userId,
+        [FromServices] ISender sender,
+        CancellationToken cancellationToken
+        )
     {
-        var user = await Task.FromResult($"Delete user with ID: {id}");
+        var command = new DeleteUserCommand(userId);
+        var userDeleted = await sender.Send(command, cancellationToken);
 
-        return TypedResults.Ok(user);
+        if (!userDeleted)
+        {
+            return TypedResults.NotFound();
+        }
+
+        return TypedResults.Ok(userDeleted);
     }
 
-    public static async Task<Ok<IEnumerable<User>>> GetUsers(
+    public static async Task<Results<Ok<IEnumerable<User>>, NotFound>> GetUsers(
         [FromServices] ISender sender,
         CancellationToken cancellationToken
         )
@@ -79,6 +99,11 @@ public sealed class UserEndpoints : IEndpoint
         var query = new GetUsersQuery();
 
         var users = await sender.Send(query, cancellationToken);
+
+        if (!users.Any())
+        {
+            return TypedResults.NotFound();
+        }
 
         return TypedResults.Ok(users);
     }

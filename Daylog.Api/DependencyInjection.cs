@@ -1,8 +1,4 @@
-﻿using Daylog.Application.Enums;
-using Daylog.Application.Helpers.Configuration;
-using Scalar.AspNetCore;
-
-namespace Daylog.Api;
+﻿namespace Daylog.Api;
 
 public static class DependencyInjection
 {
