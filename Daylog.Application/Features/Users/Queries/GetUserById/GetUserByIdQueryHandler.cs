@@ -16,7 +16,7 @@ public sealed class GetUserByIdQueryHandler(
         await _validator.ValidateAndThrowAsync(request, cancellationToken);
 
         var user = await _appDbContext.Users.AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
+            .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
         return user;
     }

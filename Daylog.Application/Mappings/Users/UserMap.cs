@@ -49,7 +49,7 @@ public static class UserMap
     public static User? ToDomain(this DeleteUserCommand? deleteUserCommand)
     {
         return deleteUserCommand is not null ? new User(
-            deleteUserCommand.UserId
+            deleteUserCommand.Id
         ) : null;
     }
 }

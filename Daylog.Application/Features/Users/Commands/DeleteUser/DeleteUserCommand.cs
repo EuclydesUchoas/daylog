@@ -3,5 +3,5 @@
 namespace Daylog.Application.Features.Users.Commands.DeleteUser;
 
 public sealed record DeleteUserCommand(
-    int UserId
+    int Id
     ) : IRequest<bool>;

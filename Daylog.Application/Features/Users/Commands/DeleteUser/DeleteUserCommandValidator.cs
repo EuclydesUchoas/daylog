@@ -1,11 +1,11 @@
 ﻿using Daylog.Application.Resources;
 using FluentValidation;
 
-namespace Daylog.Application.Features.Users.Queries.GetUserById;
+namespace Daylog.Application.Features.Users.Commands.DeleteUser;
 
-public sealed class GetUserByIdQueryValidator : AbstractValidator<GetUserByIdQuery>
+public sealed class DeleteUserCommandValidator : AbstractValidator<DeleteUserCommand>
 {
-    public GetUserByIdQueryValidator()
+    public DeleteUserCommandValidator()
     {
         RuleFor(x => x.Id)
             .GreaterThan(0)

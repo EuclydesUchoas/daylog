@@ -26,17 +26,17 @@ public sealed class UserEndpoints : IEndpoint
             .WithDescription("Create a new user.");
 
         group
-            .MapPut("/users/{userId}", UpdateUser)
+            .MapPut("/users/{id}", UpdateUser)
             .WithSummary("Update User")
             .WithDescription("Update an existing user by ID.");
 
         group
-            .MapDelete("/users/{userId}", DeleteUser)
+            .MapDelete("/users/{id}", DeleteUser)
             .WithSummary("Delete User")
             .WithDescription("Delete a user by ID.");
 
         group
-            .MapGet("/users/{userId}", GetUser)
+            .MapGet("/users/{id}", GetUser)
             .WithSummary("Get User")
             .WithDescription("Get a user by ID.");
 
@@ -60,13 +60,13 @@ public sealed class UserEndpoints : IEndpoint
     }
 
     public static async Task<Ok<UserDto>> UpdateUser(
-        int userId,
+        int id,
         [FromBody] UpdateUserCommand command,
         [FromServices] ISender sender,
         CancellationToken cancellationToken
         )
     {
-        command = command with { Id = userId };
+        command = command with { Id = id };
         var user = await sender.Send(command, cancellationToken);
 
         var userDto = user.ToDto();
@@ -75,12 +75,12 @@ public sealed class UserEndpoints : IEndpoint
     }
 
     public static async Task<Results<Ok<bool>, NotFound>> DeleteUser(
-        int userId,
+        int id,
         [FromServices] ISender sender,
         CancellationToken cancellationToken
         )
     {
-        var command = new DeleteUserCommand(userId);
+        var command = new DeleteUserCommand(id);
         var userDeleted = await sender.Send(command, cancellationToken);
 
         if (!userDeleted)
@@ -109,12 +109,12 @@ public sealed class UserEndpoints : IEndpoint
     }
 
     public static async Task<Results<Ok<User>, NotFound>> GetUser(
-        int userId,
+        int id,
         [FromServices] ISender sender,
         CancellationToken cancellationToken
         )
     {
-        var query = new GetUserByIdQuery(userId);
+        var query = new GetUserByIdQuery(id);
 
         var user = await sender.Send(query, cancellationToken);
 
