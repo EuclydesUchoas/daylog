@@ -1,11 +1,12 @@
 ﻿using Daylog.Application.Resources;
+using Daylog.Domain.Entities.Users;
 using FluentValidation;
 
 namespace Daylog.Application.Features.Users.Commands.CreateUser;
 
 public sealed class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
 {
-    public CreateUserCommandValidator()
+    public CreateUserCommandValidator(IValidator<CreateUserDepartmentCommand> createUserDepartmentCommandValidator)
     {
         RuleFor(x => x.Name)
             .NotEmpty()
@@ -26,7 +27,12 @@ public sealed class CreateUserCommandValidator : AbstractValidator<CreateUserCom
         RuleFor(x => x.Profile)
             .GreaterThan(0)
             .WithMessage(AppMessages.User_ProfileIsRequired)
-            .IsInEnum()
+            .Must(x => Enum.IsDefined(typeof(UserProfileEnum), x))
             .WithMessage(AppMessages.User_ProfileIsInvalid);
+
+        RuleFor(x => x.UserDepartments)
+            .NotEmpty()
+            .WithMessage(AppMessages.User_DepartmentsAreRequired)
+            .ForEach(x => x.SetValidator(createUserDepartmentCommandValidator));
     }
 }

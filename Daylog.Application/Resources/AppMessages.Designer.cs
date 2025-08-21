@@ -61,6 +61,15 @@ namespace Daylog.Application.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a User: Departments are required.
+        /// </summary>
+        internal static string User_DepartmentsAreRequired {
+            get {
+                return ResourceManager.GetString("User_DepartmentsAreRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a User: Email is invalid.
         /// </summary>
         internal static string User_EmailIsInvalid {
@@ -138,6 +147,15 @@ namespace Daylog.Application.Resources {
         internal static string User_ProfileIsRequired {
             get {
                 return ResourceManager.GetString("User_ProfileIsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a UserDepartment: Department id is required.
+        /// </summary>
+        internal static string UserDepartment_DepartmentIdIsRequired {
+            get {
+                return ResourceManager.GetString("UserDepartment_DepartmentIdIsRequired", resourceCulture);
             }
         }
     }

@@ -62,6 +62,11 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
             .HasColumnName("deleted_by_user_id")
             .IsRequired(false);
 
+        builder.HasMany(x => x.UserDepartments)
+            .WithOne()
+            .HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
         builder.HasQueryFilter(x => !x.IsDeleted);
     }
 }

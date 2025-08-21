@@ -16,6 +16,7 @@ public static class UserMap
             user.Email,
             user.Password,
             user.Profile,
+            user.UserDepartments?.Select(x => x.ToDto()).ToList()!,
             user.CreatedAt,
             user.CreatedByUserId,
             user.UpdatedAt,
@@ -32,7 +33,8 @@ public static class UserMap
             createUserCommand.Name,
             createUserCommand.Email,
             createUserCommand.Password,
-            createUserCommand.Profile
+            createUserCommand.Profile,
+            createUserCommand.UserDepartments?.Select(x => x.ToDomain()).ToList()!
         ) : null;
     }
 
@@ -42,7 +44,8 @@ public static class UserMap
             updateUserCommand.Id,
             updateUserCommand.Name,
             updateUserCommand.Email,
-            updateUserCommand.Profile
+            updateUserCommand.Profile,
+            updateUserCommand.UserDepartments?.Select(x => x.ToDomain()).ToList()!
         ) : null;
     }
 

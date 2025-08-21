@@ -7,5 +7,6 @@ public sealed record UpdateUserCommand(
     int Id,
     string Name,
     string Email,
-    int Profile
+    int Profile,
+    ICollection<UpdateUserDepartmentCommand> UserDepartments
     ) : IRequest<User>;

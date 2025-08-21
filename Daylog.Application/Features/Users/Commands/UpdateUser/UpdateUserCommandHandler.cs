@@ -17,9 +17,11 @@ public sealed class UpdateUserCommandHandler(
         await _validator.ValidateAndThrowAsync(request, cancellationToken);
 
         var user = request.ToDomain();
+
         ArgumentNullException.ThrowIfNull(user, nameof(user));
 
         var userDb = await _appDbContext.Users // Change Tracking is required for updates
+            .Include(x => x.UserDepartments)
             .FirstOrDefaultAsync(u => u.Id == user.Id, cancellationToken)
             ?? throw new KeyNotFoundException($"User with ID {user.Id} not found.");
 
@@ -28,23 +30,5 @@ public sealed class UpdateUserCommandHandler(
         await _appDbContext.SaveChangesAsync(cancellationToken);
 
         return userDb;
-
-        bool userExists = await _appDbContext.Users.AsNoTracking()
-            .AnyAsync(u => u.Id == user.Id, cancellationToken);
-
-        if (!userExists)
-        {
-            throw new KeyNotFoundException($"User with ID {user.Id} not found.");
-        }
-
-        var userBase = new User(user.Id);
-
-        _appDbContext.Users.Attach(userBase);
-
-        userBase.Update(user);
-
-        await _appDbContext.SaveChangesAsync(cancellationToken);
-
-        return userBase;
     }
 }

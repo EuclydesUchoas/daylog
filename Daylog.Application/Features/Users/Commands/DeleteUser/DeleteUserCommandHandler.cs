@@ -15,13 +15,14 @@ public sealed class DeleteUserCommandHandler(
     {
         await _validator.ValidateAndThrowAsync(request, cancellationToken);
 
-        var user = request.ToDomain();
-        ArgumentNullException.ThrowIfNull(user, nameof(user));
+        var userWithId = request.ToDomain();
+        ArgumentNullException.ThrowIfNull(userWithId, nameof(request));
 
-        bool userExists = await _appDbContext.Users.AsNoTracking()
-            .AnyAsync(u => u.Id == user.Id, cancellationToken);
+        var user = await _appDbContext.Users
+            .Include(x => x.UserDepartments)
+            .FirstOrDefaultAsync(u => u.Id == userWithId.Id, cancellationToken);
 
-        if (!userExists)
+        if (user is null)
         {
             return false;
         }

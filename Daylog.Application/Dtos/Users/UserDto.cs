@@ -6,6 +6,7 @@ public sealed record UserDto(
     string Email,
     string Password,
     int Profile,
+    ICollection<UserDepartmentDto> UserDepartments,
     DateTime CreatedAt,
     int? CreatedByUserId,
     DateTime UpdatedAt,

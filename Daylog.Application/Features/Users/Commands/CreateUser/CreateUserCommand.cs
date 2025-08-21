@@ -7,5 +7,6 @@ public sealed record CreateUserCommand(
     string Name,
     string Email,
     string Password,
-    int Profile
+    int Profile,
+    ICollection<CreateUserDepartmentCommand> UserDepartments
     ) : IRequest<User>;

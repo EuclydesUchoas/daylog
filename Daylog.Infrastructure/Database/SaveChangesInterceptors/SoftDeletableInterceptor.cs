@@ -15,7 +15,7 @@ internal sealed class SoftDeletableInterceptor(
         {
             return base.SavingChangesAsync(eventData, result, cancellationToken);
         }
-
+        
         var entries = eventData.Context.ChangeTracker
             .Entries<ISoftDeletable>()
             .Where(e => e.State == EntityState.Deleted);
@@ -30,6 +30,12 @@ internal sealed class SoftDeletableInterceptor(
             entry.Property(x => x.IsDeleted).CurrentValue = true;
             entry.Property(x => x.DeletedAt).CurrentValue = actualDateTime;
             entry.Property(x => x.DeletedByUserId).CurrentValue = userId;
+
+            foreach (var entryNavigation in entry.Navigations)
+            {
+                entryNavigation.IsLoaded = false;
+                entryNavigation.IsModified = false;
+            }
         }
 
         return base.SavingChangesAsync(eventData, result, cancellationToken);
