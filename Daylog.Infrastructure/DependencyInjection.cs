@@ -1,22 +1,24 @@
-﻿using FluentMigrator.Runner;
+﻿using Daylog.Application.Abstractions.Authentications;
+using Daylog.Application.Abstractions.Configurations;
+using Daylog.Application.Abstractions.Data;
 using Daylog.Application.Enums;
-using Daylog.Infrastructure.Database.Contexts;
+using Daylog.Infrastructure.Authentications;
+using Daylog.Infrastructure.Configurations;
+using Daylog.Infrastructure.Database.Data;
 using Daylog.Infrastructure.Database.Factories;
+using Daylog.Infrastructure.Database.SaveChangesInterceptors;
+using FluentMigrator.Runner;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Daylog.Application.Abstractions.Data;
-using Daylog.Application.Extensions;
-using Daylog.Application.Abstractions.Authentications;
-using Daylog.Infrastructure.Authentications;
-using Daylog.Infrastructure.Database.SaveChangesInterceptors;
 
 namespace Daylog.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddSingleton<IAppConfiguration, AppConfiguration>();
         services.AddSingleton<IDatabaseFactory, DatabaseFactory>();
 
         services.AddHttpContextAccessor();
@@ -29,11 +31,12 @@ public static class DependencyInjection
 
     private static IServiceCollection AddAppDbContextAndMigrationRunner(this IServiceCollection services, IConfiguration configuration)
     {
-        //var configurationHelper = IConfigurationHelper.CreateDefaultInstance(configuration);
+        //var configurationHelper = IAppConfiguration.CreateDefaultInstance(configuration);
+        var configurationHelper = new AppConfiguration(configuration); // Default implementation of IAppConfiguration
 
-        var databaseProvider = configuration.GetDatabaseProvider();//configurationHelper.GetDatabaseProvider();
-        var connectionString = configuration.GetDatabaseConnectionString();//configurationHelper.GetDatabaseConnectionString();
-
+        var databaseProvider = /*configuration.GetDatabaseProvider();*/configurationHelper.GetDatabaseProvider();
+        var connectionString = /*configuration.GetDatabaseConnectionString();*/configurationHelper.GetDatabaseConnectionString();
+        
         if (databaseProvider is DatabaseProviderEnum.None)
             throw new Exception("Database provider not set.");
 

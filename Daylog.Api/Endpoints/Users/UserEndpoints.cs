@@ -1,12 +1,7 @@
-﻿using Daylog.Application.Dtos.Users;
-using Daylog.Application.Features.Users.Commands.CreateUser;
-using Daylog.Application.Features.Users.Commands.DeleteUser;
-using Daylog.Application.Features.Users.Commands.UpdateUser;
-using Daylog.Application.Features.Users.Queries.GetUserById;
-using Daylog.Application.Features.Users.Queries.GetUsers;
+﻿using Daylog.Application.Abstractions.Services.Users;
+using Daylog.Application.Dtos.Users.Request;
+using Daylog.Application.Dtos.Users.Response;
 using Daylog.Application.Mappings.Users;
-using Daylog.Domain.Entities.Users;
-using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,7 +30,7 @@ public sealed class UserEndpoints : IEndpoint
             .WithSummary("Delete User")
             .WithDescription("Delete a user by ID.");
 
-        group
+        /*group
             .MapGet("/users/{id}", GetUser)
             .WithSummary("Get User")
             .WithDescription("Get a user by ID.");
@@ -43,10 +38,10 @@ public sealed class UserEndpoints : IEndpoint
         group
             .MapGet("/users", GetUsers)
             .WithSummary("Get Users")
-            .WithDescription("Get a list of all users.");
+            .WithDescription("Get a list of all users.");*/
     }
 
-    public static async Task<Ok<UserDto>> CreateUser(
+    /*public static async Task<Ok<UserDto>> CreateUser(
         [FromBody] CreateUserCommand command,
         [FromServices] ISender sender,
         CancellationToken cancellationToken
@@ -57,17 +52,30 @@ public sealed class UserEndpoints : IEndpoint
         var userDto = user.ToDto();
 
         return TypedResults.Ok(userDto);
-    }
+    }*/
 
-    public static async Task<Ok<UserDto>> UpdateUser(
-        int id,
-        [FromBody] UpdateUserCommand command,
-        [FromServices] ISender sender,
+    public static async Task<Ok<UserResponseDto>> CreateUser(
+        [FromBody] CreateUserRequestDto createUserRequestDto,
+        [FromServices] ICreateUserService createUserService,
         CancellationToken cancellationToken
         )
     {
-        command = command with { Id = id };
-        var user = await sender.Send(command, cancellationToken);
+        var user = await createUserService.HandleAsync(createUserRequestDto, cancellationToken);
+
+        var userDto = user.ToDto();
+
+        return TypedResults.Ok(userDto);
+    }
+
+    public static async Task<Ok<UserResponseDto>> UpdateUser(
+        int id,
+        [FromBody] UpdateUserRequestDto updateUserRequestDto,
+        [FromServices] IUpdateUserService updateUserService,
+        CancellationToken cancellationToken
+        )
+    {
+        updateUserRequestDto = updateUserRequestDto with { Id = id };
+        var user = await updateUserService.HandleAsync(updateUserRequestDto, cancellationToken);
 
         var userDto = user.ToDto();
 
@@ -76,12 +84,12 @@ public sealed class UserEndpoints : IEndpoint
 
     public static async Task<Results<Ok<bool>, NotFound>> DeleteUser(
         int id,
-        [FromServices] ISender sender,
+        [FromServices] IDeleteUserService deleteUserService,
         CancellationToken cancellationToken
         )
     {
-        var command = new DeleteUserCommand(id);
-        var userDeleted = await sender.Send(command, cancellationToken);
+        var deleteUserRequestDto = new DeleteUserRequestDto(id);
+        var userDeleted = await deleteUserService.HandleAsync(deleteUserRequestDto, cancellationToken);
 
         if (!userDeleted)
         {
@@ -91,7 +99,7 @@ public sealed class UserEndpoints : IEndpoint
         return TypedResults.Ok(userDeleted);
     }
 
-    public static async Task<Results<Ok<IEnumerable<User>>, NotFound>> GetUsers(
+    /*public static async Task<Results<Ok<IEnumerable<User>>, NotFound>> GetUsers(
         [FromServices] ISender sender,
         CancellationToken cancellationToken
         )
@@ -124,5 +132,5 @@ public sealed class UserEndpoints : IEndpoint
         }
 
         return TypedResults.Ok(user);
-    }
+    }*/
 }

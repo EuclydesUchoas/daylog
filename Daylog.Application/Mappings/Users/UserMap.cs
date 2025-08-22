@@ -1,16 +1,14 @@
-﻿using Daylog.Application.Dtos.Users;
-using Daylog.Application.Features.Users.Commands.CreateUser;
-using Daylog.Application.Features.Users.Commands.DeleteUser;
-using Daylog.Application.Features.Users.Commands.UpdateUser;
+﻿using Daylog.Application.Dtos.Users.Request;
+using Daylog.Application.Dtos.Users.Response;
 using Daylog.Domain.Entities.Users;
 
 namespace Daylog.Application.Mappings.Users;
 
 public static class UserMap
 {
-    public static UserDto? ToDto(this User? user)
+    public static UserResponseDto? ToDto(this User? user)
     {
-        return user is not null ? new UserDto(
+        return user is not null ? new UserResponseDto(
             user.Id,
             user.Name,
             user.Email,
@@ -27,32 +25,25 @@ public static class UserMap
         ) : null;
     }
 
-    public static User? ToDomain(this CreateUserCommand? createUserCommand)
+    public static User? ToDomain(this CreateUserRequestDto? createUserRequestDto)
     {
-        return createUserCommand is not null ? new User(
-            createUserCommand.Name,
-            createUserCommand.Email,
-            createUserCommand.Password,
-            createUserCommand.Profile,
-            createUserCommand.UserDepartments?.Select(x => x.ToDomain()).ToList()!
+        return createUserRequestDto is not null ? new User(
+            createUserRequestDto.Name,
+            createUserRequestDto.Email,
+            createUserRequestDto.Password,
+            createUserRequestDto.Profile,
+            createUserRequestDto.UserDepartments?.Select(x => x.ToDomain()).ToList()!
         ) : null;
     }
 
-    public static User? ToDomain(this UpdateUserCommand? updateUserCommand)
+    public static User? ToDomain(this UpdateUserRequestDto? updateUserRequestDto)
     {
-        return updateUserCommand is not null ? new User(
-            updateUserCommand.Id,
-            updateUserCommand.Name,
-            updateUserCommand.Email,
-            updateUserCommand.Profile,
-            updateUserCommand.UserDepartments?.Select(x => x.ToDomain()).ToList()!
-        ) : null;
-    }
-
-    public static User? ToDomain(this DeleteUserCommand? deleteUserCommand)
-    {
-        return deleteUserCommand is not null ? new User(
-            deleteUserCommand.Id
+        return updateUserRequestDto is not null ? new User(
+            updateUserRequestDto.Id,
+            updateUserRequestDto.Name,
+            updateUserRequestDto.Email,
+            updateUserRequestDto.Profile,
+            updateUserRequestDto.UserDepartments?.Select(x => x.ToDomain()).ToList()!
         ) : null;
     }
 }

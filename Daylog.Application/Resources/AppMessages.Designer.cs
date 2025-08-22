@@ -61,7 +61,7 @@ namespace Daylog.Application.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a User: Departments are required.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Departments are required.
         /// </summary>
         internal static string User_DepartmentsAreRequired {
             get {
@@ -70,7 +70,7 @@ namespace Daylog.Application.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a User: Email is invalid.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Email is invalid.
         /// </summary>
         internal static string User_EmailIsInvalid {
             get {
@@ -79,7 +79,7 @@ namespace Daylog.Application.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a User: Email is required.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Email is required.
         /// </summary>
         internal static string User_EmailIsRequired {
             get {
@@ -88,7 +88,7 @@ namespace Daylog.Application.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a User: Id is required.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Id is required.
         /// </summary>
         internal static string User_IdIsRequired {
             get {
@@ -97,7 +97,7 @@ namespace Daylog.Application.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a User: Name is required.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Name is required.
         /// </summary>
         internal static string User_NameIsRequired {
             get {
@@ -106,7 +106,7 @@ namespace Daylog.Application.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a User: Not found.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Not found.
         /// </summary>
         internal static string User_NotFound {
             get {
@@ -115,7 +115,7 @@ namespace Daylog.Application.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a User: Password is required.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Password is required.
         /// </summary>
         internal static string User_PasswordIsRequired {
             get {
@@ -124,7 +124,7 @@ namespace Daylog.Application.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a User: Password must be at least 8 characters long.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Password must be at least 8 characters long.
         /// </summary>
         internal static string User_PasswordMustBeAtLeast8CharactersLong {
             get {
@@ -133,7 +133,7 @@ namespace Daylog.Application.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a User: Profile is invalid.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Profile is invalid.
         /// </summary>
         internal static string User_ProfileIsInvalid {
             get {
@@ -142,7 +142,7 @@ namespace Daylog.Application.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a User: Profile is required.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Profile is required.
         /// </summary>
         internal static string User_ProfileIsRequired {
             get {
@@ -151,7 +151,7 @@ namespace Daylog.Application.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a UserDepartment: Department id is required.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Department id is required.
         /// </summary>
         internal static string UserDepartment_DepartmentIdIsRequired {
             get {

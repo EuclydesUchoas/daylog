@@ -63,7 +63,7 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
             .IsRequired(false);
 
         builder.HasMany(x => x.UserDepartments)
-            .WithOne()
+            .WithOne(x => x.User)
             .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 

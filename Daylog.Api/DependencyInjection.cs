@@ -1,9 +1,18 @@
-﻿namespace Daylog.Api;
+﻿using Microsoft.AspNetCore.Http.Json;
+using System.Text.Json.Serialization;
+
+namespace Daylog.Api;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddApiServices(this IServiceCollection services)
+    public static IServiceCollection AddApi(this IServiceCollection services)
     {
+        services.Configure<JsonOptions>(options =>
+        {
+            options.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+            options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        });
+
         services.AddDocumentation();
 
         return services;

@@ -118,36 +118,36 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="UserDepartment_DepartmentIdIsRequired" xml:space="preserve">
-    <value>UserDepartment: Department id is required</value>
+    <value>Department id is required</value>
   </data>
   <data name="User_DepartmentsAreRequired" xml:space="preserve">
-    <value>User: Departments are required</value>
+    <value>Departments are required</value>
   </data>
   <data name="User_EmailIsInvalid" xml:space="preserve">
-    <value>User: Email is invalid</value>
+    <value>Email is invalid</value>
   </data>
   <data name="User_EmailIsRequired" xml:space="preserve">
-    <value>User: Email is required</value>
+    <value>Email is required</value>
   </data>
   <data name="User_IdIsRequired" xml:space="preserve">
-    <value>User: Id is required</value>
+    <value>Id is required</value>
   </data>
   <data name="User_NameIsRequired" xml:space="preserve">
-    <value>User: Name is required</value>
+    <value>Name is required</value>
   </data>
   <data name="User_NotFound" xml:space="preserve">
-    <value>User: Not found</value>
+    <value>Not found</value>
   </data>
   <data name="User_PasswordIsRequired" xml:space="preserve">
-    <value>User: Password is required</value>
+    <value>Password is required</value>
   </data>
   <data name="User_PasswordMustBeAtLeast8CharactersLong" xml:space="preserve">
-    <value>User: Password must be at least 8 characters long</value>
+    <value>Password must be at least 8 characters long</value>
   </data>
   <data name="User_ProfileIsInvalid" xml:space="preserve">
-    <value>User: Profile is invalid</value>
+    <value>Profile is invalid</value>
   </data>
   <data name="User_ProfileIsRequired" xml:space="preserve">
-    <value>User: Profile is required</value>
+    <value>Profile is required</value>
   </data>
 </root>

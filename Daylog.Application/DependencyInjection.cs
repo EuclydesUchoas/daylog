@@ -1,4 +1,4 @@
-﻿using Daylog.Application.Helpers.Configuration;
+﻿using Daylog.Application.Abstractions.Services;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -6,14 +6,13 @@ namespace Daylog.Application;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+    public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        services.AddSingleton<IConfigurationHelper, ConfigurationHelper>();
-
-        services.AddMediatR(options =>
-        {
-            options.RegisterServicesFromAssembly(ApplicationAssemblyReference.Assembly);
-        });
+        services.Scan(scan => scan
+            .FromAssemblies(ApplicationAssemblyReference.Assembly)
+            .AddClasses(classes => classes.AssignableToAny(typeof(IService<,>), typeof(IService<>)), publicOnly: false)
+            .AsImplementedInterfaces()
+            .WithScopedLifetime());
 
         services.AddValidatorsFromAssembly(ApplicationAssemblyReference.Assembly, includeInternalTypes: true);
 

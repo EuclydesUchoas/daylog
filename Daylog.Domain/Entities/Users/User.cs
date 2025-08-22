@@ -6,7 +6,7 @@ public sealed class User : IEntity, ICreatable, IUpdatable, ISoftDeletable
     private User() { }
 
     // Create
-    public User(string name, string email, string password, int profile, ICollection<UserDepartment> userDepartments)
+    public User(string name, string email, string password, UserProfileEnum profile, ICollection<UserDepartment> userDepartments)
     {
         Id = 0;
         Name = name;
@@ -17,7 +17,7 @@ public sealed class User : IEntity, ICreatable, IUpdatable, ISoftDeletable
     }
 
     // Update
-    public User(int id, string name, string email, int profile, ICollection<UserDepartment> userDepartments)
+    public User(int id, string name, string email, UserProfileEnum profile, ICollection<UserDepartment> userDepartments)
     {
         Id = id;
         Name = name;
@@ -40,7 +40,7 @@ public sealed class User : IEntity, ICreatable, IUpdatable, ISoftDeletable
 
     public string Password { get; private set; } = null!;
 
-    public int Profile { get; private set; }
+    public UserProfileEnum Profile { get; private set; }
 
     public ICollection<UserDepartment> UserDepartments { get; private set; } = null!;
 

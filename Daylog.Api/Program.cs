@@ -7,9 +7,9 @@ using Daylog.Infrastructure.Database.Factories;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
-    .AddApiServices()
-    .AddApplicationServices()
-    .AddInfrastructureServices(builder.Configuration);
+    .AddApi()
+    .AddApplication()
+    .AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
