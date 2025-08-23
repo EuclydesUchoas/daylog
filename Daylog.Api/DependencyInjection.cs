@@ -13,7 +13,29 @@ public static class DependencyInjection
             options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
         });
 
+        services.AddRequestLocalization();
         services.AddDocumentation();
+
+        return services;
+    }
+
+    private static IServiceCollection AddRequestLocalization(this IServiceCollection services)
+    {
+        string[] supportedCultures = [
+            "en",
+            "en-US",
+            "pt",
+            "pt-BR",
+            ];
+
+        services.AddRequestLocalization(options =>
+        {
+            options.ApplyCurrentCultureToResponseHeaders = true;
+
+            options.SetDefaultCulture(supportedCultures[0])
+                .AddSupportedCultures(supportedCultures)
+                .AddSupportedUICultures(supportedCultures);
+        });
 
         return services;
     }

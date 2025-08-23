@@ -22,7 +22,7 @@ namespace Daylog.Application.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class AppMessages {
+    public class AppMessages {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Daylog.Application.Resources {
         ///   Retorna a instância de ResourceManager armazenada em cache usada por essa classe.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Daylog.Application.Resources.AppMessages", typeof(AppMessages).Assembly);
@@ -51,7 +51,7 @@ namespace Daylog.Application.Resources {
         ///   pesquisas de recursos que usam essa classe de recurso de tipo de alta segurança.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,27 +61,54 @@ namespace Daylog.Application.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Error has ocurred.
+        /// </summary>
+        public static string App_ErrorHasOcurred {
+            get {
+                return ResourceManager.GetString("App_ErrorHasOcurred", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Persistence error has ocurred.
+        /// </summary>
+        public static string App_PersistenceErrorHasOcurred {
+            get {
+                return ResourceManager.GetString("App_PersistenceErrorHasOcurred", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Unknown error has ocurred.
+        /// </summary>
+        public static string App_UnknownErrorHasOcurred {
+            get {
+                return ResourceManager.GetString("App_UnknownErrorHasOcurred", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Departments are required.
         /// </summary>
-        internal static string User_DepartmentsAreRequired {
+        public static string User_DepartmentsAreRequired {
             get {
                 return ResourceManager.GetString("User_DepartmentsAreRequired", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Email is invalid.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a E-mail is invalid.
         /// </summary>
-        internal static string User_EmailIsInvalid {
+        public static string User_EmailIsInvalid {
             get {
                 return ResourceManager.GetString("User_EmailIsInvalid", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Email is required.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a E-mail is required.
         /// </summary>
-        internal static string User_EmailIsRequired {
+        public static string User_EmailIsRequired {
             get {
                 return ResourceManager.GetString("User_EmailIsRequired", resourceCulture);
             }
@@ -90,7 +117,7 @@ namespace Daylog.Application.Resources {
         /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Id is required.
         /// </summary>
-        internal static string User_IdIsRequired {
+        public static string User_IdIsRequired {
             get {
                 return ResourceManager.GetString("User_IdIsRequired", resourceCulture);
             }
@@ -99,7 +126,7 @@ namespace Daylog.Application.Resources {
         /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Name is required.
         /// </summary>
-        internal static string User_NameIsRequired {
+        public static string User_NameIsRequired {
             get {
                 return ResourceManager.GetString("User_NameIsRequired", resourceCulture);
             }
@@ -108,7 +135,7 @@ namespace Daylog.Application.Resources {
         /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Not found.
         /// </summary>
-        internal static string User_NotFound {
+        public static string User_NotFound {
             get {
                 return ResourceManager.GetString("User_NotFound", resourceCulture);
             }
@@ -117,7 +144,7 @@ namespace Daylog.Application.Resources {
         /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Password is required.
         /// </summary>
-        internal static string User_PasswordIsRequired {
+        public static string User_PasswordIsRequired {
             get {
                 return ResourceManager.GetString("User_PasswordIsRequired", resourceCulture);
             }
@@ -126,7 +153,7 @@ namespace Daylog.Application.Resources {
         /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Password must be at least 8 characters long.
         /// </summary>
-        internal static string User_PasswordMustBeAtLeast8CharactersLong {
+        public static string User_PasswordMustBeAtLeast8CharactersLong {
             get {
                 return ResourceManager.GetString("User_PasswordMustBeAtLeast8CharactersLong", resourceCulture);
             }
@@ -135,7 +162,7 @@ namespace Daylog.Application.Resources {
         /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Profile is invalid.
         /// </summary>
-        internal static string User_ProfileIsInvalid {
+        public static string User_ProfileIsInvalid {
             get {
                 return ResourceManager.GetString("User_ProfileIsInvalid", resourceCulture);
             }
@@ -144,7 +171,7 @@ namespace Daylog.Application.Resources {
         /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Profile is required.
         /// </summary>
-        internal static string User_ProfileIsRequired {
+        public static string User_ProfileIsRequired {
             get {
                 return ResourceManager.GetString("User_ProfileIsRequired", resourceCulture);
             }
@@ -153,7 +180,7 @@ namespace Daylog.Application.Resources {
         /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Department id is required.
         /// </summary>
-        internal static string UserDepartment_DepartmentIdIsRequired {
+        public static string UserDepartment_DepartmentIdIsRequired {
             get {
                 return ResourceManager.GetString("UserDepartment_DepartmentIdIsRequired", resourceCulture);
             }

@@ -1,19 +1,21 @@
 ﻿using Daylog.Domain.Entities.Users;
+using Daylog.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Daylog.Infrastructure.Database.EntityConfigurations.Users;
 
-public sealed class UserConfiguration : IEntityTypeConfiguration<User>
+internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
         builder.ToTable("users");
-
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id)
-            .HasColumnName("id");
+            .HasColumnName("id")
+            .HasEntityIdConversion()
+            .IsRequired();
 
         builder.Property(x => x.Name)
             .HasColumnName("name")
@@ -34,39 +36,13 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
             .HasColumnName("profile")
             .IsRequired();
 
-        builder.Property(x => x.CreatedAt)
-            .HasColumnName("created_at")
-            .IsRequired();
-
-        builder.Property(x => x.CreatedByUserId)
-            .HasColumnName("created_by_user_id")
-            .IsRequired(false);
-
-        builder.Property(x => x.UpdatedAt)
-            .HasColumnName("updated_at")
-            .IsRequired();
-
-        builder.Property(x => x.UpdatedByUserId)
-            .HasColumnName("updated_by_user_id")
-            .IsRequired(false);
-
-        builder.Property(x => x.IsDeleted)
-            .HasColumnName("is_deleted")
-            .IsRequired(true);
-
-        builder.Property(x => x.DeletedAt)
-            .HasColumnName("deleted_at")
-            .IsRequired(false);
-
-        builder.Property(x => x.DeletedByUserId)
-            .HasColumnName("deleted_by_user_id")
-            .IsRequired(false);
-
         builder.HasMany(x => x.UserDepartments)
             .WithOne(x => x.User)
             .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasQueryFilter(x => !x.IsDeleted);
+        builder.ConfigureCreatableEntityProperties();
+        builder.ConfigureUpdatableEntityProperties();
+        builder.ConfigureSoftDeletableEntityProperties();
     }
 }

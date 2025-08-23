@@ -1,6 +1,8 @@
-﻿namespace Daylog.Application.Abstractions.Authentications;
+﻿using Daylog.Domain.Entities.Users;
+
+namespace Daylog.Application.Abstractions.Authentications;
 
 public interface IUserContext
 {
-    int? UserId { get; }
+    UserId? UserId { get; }
 }

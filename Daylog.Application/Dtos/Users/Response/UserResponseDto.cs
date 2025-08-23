@@ -3,17 +3,17 @@
 namespace Daylog.Application.Dtos.Users.Response;
 
 public sealed record UserResponseDto(
-    int Id,
+    Guid Id,
     string Name,
     string Email,
     string Password,
     UserProfileEnum Profile,
     ICollection<UserDepartmentResponseDto> UserDepartments,
     DateTime CreatedAt,
-    int? CreatedByUserId,
+    Guid? CreatedByUserId,
     DateTime UpdatedAt,
-    int? UpdatedByUserId,
+    Guid? UpdatedByUserId,
     bool IsDeleted,
     DateTime? DeletedAt,
-    int? DeletedByUserId
+    Guid? DeletedByUserId
     ) : IResponseDto;

@@ -9,7 +9,7 @@ public sealed class DeleteUserRequestDtoValidator : AbstractValidator<DeleteUser
     public DeleteUserRequestDtoValidator()
     {
         RuleFor(x => x.Id)
-            .GreaterThan(0)
+            .NotEmpty()
             .WithMessage(AppMessages.User_IdIsRequired);
     }
 }

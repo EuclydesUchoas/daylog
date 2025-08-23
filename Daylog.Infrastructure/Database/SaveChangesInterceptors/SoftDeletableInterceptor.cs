@@ -21,7 +21,7 @@ internal sealed class SoftDeletableInterceptor(
             .Where(e => e.State == EntityState.Deleted);
 
         var actualDateTime = DateTime.UtcNow;
-        int? userId = _userContext.UserId;
+        var userId = _userContext.UserId;
 
         foreach (var entry in entries)
         {

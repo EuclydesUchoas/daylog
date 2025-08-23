@@ -1,6 +1,8 @@
 ﻿using Daylog.Application.Abstractions.Data;
+using Daylog.Domain.Entities;
 using Daylog.Domain.Entities.Departments;
 using Daylog.Domain.Entities.Users;
+using Daylog.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -46,6 +48,7 @@ public sealed class AppDbContext : DbContext, IAppDbContext
 
         modelBuilder.Entity<UserDepartment>()
             .Property(ud => ud.UserId)
+            .HasEntityIdConversion()
             .HasColumnName("user_id");
 
         modelBuilder.Entity<UserDepartment>()

@@ -21,7 +21,7 @@ internal sealed class CreatableInterceptor(
             .Where(e => e.State == EntityState.Added);
 
         var actualDateTime = DateTime.UtcNow;
-        int? userId = _userContext.UserId;
+        var userId = _userContext.UserId;
 
         foreach (var entry in entries)
         {

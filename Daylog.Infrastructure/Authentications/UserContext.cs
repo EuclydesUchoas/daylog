@@ -1,4 +1,5 @@
 ﻿using Daylog.Application.Abstractions.Authentications;
+using Daylog.Domain.Entities.Users;
 using Microsoft.AspNetCore.Http;
 
 namespace Daylog.Infrastructure.Authentications;
@@ -7,6 +8,6 @@ public sealed class UserContext(
     IHttpContextAccessor _httpContextAccessor
     ) : IUserContext
 {
-    public int? UserId
+    public UserId? UserId
         => _httpContextAccessor.HttpContext?.User.GetUserId();
 }

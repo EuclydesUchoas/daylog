@@ -7,13 +7,12 @@ public sealed class UserDepartment : IEntity
     // Entity Framework
     private UserDepartment() { }
 
-    public UserDepartment(int userId, int departmentId)
+    public UserDepartment(int departmentId)
     {
-        UserId = userId;
         DepartmentId = departmentId;
     }
 
-    public int UserId { get; private set; }
+    public UserId UserId { get; private set; }
 
     public int DepartmentId { get; private set; }
 

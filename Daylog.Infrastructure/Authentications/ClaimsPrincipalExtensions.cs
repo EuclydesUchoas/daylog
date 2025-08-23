@@ -1,15 +1,16 @@
-﻿using System.Security.Claims;
+﻿using Daylog.Domain.Entities.Users;
+using System.Security.Claims;
 
 namespace Daylog.Infrastructure.Authentications;
 
 public static class ClaimsPrincipalExtensions
 {
-    public static int? GetUserId(this ClaimsPrincipal? claimsPrincipal)
+    public static UserId? GetUserId(this ClaimsPrincipal? claimsPrincipal)
     {
         string? claimValue = claimsPrincipal?.FindFirstValue(ClaimTypes.PrimarySid);
 
-        int? userId = !string.IsNullOrWhiteSpace(claimValue) && int.TryParse(claimValue, out int id) && id > 0
-            ? id : null;
+        UserId? userId = !string.IsNullOrWhiteSpace(claimValue) && Guid.TryParse(claimValue, out Guid id) && !id.Equals(Guid.Empty)
+            ? UserId.CreateExisting(id) : null;
 
         return userId;
     }

@@ -2,37 +2,7 @@
 
 public sealed class User : IEntity, ICreatable, IUpdatable, ISoftDeletable
 {
-    // Entity Framework
-    private User() { }
-
-    // Create
-    public User(string name, string email, string password, UserProfileEnum profile, ICollection<UserDepartment> userDepartments)
-    {
-        Id = 0;
-        Name = name;
-        Email = email;
-        Password = password;
-        Profile = profile;
-        UserDepartments = userDepartments;
-    }
-
-    // Update
-    public User(int id, string name, string email, UserProfileEnum profile, ICollection<UserDepartment> userDepartments)
-    {
-        Id = id;
-        Name = name;
-        Email = email;
-        Profile = profile;
-        UserDepartments = userDepartments;
-    }
-
-    // Delete
-    public User(int id)
-    {
-        Id = id;
-    }
-
-    public int Id { get; private set; }
+    public UserId Id { get; private set; }
 
     public string Name { get; private set; } = null!;
 
@@ -48,13 +18,13 @@ public sealed class User : IEntity, ICreatable, IUpdatable, ISoftDeletable
 
     public DateTime CreatedAt { get; private set; }
 
-    public int? CreatedByUserId { get; private set; }
+    public UserId? CreatedByUserId { get; private set; }
 
     // Updatable
 
     public DateTime UpdatedAt { get; private set; }
 
-    public int? UpdatedByUserId { get; private set; }
+    public UserId? UpdatedByUserId { get; private set; }
 
     public void Update(User user)
     {
@@ -71,5 +41,33 @@ public sealed class User : IEntity, ICreatable, IUpdatable, ISoftDeletable
 
     public DateTime? DeletedAt { get; private set; }
 
-    public int? DeletedByUserId { get; private set; }
+    public UserId? DeletedByUserId { get; private set; }
+
+    // Entity Framework
+    private User() { }
+
+    public static User CreateNew(string name, string email, string password, UserProfileEnum profile, ICollection<UserDepartment> userDepartments)
+    {
+        return new User
+        {
+            Id = UserId.CreateNew(),
+            Name = name,
+            Email = email,
+            Password = password,
+            Profile = profile,
+            UserDepartments = userDepartments,
+        };
+    }
+
+    public static User CreateExisting(UserId id, string name, string email, UserProfileEnum profile, ICollection<UserDepartment> userDepartments)
+    {
+        return new User
+        {
+            Id = id,
+            Name = name,
+            Email = email,
+            Profile = profile,
+            UserDepartments = userDepartments,
+        };
+    }
 }

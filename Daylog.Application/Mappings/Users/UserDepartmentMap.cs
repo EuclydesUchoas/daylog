@@ -16,7 +16,6 @@ public static class UserDepartmentMap
     public static UserDepartment? ToDomain(this CreateUserDepartmentRequestDto? createUserDepartmentRequestDto)
     {
         return createUserDepartmentRequestDto is not null ? new UserDepartment(
-            0,
             createUserDepartmentRequestDto.DepartmentId
         ) : null;
     }
@@ -24,7 +23,6 @@ public static class UserDepartmentMap
     public static UserDepartment? ToDomain(this UpdateUserDepartmentRequestDto? updateUserDepartmentRequestDto)
     {
         return updateUserDepartmentRequestDto is not null ? new UserDepartment(
-            0,
             updateUserDepartmentRequestDto.DepartmentId
         ) : null;
     }

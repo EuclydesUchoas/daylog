@@ -9,7 +9,7 @@ public sealed class UpdateUserRequestDtoValidator : AbstractValidator<UpdateUser
     public UpdateUserRequestDtoValidator(IValidator<UpdateUserDepartmentRequestDto> updateUserDepartmentRequestDtoValidator)
     {
         RuleFor(x => x.Id)
-            .GreaterThan(0)
+            .NotEmpty()
             .WithMessage(AppMessages.User_IdIsRequired);
 
         RuleFor(x => x.Name)

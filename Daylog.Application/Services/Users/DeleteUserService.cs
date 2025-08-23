@@ -17,7 +17,7 @@ public sealed class DeleteUserService(
 
         var user = await appDbContext.Users.AsNoTracking()
             .Include(x => x.UserDepartments)
-            .FirstOrDefaultAsync(u => u.Id == requestDto.Id, cancellationToken);
+            .FirstOrDefaultAsync(u => u.Id.Value == requestDto.Id, cancellationToken);
 
         if (user is null)
         {

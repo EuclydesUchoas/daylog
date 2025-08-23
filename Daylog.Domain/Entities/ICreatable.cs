@@ -1,7 +1,10 @@
-﻿namespace Daylog.Domain.Entities;
+﻿using Daylog.Domain.Entities.Users;
+
+namespace Daylog.Domain.Entities;
 
 public interface ICreatable
 {
     DateTime CreatedAt { get; }
-    int? CreatedByUserId { get; }
+
+    UserId? CreatedByUserId { get; }
 }

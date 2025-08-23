@@ -1,7 +1,9 @@
 ﻿using Daylog.Application.Abstractions.Services.Users;
+using Daylog.Application.Dtos.App;
 using Daylog.Application.Dtos.Users.Request;
 using Daylog.Application.Dtos.Users.Response;
 using Daylog.Application.Mappings.Users;
+using Daylog.Application.Resources;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -54,7 +56,7 @@ public sealed class UserEndpoints : IEndpoint
         return TypedResults.Ok(userDto);
     }*/
 
-    public static async Task<Ok<UserResponseDto>> CreateUser(
+    public static async Task<Ok<ResponseDto<UserResponseDto>>> CreateUser(
         [FromBody] CreateUserRequestDto createUserRequestDto,
         [FromServices] ICreateUserService createUserService,
         CancellationToken cancellationToken
@@ -63,12 +65,13 @@ public sealed class UserEndpoints : IEndpoint
         var user = await createUserService.HandleAsync(createUserRequestDto, cancellationToken);
 
         var userDto = user.ToDto();
+        var response = ResponseDto.CreateWithSuccess(userDto);
 
-        return TypedResults.Ok(userDto);
+        return TypedResults.Ok(response);
     }
 
-    public static async Task<Ok<UserResponseDto>> UpdateUser(
-        int id,
+    public static async Task<Ok<ResponseDto<UserResponseDto>>> UpdateUser(
+        Guid id,
         [FromBody] UpdateUserRequestDto updateUserRequestDto,
         [FromServices] IUpdateUserService updateUserService,
         CancellationToken cancellationToken
@@ -78,12 +81,13 @@ public sealed class UserEndpoints : IEndpoint
         var user = await updateUserService.HandleAsync(updateUserRequestDto, cancellationToken);
 
         var userDto = user.ToDto();
+        var response = ResponseDto.CreateWithSuccess(userDto);
 
-        return TypedResults.Ok(userDto);
+        return TypedResults.Ok(response);
     }
 
-    public static async Task<Results<Ok<bool>, NotFound>> DeleteUser(
-        int id,
+    public static async Task<Results<Ok<ResponseDto<bool>>, NotFound<ResponseDto>>> DeleteUser(
+        Guid id,
         [FromServices] IDeleteUserService deleteUserService,
         CancellationToken cancellationToken
         )
@@ -93,10 +97,12 @@ public sealed class UserEndpoints : IEndpoint
 
         if (!userDeleted)
         {
-            return TypedResults.NotFound();
+            var responseFail = ResponseDto.CreateWithFail(AppMessages.User_NotFound);
+            return TypedResults.NotFound(responseFail);
         }
 
-        return TypedResults.Ok(userDeleted);
+        var response = ResponseDto.CreateWithSuccess(userDeleted);
+        return TypedResults.Ok(response);
     }
 
     /*public static async Task<Results<Ok<IEnumerable<User>>, NotFound>> GetUsers(

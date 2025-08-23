@@ -5,7 +5,8 @@ namespace Daylog.Domain.Entities;
 public interface IUpdatable
 {
     DateTime UpdatedAt { get; }
-    int? UpdatedByUserId { get; }
+
+    UserId? UpdatedByUserId { get; }
 
     void Update(User user);
 }

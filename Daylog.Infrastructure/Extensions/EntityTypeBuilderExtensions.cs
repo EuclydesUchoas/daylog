@@ -1,0 +1,72 @@
+﻿using Daylog.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace Daylog.Infrastructure.Extensions;
+
+internal static class EntityTypeBuilderExtensions
+{
+    /*internal static void ConfigureInheritanceEntityProperties<TEntity>(this EntityTypeBuilder<TEntity> builder)
+        where TEntity : class, IEntity
+    {
+        if (builder is EntityTypeBuilder<ICreatable> creatableBuilder)
+        {
+            //creatableBuilder.ConfigureCreatableEntityProperties();
+        }
+
+        if (builder is EntityTypeBuilder<IUpdatable> updatableBuilder)
+        {
+            //updatableBuilder.ConfigureUpdatableEntityProperties();
+        }
+
+        if (builder is EntityTypeBuilder<ISoftDeletable> softDeletableBuilder)
+        {
+            //softDeletableBuilder.ConfigureSoftDeletableEntityProperties();
+        }
+    }*/
+
+    internal static void ConfigureCreatableEntityProperties<TEntity>(this EntityTypeBuilder<TEntity> builder)
+        where TEntity : class, IEntity, ICreatable
+    {
+        builder.Property(x => x.CreatedAt)
+            .HasColumnName("created_at")
+            .IsRequired();
+
+        builder.Property(x => x.CreatedByUserId)
+            .HasColumnName("created_by_user_id")
+            .HasEntityIdConversion()
+            .IsRequired(false);
+    }
+
+    internal static void ConfigureUpdatableEntityProperties<TEntity>(this EntityTypeBuilder<TEntity> builder)
+        where TEntity : class, IEntity, IUpdatable
+    {
+        builder.Property(x => x.UpdatedAt)
+            .HasColumnName("updated_at")
+            .IsRequired();
+
+        builder.Property(x => x.UpdatedByUserId)
+            .HasColumnName("updated_by_user_id")
+            .HasEntityIdConversion()
+            .IsRequired(false);
+    }
+
+    internal static void ConfigureSoftDeletableEntityProperties<TEntity>(this EntityTypeBuilder<TEntity> builder)
+        where TEntity : class, IEntity, ISoftDeletable
+    {
+        builder.Property(x => x.IsDeleted)
+            .HasColumnName("is_deleted")
+            .IsRequired(true);
+
+        builder.Property(x => x.DeletedAt)
+            .HasColumnName("deleted_at")
+            .IsRequired(false);
+
+        builder.Property(x => x.DeletedByUserId)
+            .HasColumnName("deleted_by_user_id")
+            .HasEntityIdConversion()
+            .IsRequired(false);
+
+        builder.HasQueryFilter(x => !x.IsDeleted);
+    }
+}

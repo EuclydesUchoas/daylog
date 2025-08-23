@@ -29,7 +29,7 @@ public sealed class CreateUserRequestDtoValidator : AbstractValidator<CreateUser
             .WithMessage(AppMessages.User_ProfileIsRequired)
             .IsInEnum()
             .WithMessage(AppMessages.User_ProfileIsInvalid);
-
+        ;
         RuleFor(x => x.UserDepartments)
             .NotEmpty()
             .WithMessage(AppMessages.User_DepartmentsAreRequired)
