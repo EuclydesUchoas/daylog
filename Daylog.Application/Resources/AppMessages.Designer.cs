@@ -88,6 +88,15 @@ namespace Daylog.Application.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Validation error has ocurred.
+        /// </summary>
+        public static string App_ValidationErrorHasOcurred {
+            get {
+                return ResourceManager.GetString("App_ValidationErrorHasOcurred", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Departments are required.
         /// </summary>
         public static string User_DepartmentsAreRequired {

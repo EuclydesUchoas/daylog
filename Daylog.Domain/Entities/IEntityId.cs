@@ -1,4 +1,6 @@
-﻿namespace Daylog.Domain.Entities;
+﻿using Daylog.Domain.Entities.Users;
+
+namespace Daylog.Domain.Entities;
 
 public interface IEntityId<TEntityId> : IEntityId
     where TEntityId : struct, IEntityId<TEntityId>

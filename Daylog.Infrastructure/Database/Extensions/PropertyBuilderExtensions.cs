@@ -1,7 +1,7 @@
 ﻿using Daylog.Domain.Entities;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Daylog.Infrastructure.Extensions;
+namespace Daylog.Infrastructure.Database.Extensions;
 
 internal static class PropertyBuilderExtensions
 {

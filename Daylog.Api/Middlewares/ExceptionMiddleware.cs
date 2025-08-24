@@ -21,6 +21,7 @@ internal sealed class ExceptionMiddleware(RequestDelegate next)
             var response = exception switch
             {
                 ValidationException ex => ResponseDto.CreateWithFail(
+                    AppMessages.App_ValidationErrorHasOcurred,
                     ex.Errors.Select(e => new ValidationErrorDto(e.PropertyName, e.ErrorMessage)).ToList()
                     ),
 

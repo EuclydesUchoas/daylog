@@ -1,5 +1,5 @@
 ﻿using Daylog.Domain.Entities.Users;
-using Daylog.Infrastructure.Extensions;
+using Daylog.Infrastructure.Database.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

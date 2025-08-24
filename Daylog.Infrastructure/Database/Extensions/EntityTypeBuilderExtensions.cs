@@ -2,29 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Daylog.Infrastructure.Extensions;
+namespace Daylog.Infrastructure.Database.Extensions;
 
 internal static class EntityTypeBuilderExtensions
 {
-    /*internal static void ConfigureInheritanceEntityProperties<TEntity>(this EntityTypeBuilder<TEntity> builder)
-        where TEntity : class, IEntity
-    {
-        if (builder is EntityTypeBuilder<ICreatable> creatableBuilder)
-        {
-            //creatableBuilder.ConfigureCreatableEntityProperties();
-        }
-
-        if (builder is EntityTypeBuilder<IUpdatable> updatableBuilder)
-        {
-            //updatableBuilder.ConfigureUpdatableEntityProperties();
-        }
-
-        if (builder is EntityTypeBuilder<ISoftDeletable> softDeletableBuilder)
-        {
-            //softDeletableBuilder.ConfigureSoftDeletableEntityProperties();
-        }
-    }*/
-
     internal static void ConfigureCreatableEntityProperties<TEntity>(this EntityTypeBuilder<TEntity> builder)
         where TEntity : class, IEntity, ICreatable
     {

@@ -126,6 +126,9 @@
   <data name="App_UnknownErrorHasOcurred" xml:space="preserve">
     <value>Ocorreu um erro desconhecido</value>
   </data>
+  <data name="App_ValidationErrorHasOcurred" xml:space="preserve">
+    <value>Ocorreu um erro de validação</value>
+  </data>
   <data name="UserDepartment_DepartmentIdIsRequired" xml:space="preserve">
     <value>Id do departamento é obrigatório</value>
   </data>

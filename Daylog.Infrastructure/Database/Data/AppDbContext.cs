@@ -2,7 +2,7 @@
 using Daylog.Domain.Entities;
 using Daylog.Domain.Entities.Departments;
 using Daylog.Domain.Entities.Users;
-using Daylog.Infrastructure.Extensions;
+using Daylog.Infrastructure.Database.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -59,6 +59,9 @@ public sealed class AppDbContext : DbContext, IAppDbContext
             .HasOne(ud => ud.User)
             .WithMany(u => u.UserDepartments)
             .HasForeignKey(ud => ud.UserId);
+
+        modelBuilder.Entity<UserDepartment>()
+            .HasQueryFilter(ud => !ud.User.IsDeleted);
 
         modelBuilder.ApplyConfigurationsFromAssembly(InfrastructureAssemblyReference.Assembly);
     }
