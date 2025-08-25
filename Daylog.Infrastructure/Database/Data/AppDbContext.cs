@@ -1,5 +1,4 @@
 ﻿using Daylog.Application.Abstractions.Data;
-using Daylog.Domain.Entities;
 using Daylog.Domain.Entities.Departments;
 using Daylog.Domain.Entities.Users;
 using Daylog.Infrastructure.Database.Extensions;

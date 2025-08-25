@@ -1,4 +1,5 @@
-﻿using Daylog.Application.Dtos.Users.Request;
+﻿using Daylog.Application.Dtos.App.Response;
+using Daylog.Application.Dtos.Users.Request;
 using Daylog.Application.Dtos.Users.Response;
 using Daylog.Domain.Entities.Users;
 
@@ -23,6 +24,16 @@ public static class UserMap
             user.DeletedAt,
             user.DeletedByUserId?.Value
         ) : null;
+    }
+
+    public static IEnumerable<UserResponseDto> ToDto(this IEnumerable<User> users)
+    {
+        return users.Select(x => x.ToDto()!);
+    }
+
+    public static CollectionResponseDto<UserResponseDto> ToCollectionDto(this IEnumerable<User> users)
+    {
+        return users.ToCollectionResponseDto(x => x.ToDto()!);
     }
 
     public static User? ToDomain(this CreateUserRequestDto? createUserRequestDto)

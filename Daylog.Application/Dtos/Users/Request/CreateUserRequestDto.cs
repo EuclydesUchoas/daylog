@@ -1,4 +1,5 @@
-﻿using Daylog.Domain.Entities.Users;
+﻿using Daylog.Application.Abstractions.Dtos;
+using Daylog.Domain.Entities.Users;
 
 namespace Daylog.Application.Dtos.Users.Request;
 

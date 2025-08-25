@@ -1,4 +1,4 @@
-﻿using Daylog.Application.Dtos.App;
+﻿using Daylog.Api.Models;
 using Daylog.Application.Enums;
 using Daylog.Application.Resources;
 using FluentValidation;
@@ -20,17 +20,17 @@ internal sealed class ExceptionMiddleware(RequestDelegate next)
         {
             var response = exception switch
             {
-                ValidationException ex => ResponseDto.CreateWithFail(
+                ValidationException ex => ResponseModel.CreateWithFail(
                     AppMessages.App_ValidationErrorHasOcurred,
-                    ex.Errors.Select(e => new ValidationErrorDto(e.PropertyName, e.ErrorMessage)).ToList()
+                    ex.Errors.Select(e => new ValidationErrorModel(e.PropertyName, e.ErrorMessage)).ToList()
                     ),
 
-                DbUpdateException or DbUpdateConcurrencyException => ResponseDto.CreateWithFail(
+                DbUpdateException or DbUpdateConcurrencyException => ResponseModel.CreateWithFail(
                     AppMessages.App_PersistenceErrorHasOcurred,
                     ResponseAuxCodeEnum.PersistenceError
                     ),
 
-                _ => ResponseDto.CreateWithFail(
+                _ => ResponseModel.CreateWithFail(
                     AppMessages.App_UnknownErrorHasOcurred,
                     ResponseAuxCodeEnum.Unknown
                     )

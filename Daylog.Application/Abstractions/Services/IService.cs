@@ -1,4 +1,4 @@
-﻿using Daylog.Application.Dtos;
+﻿using Daylog.Application.Abstractions.Dtos;
 
 namespace Daylog.Application.Abstractions.Services;
 

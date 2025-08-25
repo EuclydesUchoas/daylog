@@ -2,6 +2,6 @@
 
 namespace Daylog.Application.Dtos.Users.Request;
 
-public sealed record DeleteUserRequestDto(
+public sealed record GetUserByIdRequestDto(
     Guid Id
     ) : IRequestDto;

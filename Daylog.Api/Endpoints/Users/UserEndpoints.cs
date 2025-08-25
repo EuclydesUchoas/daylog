@@ -1,9 +1,14 @@
-﻿using Daylog.Application.Abstractions.Services.Users;
-using Daylog.Application.Dtos.App;
+﻿using Daylog.Api.Models;
+using Daylog.Application.Abstractions.Dtos;
+using Daylog.Application.Abstractions.Services.Users;
+using Daylog.Application.Dtos.App.Response;
 using Daylog.Application.Dtos.Users.Request;
 using Daylog.Application.Dtos.Users.Response;
 using Daylog.Application.Mappings.Users;
 using Daylog.Application.Resources;
+using Daylog.Application.Services.Users;
+using Daylog.Domain.Entities.Users;
+using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,7 +37,7 @@ public sealed class UserEndpoints : IEndpoint
             .WithSummary("Delete User")
             .WithDescription("Delete a user by ID.");
 
-        /*group
+        group
             .MapGet("/users/{id}", GetUser)
             .WithSummary("Get User")
             .WithDescription("Get a user by ID.");
@@ -40,7 +45,7 @@ public sealed class UserEndpoints : IEndpoint
         group
             .MapGet("/users", GetUsers)
             .WithSummary("Get Users")
-            .WithDescription("Get a list of all users.");*/
+            .WithDescription("Get a list of all users.");
     }
 
     /*public static async Task<Ok<UserDto>> CreateUser(
@@ -56,87 +61,97 @@ public sealed class UserEndpoints : IEndpoint
         return TypedResults.Ok(userDto);
     }*/
 
-    public static async Task<Ok<ResponseDto<UserResponseDto>>> CreateUser(
-        [FromBody] CreateUserRequestDto createUserRequestDto,
+    public static async Task<Ok<ResponseModel<UserResponseDto>>> CreateUser(
+        [FromBody] CreateUserRequestDto requestDto,
         [FromServices] ICreateUserService createUserService,
         CancellationToken cancellationToken
         )
     {
-        var user = await createUserService.HandleAsync(createUserRequestDto, cancellationToken);
+        var user = await createUserService.HandleAsync(requestDto, cancellationToken);
 
         var userDto = user.ToDto();
-        var response = ResponseDto.CreateWithSuccess(userDto);
+        var response = ResponseModel.CreateWithSuccess(userDto);
 
         return TypedResults.Ok(response);
     }
 
-    public static async Task<Ok<ResponseDto<UserResponseDto>>> UpdateUser(
+    public static async Task<Ok<ResponseModel<UserResponseDto>>> UpdateUser(
         Guid id,
-        [FromBody] UpdateUserRequestDto updateUserRequestDto,
+        [FromBody] UpdateUserRequestDto requestDto,
         [FromServices] IUpdateUserService updateUserService,
         CancellationToken cancellationToken
         )
     {
-        updateUserRequestDto = updateUserRequestDto with { Id = id };
-        var user = await updateUserService.HandleAsync(updateUserRequestDto, cancellationToken);
+        requestDto = requestDto with { Id = id };
+        var user = await updateUserService.HandleAsync(requestDto, cancellationToken);
 
         var userDto = user.ToDto();
-        var response = ResponseDto.CreateWithSuccess(userDto);
+        var response = ResponseModel.CreateWithSuccess(userDto);
 
         return TypedResults.Ok(response);
     }
 
-    public static async Task<Results<Ok<ResponseDto<bool>>, NotFound<ResponseDto>>> DeleteUser(
+    public static async Task<Results<Ok<ResponseModel>, NotFound<ResponseModel>>> DeleteUser(
         Guid id,
         [FromServices] IDeleteUserService deleteUserService,
         CancellationToken cancellationToken
         )
     {
-        var deleteUserRequestDto = new DeleteUserRequestDto(id);
-        var userDeleted = await deleteUserService.HandleAsync(deleteUserRequestDto, cancellationToken);
+        var requestDto = new DeleteUserRequestDto(id);
+        var userDeleted = await deleteUserService.HandleAsync(requestDto, cancellationToken);
 
         if (!userDeleted)
         {
-            var responseFail = ResponseDto.CreateWithFail(AppMessages.User_NotFound);
+            var responseFail = ResponseModel.CreateWithFail(AppMessages.User_NotFound);
             return TypedResults.NotFound(responseFail);
         }
 
-        var response = ResponseDto.CreateWithSuccess(userDeleted);
+        var response = ResponseModel.CreateWithSuccess();
         return TypedResults.Ok(response);
     }
 
-    /*public static async Task<Results<Ok<IEnumerable<User>>, NotFound>> GetUsers(
-        [FromServices] ISender sender,
+    public static async Task<Results<Ok<ResponseModel<UserResponseDto>>, NotFound>> GetUser(
+        Guid id,
+        [FromServices] IGetUserByIdService getUserByIdService,
         CancellationToken cancellationToken
         )
     {
-        var query = new GetUsersQuery();
-
-        var users = await sender.Send(query, cancellationToken);
-
-        if (!users.Any())
-        {
-            return TypedResults.NotFound();
-        }
-
-        return TypedResults.Ok(users);
-    }
-
-    public static async Task<Results<Ok<User>, NotFound>> GetUser(
-        int id,
-        [FromServices] ISender sender,
-        CancellationToken cancellationToken
-        )
-    {
-        var query = new GetUserByIdQuery(id);
-
-        var user = await sender.Send(query, cancellationToken);
+        var requestDto = new GetUserByIdRequestDto(id);
+        var user = await getUserByIdService.HandleAsync(requestDto, cancellationToken);
 
         if (user is null)
         {
             return TypedResults.NotFound();
         }
 
-        return TypedResults.Ok(user);
-    }*/
+        var userDto = user.ToDto();
+        var response = ResponseModel.CreateWithSuccess(userDto);
+
+        return TypedResults.Ok(response);
+    }
+
+    public static async Task<Results<Ok<ResponseModel<PagedResponseDto<UserResponseDto>>>, NotFound<ResponseModel<PagedResponseDto<UserResponseDto>>>>> GetUsers(
+        [AsParameters] GetPagedUsersRequestDto requestDto,
+        [FromServices] IGetPagedUsersService getPagedUsersService,
+        CancellationToken cancellationToken
+        )
+    {
+        var pagedUsers = await getPagedUsersService.HandleAsync(requestDto, cancellationToken);
+
+        var pagedUsersDto = new PagedResponseDto<UserResponseDto>(
+            pagedUsers.PageNumber,
+            pagedUsers.PageSize,
+            pagedUsers.Items.ToDto(),
+            pagedUsers.TotalItems
+            );
+
+        var response = ResponseModel.CreateWithSuccess(pagedUsersDto);
+
+        if (!pagedUsers.Items.Any())
+        {
+            return TypedResults.NotFound(response);
+        }
+
+        return TypedResults.Ok(response);
+    }
 }
