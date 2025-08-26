@@ -7,7 +7,7 @@ public sealed record PagedResponseModel<TResponse>(
     int PageSize,
     IEnumerable<TResponse> Items,
     int? TotalItems
-    )
+    ) : IResponseModel
 {
     public int? TotalPages
         => TotalItems.HasValue && TotalItems.Value > 0 && PageSize > 0

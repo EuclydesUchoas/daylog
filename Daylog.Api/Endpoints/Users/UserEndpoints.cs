@@ -1,14 +1,10 @@
 ﻿using Daylog.Api.Models;
-using Daylog.Application.Abstractions.Dtos;
 using Daylog.Application.Abstractions.Services.Users;
 using Daylog.Application.Dtos.App.Response;
 using Daylog.Application.Dtos.Users.Request;
 using Daylog.Application.Dtos.Users.Response;
 using Daylog.Application.Mappings.Users;
 using Daylog.Application.Resources;
-using Daylog.Application.Services.Users;
-using Daylog.Domain.Entities.Users;
-using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,27 +19,27 @@ public sealed class UserEndpoints : IEndpoint
             .WithTags("Users");
 
         group
-            .MapPost("/users", CreateUser)
+            .MapPost("/", CreateUser)
             .WithSummary("Create User")
             .WithDescription("Create a new user.");
 
         group
-            .MapPut("/users/{id}", UpdateUser)
+            .MapPut("/{id}", UpdateUser)
             .WithSummary("Update User")
             .WithDescription("Update an existing user by ID.");
 
         group
-            .MapDelete("/users/{id}", DeleteUser)
+            .MapDelete("/{id}", DeleteUser)
             .WithSummary("Delete User")
             .WithDescription("Delete a user by ID.");
 
         group
-            .MapGet("/users/{id}", GetUser)
+            .MapGet("/{id}", GetUser)
             .WithSummary("Get User")
             .WithDescription("Get a user by ID.");
 
         group
-            .MapGet("/users", GetUsers)
+            .MapGet("/", GetUsers)
             .WithSummary("Get Users")
             .WithDescription("Get a list of all users.");
     }
@@ -144,7 +140,7 @@ public sealed class UserEndpoints : IEndpoint
             pagedUsers.Items.ToDto(),
             pagedUsers.TotalItems
             );
-
+        
         var response = ResponseModel.CreateWithSuccess(pagedUsersDto);
 
         if (!pagedUsers.Items.Any())

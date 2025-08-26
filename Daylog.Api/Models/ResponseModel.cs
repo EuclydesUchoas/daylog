@@ -1,6 +1,7 @@
 ﻿using Daylog.Application.Abstractions.Dtos;
 using Daylog.Application.Enums;
 using System.Net;
+using System.Text.Json.Serialization;
 
 namespace Daylog.Api.Models;
 
@@ -121,8 +122,10 @@ public class ResponseModel
         };
 }
 
+
 public sealed class ResponseModel<T>(T? data) : ResponseModel
     where T : class, IResponseDto
 {
+    [JsonPropertyOrder(1)] // Serialize base properties first
     public T? Data { get; private set; } = data;
 }

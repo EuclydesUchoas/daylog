@@ -1,7 +1,6 @@
 ﻿using Daylog.Application.Abstractions.Data;
 using Daylog.Application.Abstractions.Services.Users;
 using Daylog.Application.Dtos.Users.Request;
-using Daylog.Application.Models;
 using Daylog.Domain.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 
