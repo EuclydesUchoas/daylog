@@ -1,5 +1,5 @@
 ﻿using Daylog.Application.Dtos.Users.Request;
-using Daylog.Application.Resources;
+using Daylog.Application.Resources.Users;
 using FluentValidation;
 
 namespace Daylog.Application.Validators.Users;
@@ -10,27 +10,27 @@ public sealed class UpdateUserRequestDtoValidator : AbstractValidator<UpdateUser
     {
         RuleFor(x => x.Id)
             .NotEmpty()
-            .WithMessage(AppMessages.User_IdIsRequired);
+            .WithMessage(UserMessages.IdIsRequired);
 
         RuleFor(x => x.Name)
             .NotEmpty()
-            .WithMessage(AppMessages.User_NameIsRequired);
+            .WithMessage(UserMessages.NameIsRequired);
 
         RuleFor(x => x.Email)
             .NotEmpty()
-            .WithMessage(AppMessages.User_EmailIsRequired)
+            .WithMessage(UserMessages.EmailIsRequired)
             .EmailAddress()
-            .WithMessage(AppMessages.User_EmailIsInvalid);
+            .WithMessage(UserMessages.EmailIsInvalid);
 
         RuleFor(x => x.Profile)
             .NotEmpty()
-            .WithMessage(AppMessages.User_ProfileIsRequired)
+            .WithMessage(UserMessages.ProfileIsRequired)
             .IsInEnum()
-            .WithMessage(AppMessages.User_ProfileIsInvalid);
+            .WithMessage(UserMessages.ProfileIsInvalid);
 
         RuleFor(x => x.UserDepartments)
             .NotEmpty()
-            .WithMessage(AppMessages.User_DepartmentsAreRequired)
+            .WithMessage(UserMessages.DepartmentsAreRequired)
             .ForEach(x => x.SetValidator(updateUserDepartmentRequestDtoValidator));
     }
 }

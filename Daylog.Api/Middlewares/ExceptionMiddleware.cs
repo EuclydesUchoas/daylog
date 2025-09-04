@@ -1,10 +1,11 @@
 ﻿using Daylog.Api.Models;
 using Daylog.Application.Enums;
-using Daylog.Application.Resources;
+using Daylog.Application.Resources.App;
 using FluentValidation;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using System.Net;
 
 namespace Daylog.Api.Middlewares;
 
@@ -18,25 +19,25 @@ internal sealed class ExceptionMiddleware(RequestDelegate next)
         }
         catch (Exception exception)
         {
-            var response = exception switch
+            (ResponseModel response, HttpStatusCode statusCode) = exception switch
             {
-                ValidationException ex => ResponseModel.CreateWithFail(
-                    AppMessages.App_ValidationErrorHasOcurred,
+                ValidationException ex => (ResponseModel.Failure(
+                    AppMessages.AValidationErrorOcurred,
                     ex.Errors.Select(e => new ValidationErrorModel(e.PropertyName, e.ErrorMessage)).ToList()
-                    ),
+                    ), HttpStatusCode.BadRequest),
 
-                DbUpdateException or DbUpdateConcurrencyException => ResponseModel.CreateWithFail(
-                    AppMessages.App_PersistenceErrorHasOcurred,
+                DbUpdateException or DbUpdateConcurrencyException => (ResponseModel.Failure(
+                    AppMessages.APersistenceErrorOcurred,
                     ResponseAuxCodeEnum.PersistenceError
-                    ),
+                    ), HttpStatusCode.BadRequest),
 
-                _ => ResponseModel.CreateWithFail(
-                    AppMessages.App_UnknownErrorHasOcurred,
-                    ResponseAuxCodeEnum.Unknown
-                    )
+                _ => (ResponseModel.Failure(
+                    AppMessages.AnUnknownErrorOcurred,
+                    ResponseAuxCodeEnum.Failure
+                    ), HttpStatusCode.BadRequest)
             };
 
-            httpContext.Response.StatusCode = (int)response.StatusCode;
+            httpContext.Response.StatusCode = (int)statusCode;
 
             var jsonSerializarOptions = jsonOptions.Value.SerializerOptions;
             await httpContext.Response.WriteAsJsonAsync(response, jsonSerializarOptions);

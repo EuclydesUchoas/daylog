@@ -1,5 +1,5 @@
 ﻿using Daylog.Application.Dtos.Users.Request;
-using Daylog.Application.Resources;
+using Daylog.Application.Resources.Users;
 using FluentValidation;
 
 namespace Daylog.Application.Validators.Users;
@@ -10,6 +10,6 @@ public sealed class DeleteUserRequestDtoValidator : AbstractValidator<DeleteUser
     {
         RuleFor(x => x.Id)
             .NotEmpty()
-            .WithMessage(AppMessages.User_IdIsRequired);
+            .WithMessage(UserMessages.IdIsRequired);
     }
 }

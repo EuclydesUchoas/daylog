@@ -117,49 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="App_ErrorHasOcurred" xml:space="preserve">
-    <value>Ocorreu um erro</value>
+  <data name="AnErrorOcurred" xml:space="preserve">
+    <value>An error ocurred</value>
   </data>
-  <data name="App_PersistenceErrorHasOcurred" xml:space="preserve">
-    <value>Ocorreu um erro de persistência</value>
+  <data name="APersistenceErrorOcurred" xml:space="preserve">
+    <value>A persistence error ocurred</value>
   </data>
-  <data name="App_UnknownErrorHasOcurred" xml:space="preserve">
-    <value>Ocorreu um erro desconhecido</value>
+  <data name="AnUnknownErrorOcurred" xml:space="preserve">
+    <value>An unknown error ocurred</value>
   </data>
-  <data name="App_ValidationErrorHasOcurred" xml:space="preserve">
-    <value>Ocorreu um erro de validação</value>
-  </data>
-  <data name="UserDepartment_DepartmentIdIsRequired" xml:space="preserve">
-    <value>Id do departamento é obrigatório</value>
-  </data>
-  <data name="User_DepartmentsAreRequired" xml:space="preserve">
-    <value>Departamentos são obrigatórios</value>
-  </data>
-  <data name="User_EmailIsInvalid" xml:space="preserve">
-    <value>E-mail é inválido</value>
-  </data>
-  <data name="User_EmailIsRequired" xml:space="preserve">
-    <value>E-mail é obrigatório</value>
-  </data>
-  <data name="User_IdIsRequired" xml:space="preserve">
-    <value>Id é obrigatório</value>
-  </data>
-  <data name="User_NameIsRequired" xml:space="preserve">
-    <value>Nome é obrigatório</value>
-  </data>
-  <data name="User_NotFound" xml:space="preserve">
-    <value>Não encontrado</value>
-  </data>
-  <data name="User_PasswordIsRequired" xml:space="preserve">
-    <value>Senha é obrigatória</value>
-  </data>
-  <data name="User_PasswordMustBeAtLeast8CharactersLong" xml:space="preserve">
-    <value>Senha tem que ter ao menos 8 caracteres</value>
-  </data>
-  <data name="User_ProfileIsInvalid" xml:space="preserve">
-    <value>Perfil é inválido</value>
-  </data>
-  <data name="User_ProfileIsRequired" xml:space="preserve">
-    <value>Perfil é obrigatório</value>
+  <data name="AValidationErrorOcurred" xml:space="preserve">
+    <value>A validation error ocurred</value>
   </data>
 </root>

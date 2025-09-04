@@ -4,6 +4,7 @@ namespace Daylog.Application.Abstractions.Services;
 
 public interface IService<TRequestDto, TResponse> 
     where TRequestDto : class, IRequestDto
+    //where TResponse : Result
 {
     Task<TResponse> HandleAsync(TRequestDto requestDto, CancellationToken cancellationToken = default);
 }

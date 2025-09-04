@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Daylog.Application.Resources {
+namespace Daylog.Application.Resources.Users {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace Daylog.Application.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class AppMessages {
+    public class UserMessages {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal AppMessages() {
+        internal UserMessages() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Daylog.Application.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Daylog.Application.Resources.AppMessages", typeof(AppMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Daylog.Application.Resources.Users.UserMessages", typeof(UserMessages).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,137 +61,101 @@ namespace Daylog.Application.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Error has ocurred.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Department id is required.
         /// </summary>
-        public static string App_ErrorHasOcurred {
+        public static string DepartmentIdIsRequired {
             get {
-                return ResourceManager.GetString("App_ErrorHasOcurred", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Persistence error has ocurred.
-        /// </summary>
-        public static string App_PersistenceErrorHasOcurred {
-            get {
-                return ResourceManager.GetString("App_PersistenceErrorHasOcurred", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Unknown error has ocurred.
-        /// </summary>
-        public static string App_UnknownErrorHasOcurred {
-            get {
-                return ResourceManager.GetString("App_UnknownErrorHasOcurred", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Validation error has ocurred.
-        /// </summary>
-        public static string App_ValidationErrorHasOcurred {
-            get {
-                return ResourceManager.GetString("App_ValidationErrorHasOcurred", resourceCulture);
+                return ResourceManager.GetString("DepartmentIdIsRequired", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Departments are required.
         /// </summary>
-        public static string User_DepartmentsAreRequired {
+        public static string DepartmentsAreRequired {
             get {
-                return ResourceManager.GetString("User_DepartmentsAreRequired", resourceCulture);
+                return ResourceManager.GetString("DepartmentsAreRequired", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a E-mail is invalid.
         /// </summary>
-        public static string User_EmailIsInvalid {
+        public static string EmailIsInvalid {
             get {
-                return ResourceManager.GetString("User_EmailIsInvalid", resourceCulture);
+                return ResourceManager.GetString("EmailIsInvalid", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a E-mail is required.
         /// </summary>
-        public static string User_EmailIsRequired {
+        public static string EmailIsRequired {
             get {
-                return ResourceManager.GetString("User_EmailIsRequired", resourceCulture);
+                return ResourceManager.GetString("EmailIsRequired", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Id is required.
         /// </summary>
-        public static string User_IdIsRequired {
+        public static string IdIsRequired {
             get {
-                return ResourceManager.GetString("User_IdIsRequired", resourceCulture);
+                return ResourceManager.GetString("IdIsRequired", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Name is required.
         /// </summary>
-        public static string User_NameIsRequired {
+        public static string NameIsRequired {
             get {
-                return ResourceManager.GetString("User_NameIsRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Not found.
-        /// </summary>
-        public static string User_NotFound {
-            get {
-                return ResourceManager.GetString("User_NotFound", resourceCulture);
+                return ResourceManager.GetString("NameIsRequired", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Password is required.
         /// </summary>
-        public static string User_PasswordIsRequired {
+        public static string PasswordIsRequired {
             get {
-                return ResourceManager.GetString("User_PasswordIsRequired", resourceCulture);
+                return ResourceManager.GetString("PasswordIsRequired", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Password must be at least 8 characters long.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Password must be at least {0} characters long.
         /// </summary>
-        public static string User_PasswordMustBeAtLeast8CharactersLong {
+        public static string PasswordLengthTooShort {
             get {
-                return ResourceManager.GetString("User_PasswordMustBeAtLeast8CharactersLong", resourceCulture);
+                return ResourceManager.GetString("PasswordLengthTooShort", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Profile is invalid.
         /// </summary>
-        public static string User_ProfileIsInvalid {
+        public static string ProfileIsInvalid {
             get {
-                return ResourceManager.GetString("User_ProfileIsInvalid", resourceCulture);
+                return ResourceManager.GetString("ProfileIsInvalid", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Profile is required.
         /// </summary>
-        public static string User_ProfileIsRequired {
+        public static string ProfileIsRequired {
             get {
-                return ResourceManager.GetString("User_ProfileIsRequired", resourceCulture);
+                return ResourceManager.GetString("ProfileIsRequired", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Department id is required.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a User not found.
         /// </summary>
-        public static string UserDepartment_DepartmentIdIsRequired {
+        public static string UserNotFound {
             get {
-                return ResourceManager.GetString("UserDepartment_DepartmentIdIsRequired", resourceCulture);
+                return ResourceManager.GetString("UserNotFound", resourceCulture);
             }
         }
     }

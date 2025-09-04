@@ -13,7 +13,6 @@ public static class UserMap
             user.Id.Value,
             user.Name,
             user.Email,
-            user.Password,
             user.Profile,
             user.UserDepartments?.Select(x => x.ToDto()).ToList()!,
             user.CreatedAt,

@@ -3,8 +3,10 @@ using Daylog.Application.Abstractions.Services.Users;
 using Daylog.Application.Dtos.App.Response;
 using Daylog.Application.Dtos.Users.Request;
 using Daylog.Application.Dtos.Users.Response;
+using Daylog.Application.Enums;
 using Daylog.Application.Mappings.Users;
-using Daylog.Application.Resources;
+using Daylog.Application.Resources.Users;
+using Daylog.Application.Results;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -44,31 +46,48 @@ public sealed class UserEndpoints : IEndpoint
             .WithDescription("Get a list of all users.");
     }
 
-    /*public static async Task<Ok<UserDto>> CreateUser(
-        [FromBody] CreateUserCommand command,
-        [FromServices] ISender sender,
-        CancellationToken cancellationToken
-        )
-    {
-        var user = await sender.Send(command, cancellationToken);
-
-        var userDto = user.ToDto();
-
-        return TypedResults.Ok(userDto);
-    }*/
-
-    public static async Task<Ok<ResponseModel<UserResponseDto>>> CreateUser(
+    /*public static async Task<Results<Ok<ResponseModel<UserResponseDto>>, Conflict<ResponseModel>, BadRequest<ResponseModel>>> CreateUser(
         [FromBody] CreateUserRequestDto requestDto,
         [FromServices] ICreateUserService createUserService,
         CancellationToken cancellationToken
         )
     {
-        var user = await createUserService.HandleAsync(requestDto, cancellationToken);
+        var result = await createUserService.HandleAsync(requestDto, cancellationToken);
 
-        var userDto = user.ToDto();
-        var response = ResponseModel.CreateWithSuccess(userDto);
+        var response = ResponseModel.FromResultData(result, x => x.ToDto());
 
-        return TypedResults.Ok(response);
+        if (result.IsSuccess)
+        {
+            return TypedResults.Ok(response);
+        }
+
+        return response.AuxCode switch
+        {
+            ResponseAuxCodeEnum.ConflictError => TypedResults.Conflict(response as ResponseModel),
+            _ => TypedResults.BadRequest(response as ResponseModel)
+        };
+    }*/
+
+    public static async Task<Results<Ok<Result<UserResponseDto>>, Conflict<Result>, BadRequest<Result>>> CreateUser(
+        [FromBody] CreateUserRequestDto requestDto,
+        [FromServices] ICreateUserService createUserService,
+        CancellationToken cancellationToken
+        )
+    {
+        var result = await createUserService.HandleAsync(requestDto, cancellationToken);
+        
+        var responseResult = result.Cast(result, x => x.ToDto()!);
+
+        if (result.IsSuccess)
+        {
+            return TypedResults.Ok(responseResult);
+        }
+
+        return responseResult.Error?.Type switch
+        {
+            ResultErrorTypeEnum.Conflict => TypedResults.Conflict(responseResult.Base),
+            _ => TypedResults.BadRequest(responseResult.Base)
+        };
     }
 
     public static async Task<Ok<ResponseModel<UserResponseDto>>> UpdateUser(
@@ -82,7 +101,7 @@ public sealed class UserEndpoints : IEndpoint
         var user = await updateUserService.HandleAsync(requestDto, cancellationToken);
 
         var userDto = user.ToDto();
-        var response = ResponseModel.CreateWithSuccess(userDto);
+        var response = ResponseModel.Success(userDto);
 
         return TypedResults.Ok(response);
     }
@@ -98,11 +117,11 @@ public sealed class UserEndpoints : IEndpoint
 
         if (!userDeleted)
         {
-            var responseFail = ResponseModel.CreateWithFail(AppMessages.User_NotFound);
+            var responseFail = ResponseModel.Failure(UserMessages.UserNotFound);
             return TypedResults.NotFound(responseFail);
         }
 
-        var response = ResponseModel.CreateWithSuccess();
+        var response = ResponseModel.Success();
         return TypedResults.Ok(response);
     }
 
@@ -121,7 +140,7 @@ public sealed class UserEndpoints : IEndpoint
         }
 
         var userDto = user.ToDto();
-        var response = ResponseModel.CreateWithSuccess(userDto);
+        var response = ResponseModel.Success(userDto);
 
         return TypedResults.Ok(response);
     }
@@ -141,7 +160,7 @@ public sealed class UserEndpoints : IEndpoint
             pagedUsers.TotalItems
             );
         
-        var response = ResponseModel.CreateWithSuccess(pagedUsersDto);
+        var response = ResponseModel.Success(pagedUsersDto);
 
         if (!pagedUsers.Items.Any())
         {

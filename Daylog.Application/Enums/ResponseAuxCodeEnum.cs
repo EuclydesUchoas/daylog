@@ -3,9 +3,13 @@
 public enum ResponseAuxCodeEnum
 {
     Success = 0,
-    Unknown = 1,
-    OperationNotAllowed = 2,
-    InsufficientPermissionAccessResource = 3,
-    ValidationErrorsOcurred = 4,
-    PersistenceError = 5,
+    Failure = 1,
+
+    ValidationError = 2,
+    Unauthorized = 3,
+    InsufficientPermissions = 4,
+    NotFound = 5,
+    ConflictError = 6,
+    InternalError = 7,
+    PersistenceError = 8,
 }
