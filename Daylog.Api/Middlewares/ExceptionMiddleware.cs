@@ -1,6 +1,5 @@
-﻿using Daylog.Api.Models;
-using Daylog.Application.Enums;
-using Daylog.Application.Resources.App;
+﻿using Daylog.Application.Shared.Resources;
+using Daylog.Application.Shared.Results;
 using FluentValidation;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
@@ -19,28 +18,25 @@ internal sealed class ExceptionMiddleware(RequestDelegate next)
         }
         catch (Exception exception)
         {
-            (ResponseModel response, HttpStatusCode statusCode) = exception switch
+            (Result responseResult, HttpStatusCode statusCode) = exception switch
             {
-                ValidationException ex => (ResponseModel.Failure(
-                    AppMessages.AValidationErrorOcurred,
-                    ex.Errors.Select(e => new ValidationErrorModel(e.PropertyName, e.ErrorMessage)).ToList()
+                ValidationException ex => (Result.Failure(
+                    ResultError.Validation(ex.Errors)
                     ), HttpStatusCode.BadRequest),
 
-                DbUpdateException or DbUpdateConcurrencyException => (ResponseModel.Failure(
-                    AppMessages.APersistenceErrorOcurred,
-                    ResponseAuxCodeEnum.PersistenceError
-                    ), HttpStatusCode.BadRequest),
+                DbUpdateException or DbUpdateConcurrencyException => (Result.Failure(
+                    ResultError.Internal(ResultErrorCodes.Internal, AppMessages.APersistenceErrorOcurred)
+                    ), HttpStatusCode.InternalServerError),
 
-                _ => (ResponseModel.Failure(
-                    AppMessages.AnUnknownErrorOcurred,
-                    ResponseAuxCodeEnum.Failure
-                    ), HttpStatusCode.BadRequest)
+                _ => (Result.Failure(
+                    ResultError.Internal(ResultErrorCodes.Internal, AppMessages.AnUnknownErrorOcurred)
+                    ), HttpStatusCode.InternalServerError)
             };
 
             httpContext.Response.StatusCode = (int)statusCode;
 
-            var jsonSerializarOptions = jsonOptions.Value.SerializerOptions;
-            await httpContext.Response.WriteAsJsonAsync(response, jsonSerializarOptions);
+            var jsonSerializerOptions = jsonOptions.Value.SerializerOptions;
+            await httpContext.Response.WriteAsJsonAsync(responseResult, jsonSerializerOptions);
         }
     }
 }

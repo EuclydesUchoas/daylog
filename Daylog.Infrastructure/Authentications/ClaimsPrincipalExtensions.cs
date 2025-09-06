@@ -1,4 +1,4 @@
-﻿using Daylog.Domain.Entities.Users;
+﻿using Daylog.Domain.Users;
 using System.Security.Claims;
 
 namespace Daylog.Infrastructure.Authentications;

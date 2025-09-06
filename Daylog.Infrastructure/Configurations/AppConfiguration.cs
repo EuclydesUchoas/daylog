@@ -1,5 +1,5 @@
 ﻿using Daylog.Application.Abstractions.Configurations;
-using Daylog.Application.Enums;
+using Daylog.Application.Shared.Enums;
 using Microsoft.Extensions.Configuration;
 
 namespace Daylog.Infrastructure.Configurations;

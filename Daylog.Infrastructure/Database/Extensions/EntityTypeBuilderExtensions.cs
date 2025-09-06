@@ -1,4 +1,4 @@
-﻿using Daylog.Domain.Entities;
+﻿using Daylog.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -11,6 +11,7 @@ internal static class EntityTypeBuilderExtensions
     {
         builder.Property(x => x.CreatedAt)
             .HasColumnName("created_at")
+            .HasDateTimeUTCConversion()
             .IsRequired();
 
         builder.Property(x => x.CreatedByUserId)
@@ -24,6 +25,7 @@ internal static class EntityTypeBuilderExtensions
     {
         builder.Property(x => x.UpdatedAt)
             .HasColumnName("updated_at")
+            .HasDateTimeUTCConversion()
             .IsRequired();
 
         builder.Property(x => x.UpdatedByUserId)
@@ -41,6 +43,7 @@ internal static class EntityTypeBuilderExtensions
 
         builder.Property(x => x.DeletedAt)
             .HasColumnName("deleted_at")
+            .HasDateTimeUTCConversion()
             .IsRequired(false);
 
         builder.Property(x => x.DeletedByUserId)

@@ -1,5 +1,5 @@
 ﻿using Daylog.Application.Abstractions.Authentications;
-using Daylog.Domain.Entities.Users;
+using Daylog.Domain.Users;
 using Microsoft.AspNetCore.Http;
 
 namespace Daylog.Infrastructure.Authentications;

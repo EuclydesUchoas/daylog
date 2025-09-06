@@ -1,4 +1,4 @@
-﻿using Daylog.Domain.Entities.Users;
+﻿using Daylog.Domain.Users;
 
 namespace Daylog.Application.Abstractions.Authentications;
 

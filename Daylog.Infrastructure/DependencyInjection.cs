@@ -1,7 +1,7 @@
 ﻿using Daylog.Application.Abstractions.Authentications;
 using Daylog.Application.Abstractions.Configurations;
 using Daylog.Application.Abstractions.Data;
-using Daylog.Application.Enums;
+using Daylog.Application.Shared.Enums;
 using Daylog.Infrastructure.Authentications;
 using Daylog.Infrastructure.Configurations;
 using Daylog.Infrastructure.Database.Data;

@@ -1,11 +1,11 @@
 ﻿using FluentMigrator.Runner;
 using FluentMigrator.Runner.Exceptions;
-using Daylog.Application.Enums;
 using Daylog.Infrastructure.Database.Factories.Creators;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using Daylog.Application.Abstractions.Configurations;
+using Daylog.Application.Shared.Enums;
 
 namespace Daylog.Infrastructure.Database.Factories;
 

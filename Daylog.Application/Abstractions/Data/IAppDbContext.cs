@@ -1,5 +1,5 @@
-﻿using Daylog.Domain.Entities.Departments;
-using Daylog.Domain.Entities.Users;
+﻿using Daylog.Domain.Departments;
+using Daylog.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace Daylog.Application.Abstractions.Data;

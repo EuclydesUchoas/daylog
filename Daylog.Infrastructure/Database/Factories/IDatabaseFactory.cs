@@ -1,4 +1,4 @@
-﻿using Daylog.Application.Enums;
+﻿using Daylog.Application.Shared.Enums;
 using Daylog.Infrastructure.Database.Factories.Creators;
 
 namespace Daylog.Infrastructure.Database.Factories;

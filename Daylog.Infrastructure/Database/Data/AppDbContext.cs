@@ -1,6 +1,6 @@
 ﻿using Daylog.Application.Abstractions.Data;
-using Daylog.Domain.Entities.Departments;
-using Daylog.Domain.Entities.Users;
+using Daylog.Domain.Departments;
+using Daylog.Domain.Users;
 using Daylog.Infrastructure.Database.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
