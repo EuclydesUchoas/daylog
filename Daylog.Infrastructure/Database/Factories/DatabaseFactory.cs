@@ -5,7 +5,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using Daylog.Application.Abstractions.Configurations;
-using Daylog.Application.Shared.Enums;
+using Daylog.Shared.Enums;
 
 namespace Daylog.Infrastructure.Database.Factories;
 
@@ -19,10 +19,10 @@ public sealed class DatabaseFactory : IDatabaseFactory
 
     private readonly IServiceScopeFactory _serviceScopeFactory;
 
-    public DatabaseFactory(/*IConfiguration configuration*/IAppConfiguration appConfiguration, IServiceScopeFactory serviceScopeFactory)
+    public DatabaseFactory(IAppConfiguration appConfiguration, IServiceScopeFactory serviceScopeFactory)
     {
-        var databaseProvider = /*configuration.GetDatabaseProvider();*/appConfiguration.GetDatabaseProvider();
-        var connectionString = /*configuration.GetDatabaseConnectionString();*/appConfiguration.GetDatabaseConnectionString();
+        var databaseProvider = appConfiguration.GetDatabaseProvider();
+        var connectionString = appConfiguration.GetDatabaseConnectionString();
 
         if (databaseProvider is DatabaseProviderEnum.None)
             throw new Exception("Database provider not set.");

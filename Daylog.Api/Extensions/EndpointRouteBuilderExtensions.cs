@@ -25,7 +25,7 @@ public static class EndpointRouteBuilderExtensions
             endpoint.MapRoutes(routeBuilder);
         }
 
-        // 🔎 Validate only the actually mapped methods
+        // Validate only the actually mapped methods
         ValidateMappedEndpoints(routeBuilder);
     }
 

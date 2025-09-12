@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 namespace Daylog.Infrastructure.Database.SaveChangesInterceptors;
 
 internal sealed class UpdatableInterceptor(
-    IUserContext _userContext
+    IUserContext userContext
     ) : SaveChangesInterceptor
 {
     public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
@@ -21,7 +21,7 @@ internal sealed class UpdatableInterceptor(
             .Where(e => e.State == EntityState.Modified);
 
         var actualDateTime = DateTime.UtcNow;
-        var userId = _userContext.UserId;
+        var userId = userContext.UserId;
 
         foreach (var entry in entries)
         {

@@ -1,4 +1,4 @@
-﻿namespace Daylog.Application.Shared.Enums;
+﻿namespace Daylog.Shared.Enums;
 
 public enum DatabaseProviderEnum
 {

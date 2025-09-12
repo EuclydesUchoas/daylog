@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http.Json;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Daylog.Api;
@@ -54,6 +55,16 @@ public static class DependencyInjection
                      Version = "v1",
                      Description = "API for Daylog, a daily logging application.",
                  };
+
+                 return Task.CompletedTask;
+             });
+
+             options.AddOperationTransformer((operation, context, _) =>
+             {
+                 foreach (var parameter in operation.Parameters ?? [])
+                 {
+                     parameter.Name = JsonNamingPolicy.CamelCase.ConvertName(parameter.Name);
+                 }
 
                  return Task.CompletedTask;
              });

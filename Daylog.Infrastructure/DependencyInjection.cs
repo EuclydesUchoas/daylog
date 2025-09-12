@@ -1,16 +1,17 @@
 ﻿using Daylog.Application.Abstractions.Authentications;
 using Daylog.Application.Abstractions.Configurations;
 using Daylog.Application.Abstractions.Data;
-using Daylog.Application.Shared.Enums;
 using Daylog.Infrastructure.Authentications;
 using Daylog.Infrastructure.Configurations;
 using Daylog.Infrastructure.Database.Data;
 using Daylog.Infrastructure.Database.Factories;
 using Daylog.Infrastructure.Database.SaveChangesInterceptors;
+using Daylog.Shared.Enums;
 using FluentMigrator.Runner;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Daylog.Infrastructure;
 
@@ -18,24 +19,23 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddSingleton<IAppConfiguration, AppConfiguration>();
+        var appConfiguration = new AppConfiguration(configuration); // Default implementation of IAppConfiguration
+        services.AddSingleton<IAppConfiguration>(appConfiguration);
+
         services.AddSingleton<IDatabaseFactory, DatabaseFactory>();
 
         services.AddHttpContextAccessor();
         services.AddScoped<IUserContext, UserContext>();
 
-        services.AddAppDbContextAndMigrationRunner(configuration);
+        services.AddAppDbContextAndMigrationRunner(appConfiguration);
 
         return services;
     }
 
-    private static IServiceCollection AddAppDbContextAndMigrationRunner(this IServiceCollection services, IConfiguration configuration)
+    private static IServiceCollection AddAppDbContextAndMigrationRunner(this IServiceCollection services, [SuppressMessage("Performance", "CA1859")] IAppConfiguration appConfiguration)
     {
-        //var configurationHelper = IAppConfiguration.CreateDefaultInstance(configuration);
-        var configurationHelper = new AppConfiguration(configuration); // Default implementation of IAppConfiguration
-
-        var databaseProvider = /*configuration.GetDatabaseProvider();*/configurationHelper.GetDatabaseProvider();
-        var connectionString = /*configuration.GetDatabaseConnectionString();*/configurationHelper.GetDatabaseConnectionString();
+        var databaseProvider = appConfiguration.GetDatabaseProvider();
+        var connectionString = appConfiguration.GetDatabaseConnectionString();
         
         if (databaseProvider is DatabaseProviderEnum.None)
             throw new Exception("Database provider not set.");

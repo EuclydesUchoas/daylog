@@ -1,4 +1,5 @@
-﻿using Daylog.Application.Abstractions.Data;
+﻿using Daylog.Application.Abstractions.Configurations;
+using Daylog.Application.Abstractions.Data;
 using Daylog.Application.Shared.Mappings;
 using Daylog.Application.Shared.Results;
 using Daylog.Application.Users.Dtos.Request;
@@ -11,7 +12,8 @@ using Microsoft.EntityFrameworkCore;
 namespace Daylog.Application.Users.Services;
 
 public sealed class GetPagedUsersService(
-    IAppDbContext appDbContext
+    IAppDbContext appDbContext,
+    IAppConfiguration appConfiguration
     ) : IGetPagedUsersService
 {
     public async Task<Result<PagedEntity<User>>> HandleAsync(GetPagedUsersRequestDto requestDto, CancellationToken cancellationToken = default)
@@ -19,12 +21,14 @@ public sealed class GetPagedUsersService(
         if (requestDto is null)
             return Result.Failure<PagedEntity<User>>(ResultError.NullData);
 
+        var databaseProvider = appConfiguration.GetDatabaseProvider();
+
         if (requestDto.IncludeTotalItems ?? false)
         {
             var queryBase = appDbContext.Users.AsNoTracking()
-                .Search(x => x.Name, requestDto.Name)
-                .Search(x => x.Email, requestDto.Email)
-                .Search(x => x.Profile, requestDto.Profile)
+                .Search(x => x.Name, requestDto.Name, databaseProvider)
+                .Search(x => x.Email, requestDto.Email, databaseProvider)
+                .Search(x => x.Profile, requestDto.Profile, databaseProvider)
                 .OrderBy(x => x.Id);
 
             var queryPaged = queryBase
@@ -44,9 +48,9 @@ public sealed class GetPagedUsersService(
         }
 
         var users = await appDbContext.Users.AsNoTracking()
-            .Search(x => x.Name, requestDto.Name)
-            .Search(x => x.Email, requestDto.Email)
-            .Search(x => x.Profile, requestDto.Profile)
+            .Search(x => x.Name, requestDto.Name, databaseProvider)
+            .Search(x => x.Email, requestDto.Email, databaseProvider)
+            .Search(x => x.Profile, requestDto.Profile, databaseProvider)
             .OrderBy(x => x.Id)
             .Paginate(requestDto.PageNumber!.Value, requestDto.PageSize!.Value)
             .ToListAsync(cancellationToken);

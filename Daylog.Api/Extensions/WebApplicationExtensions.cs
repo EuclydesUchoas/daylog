@@ -1,5 +1,5 @@
-﻿using Daylog.Application.Shared.Enums;
-using Daylog.Application.Shared.Extensions;
+﻿using Daylog.Application.Shared.Extensions;
+using Daylog.Shared.Enums;
 using Scalar.AspNetCore;
 
 namespace Daylog.Api.Extensions;
