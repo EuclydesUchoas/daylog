@@ -4,8 +4,11 @@ using Daylog.Api.Middlewares;
 using Daylog.Application;
 using Daylog.Infrastructure;
 using Daylog.Infrastructure.Database.Factories;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((context, options) => options.ReadFrom.Configuration(context.Configuration));
 
 builder.Services
     .AddApi()
@@ -27,9 +30,12 @@ if (app.Environment.IsDevelopment())
     app.UseDocumentation();
 }
 
-app.UseHttpsRedirection();
-
-app.UseMiddleware<ExceptionMiddleware>();
+app
+    .UseHttpsRedirection()
+    .UseSerilogRequestLogging()
+    .UseMiddleware<ExceptionMiddleware>()
+    .UseAuthentication()
+    .UseAuthorization();
 
 app.MapEndpoints();
 

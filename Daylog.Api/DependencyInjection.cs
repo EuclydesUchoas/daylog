@@ -14,6 +14,7 @@ public static class DependencyInjection
             options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
         });
 
+        //services.AddEndpointsApiExplorer();
         services.AddRequestLocalization();
         services.AddDocumentation();
 

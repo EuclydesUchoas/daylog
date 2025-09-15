@@ -15,7 +15,19 @@ public sealed class AppConfiguration(
     // Providers
     const string KeyProviders = "Providers";
     const string KeyDatabaseProvider = "Database";
+    const string KeyPathDatabaseProvider = $"{KeyProviders}:{KeyDatabaseProvider}";
     const string KeyDocumentationProvider = "Documentation";
+    const string KeyPathDocumentationProvider = $"{KeyProviders}:{KeyDocumentationProvider}";
+    // JWT
+    const string KeyJwt = "Jwt";
+    const string KeyJwtSecret = "Secret";
+    const string KeyPathJwtSecret = $"{KeyJwt}:{KeyJwtSecret}";
+    const string KeyJwtIssuer = "Issuer";
+    const string KeyPathJwtIssuer = $"{KeyJwt}:{KeyJwtIssuer}";
+    const string KeyJwtAudience = "Audience";
+    const string KeyPathJwtAudience = $"{KeyJwt}:{KeyJwtAudience}";
+    const string KeyJwtTokenExpirationInMinutes = "TokenExpirationInMinutes";
+    const string KeyPathJwtTokenExpirationInMinutes = $"{KeyJwt}:{KeyJwtTokenExpirationInMinutes}";
 
     // Environment variable names
     // Connection strings
@@ -23,7 +35,12 @@ public sealed class AppConfiguration(
     // Providers
     const string EnvVarDatabaseProvider = "DAYLOG_DATABASE_PROVIDER";
     const string EnvVarDocumentationProvider = "DAYLOG_DOCUMENTATION_PROVIDER";
-    
+    // JWT
+    const string EnvVarJwtSecret = "DAYLOG_JWT_SECRET";
+    const string EnvVarJwtIssuer = "DAYLOG_JWT_ISSUER";
+    const string EnvVarJwtAudience = "DAYLOG_JWT_AUDIENCE";
+    const string EnvVarJwtTokenExpiration = "DAYLOG_JWT_TOKEN_EXPIRATION_IN_MINUTES";
+
     static bool TryGetEnvironmentVariableValue(string key, out string? value)
     {
         value = Environment.GetEnvironmentVariable(key);
@@ -53,7 +70,7 @@ public sealed class AppConfiguration(
     public DatabaseProviderEnum GetDatabaseProvider()
     {
         if (!TryGetEnvironmentVariableValue(EnvVarDatabaseProvider, out string? databaseProviderName)
-            && !TryGetConfigurationValue(configuration.GetSection(KeyProviders), KeyDatabaseProvider, out databaseProviderName))
+            && !TryGetConfigurationValue(configuration, KeyPathDatabaseProvider, out databaseProviderName))
         {
             return DatabaseProviderEnum.None;
         }
@@ -69,7 +86,7 @@ public sealed class AppConfiguration(
     public DocumentationProviderEnum GetDocumentationProvider()
     {
         if (!TryGetEnvironmentVariableValue(EnvVarDocumentationProvider, out string? documentationProviderName)
-            && !TryGetConfigurationValue(configuration.GetSection(KeyProviders), KeyDocumentationProvider, out documentationProviderName))
+            && !TryGetConfigurationValue(configuration, KeyPathDocumentationProvider, out documentationProviderName))
         {
             return DocumentationProviderEnum.None;
         }
@@ -80,5 +97,55 @@ public sealed class AppConfiguration(
         }
 
         return DocumentationProviderEnum.None;
+    }
+
+    public string? GetJwtSecretKey()
+    {
+        if (!TryGetEnvironmentVariableValue(EnvVarJwtSecret, out string? jwtSecret)
+            && !TryGetConfigurationValue(configuration, KeyPathJwtSecret, out jwtSecret))
+        {
+            return null;
+        }
+
+        return jwtSecret;
+    }
+
+    public string? GetJwtIssuer()
+    {
+        if (!TryGetEnvironmentVariableValue(EnvVarJwtIssuer, out string? jwtIssuer)
+            && !TryGetConfigurationValue(configuration, KeyPathJwtIssuer, out jwtIssuer))
+        {
+            return null;
+        }
+
+        return jwtIssuer;
+    }
+
+    public string? GetJwtAudience()
+    {
+        if (!TryGetEnvironmentVariableValue(EnvVarJwtAudience, out string? jwtAudience)
+            && !TryGetConfigurationValue(configuration, KeyPathJwtAudience, out jwtAudience))
+        {
+            return null;
+        }
+
+        return jwtAudience;
+    }
+
+    public int GetJwtTokenExpirationInMinutes()
+    {
+        if (!TryGetEnvironmentVariableValue(EnvVarJwtTokenExpiration, out string? jwtTokenExpirationInMinutesString)
+            && !TryGetConfigurationValue(configuration, KeyPathJwtTokenExpirationInMinutes, out jwtTokenExpirationInMinutesString))
+        {
+            return 0;
+        }
+
+        if (!int.TryParse(jwtTokenExpirationInMinutesString, out int jwtTokenExpirationInMinutes)
+            || jwtTokenExpirationInMinutes <= 0)
+        {
+            return 0;
+        }
+
+        return jwtTokenExpirationInMinutes;
     }
 }

@@ -4,7 +4,6 @@ using Daylog.Application.Shared.Results;
 using Daylog.Application.Users.Dtos.Request;
 using Daylog.Application.Users.Dtos.Response;
 using Daylog.Application.Users.Mappings;
-using Daylog.Application.Users.Services;
 using Daylog.Application.Users.Services.Contracts;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +16,8 @@ public sealed class UserEndpoints : IEndpoint
     {
         var group = routeBuilder
             .MapGroup("/api/users")
-            .WithTags("Users");
+            .WithTags("Users")
+            .AllowAnonymous();
         
         group
             .MapPost("/", CreateUser)

@@ -8,10 +8,13 @@ using Daylog.Infrastructure.Database.Factories;
 using Daylog.Infrastructure.Database.SaveChangesInterceptors;
 using Daylog.Shared.Enums;
 using FluentMigrator.Runner;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 
 namespace Daylog.Infrastructure;
 
@@ -24,10 +27,11 @@ public static class DependencyInjection
 
         services.AddSingleton<IDatabaseFactory, DatabaseFactory>();
 
-        services.AddHttpContextAccessor();
-        services.AddScoped<IUserContext, UserContext>();
-
         services.AddAppDbContextAndMigrationRunner(appConfiguration);
+
+        services
+            .AddAppAuthentication(appConfiguration)
+            .AddAppAuthorization();
 
         return services;
     }
@@ -35,7 +39,7 @@ public static class DependencyInjection
     private static IServiceCollection AddAppDbContextAndMigrationRunner(this IServiceCollection services, [SuppressMessage("Performance", "CA1859")] IAppConfiguration appConfiguration)
     {
         var databaseProvider = appConfiguration.GetDatabaseProvider();
-        var connectionString = appConfiguration.GetDatabaseConnectionString();
+        string? connectionString = appConfiguration.GetDatabaseConnectionString();
         
         if (databaseProvider is DatabaseProviderEnum.None)
             throw new Exception("Database provider not set.");
@@ -49,17 +53,19 @@ public static class DependencyInjection
 
         services.AddDbContext<IAppDbContext, AppDbContext>((sp, options) =>
         {
-            _ = databaseProvider switch
+            options = databaseProvider switch
             {
                 DatabaseProviderEnum.SqlServer => options.UseSqlServer(connectionString),
                 DatabaseProviderEnum.PostgreSql => options.UseNpgsql(connectionString),
                 _ => throw new NotSupportedException($"Database provider '{databaseProvider}' is not supported."),
             };
 
-            options.AddInterceptors(
-                sp.GetRequiredService<CreatableInterceptor>(),
-                sp.GetRequiredService<UpdatableInterceptor>(),
-                sp.GetRequiredService<SoftDeletableInterceptor>()
+            options
+                .UseSnakeCaseNamingConvention()
+                .AddInterceptors(
+                    sp.GetRequiredService<CreatableInterceptor>(),
+                    sp.GetRequiredService<UpdatableInterceptor>(),
+                    sp.GetRequiredService<SoftDeletableInterceptor>()
                 );
         });
 
@@ -79,6 +85,52 @@ public static class DependencyInjection
                     .WithMigrationsIn(InfrastructureAssemblyReference.Assembly);
             })
             .AddLogging(logging => logging.AddFluentMigratorConsole());
+
+        return services;
+    }
+
+    private static IServiceCollection AddAppAuthentication(this IServiceCollection services, [SuppressMessage("Performance", "CA1859")] IAppConfiguration appConfiguration)
+    {
+        string? jwtSecret = appConfiguration.GetJwtSecretKey();
+        string? jwtIssuer = appConfiguration.GetJwtIssuer();
+        string? jwtAudience = appConfiguration.GetJwtAudience();
+        int jwtTokenExpirationInMinutes = appConfiguration.GetJwtTokenExpirationInMinutes();
+
+        if (string.IsNullOrWhiteSpace(jwtSecret))
+            throw new Exception("JWT Secret Key not provided.");
+
+        if (string.IsNullOrWhiteSpace(jwtIssuer))
+            throw new Exception("JWT Issuer not provided.");
+
+        if (string.IsNullOrWhiteSpace(jwtAudience))
+            throw new Exception("JWT Audience not provided.");
+
+        if (jwtTokenExpirationInMinutes <= 0)
+            throw new Exception("JWT Token Expiration not provided or invalid.");
+
+        services
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)),
+                    ValidIssuer = jwtIssuer,
+                    ValidAudience = jwtAudience,
+                    ClockSkew = TimeSpan.Zero,
+                };
+            });
+
+        services.AddHttpContextAccessor();
+        services.AddScoped<IUserContext, UserContext>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddAppAuthorization(this IServiceCollection services)
+    {
+        services.AddAuthorization();
 
         return services;
     }
