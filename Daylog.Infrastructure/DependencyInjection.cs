@@ -22,21 +22,28 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        var appConfiguration = new AppConfiguration(configuration); // Default implementation of IAppConfiguration
-        services.AddSingleton<IAppConfiguration>(appConfiguration);
-
-        services.AddSingleton<IDatabaseFactory, DatabaseFactory>();
-
-        services.AddAppDbContextAndMigrationRunner(appConfiguration);
-
         services
-            .AddAppAuthentication(appConfiguration)
-            .AddAppAuthorization();
+            .AddServices(configuration, out IAppConfiguration appConfiguration)
+            .AddAppDbContext(appConfiguration)
+            .AddMigrationRunner(appConfiguration)
+            .AddHealthChecksInternal(appConfiguration)
+            .AddAuthenticationInternal(appConfiguration)
+            .AddAuthorizationInternal();
 
         return services;
     }
 
-    private static IServiceCollection AddAppDbContextAndMigrationRunner(this IServiceCollection services, [SuppressMessage("Performance", "CA1859")] IAppConfiguration appConfiguration)
+    private static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration, out IAppConfiguration appConfiguration)
+    {
+        appConfiguration = new AppConfiguration(configuration); // Default implementation of IAppConfiguration
+        services.AddSingleton<IAppConfiguration>(appConfiguration);
+
+        services.AddSingleton<IDatabaseFactory, DatabaseFactory>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddAppDbContext(this IServiceCollection services, IAppConfiguration appConfiguration)
     {
         var databaseProvider = appConfiguration.GetDatabaseProvider();
         string? connectionString = appConfiguration.GetDatabaseConnectionString();
@@ -55,8 +62,8 @@ public static class DependencyInjection
         {
             options = databaseProvider switch
             {
-                DatabaseProviderEnum.SqlServer => options.UseSqlServer(connectionString),
                 DatabaseProviderEnum.PostgreSql => options.UseNpgsql(connectionString),
+                DatabaseProviderEnum.SqlServer => options.UseSqlServer(connectionString),
                 _ => throw new NotSupportedException($"Database provider '{databaseProvider}' is not supported."),
             };
 
@@ -69,14 +76,28 @@ public static class DependencyInjection
                 );
         });
 
+        return services;
+    }
+
+    private static IServiceCollection AddMigrationRunner(this IServiceCollection services, IAppConfiguration appConfiguration)
+    {
+        var databaseProvider = appConfiguration.GetDatabaseProvider();
+        string? connectionString = appConfiguration.GetDatabaseConnectionString();
+
+        if (databaseProvider is DatabaseProviderEnum.None)
+            throw new Exception("Database provider not set.");
+
+        if (string.IsNullOrWhiteSpace(connectionString))
+            throw new Exception("Connection string not provided.");
+
         services
             .AddFluentMigratorCore()
             .ConfigureRunner(runner =>
             {
-                runner = databaseProvider switch
+                _ = databaseProvider switch
                 {
-                    DatabaseProviderEnum.SqlServer => runner.AddSqlServer(),
                     DatabaseProviderEnum.PostgreSql => runner.AddPostgres(),
+                    DatabaseProviderEnum.SqlServer => runner.AddSqlServer(),
                     _ => throw new NotSupportedException($"Database provider '{databaseProvider}' is not supported."),
                 };
 
@@ -89,7 +110,30 @@ public static class DependencyInjection
         return services;
     }
 
-    private static IServiceCollection AddAppAuthentication(this IServiceCollection services, [SuppressMessage("Performance", "CA1859")] IAppConfiguration appConfiguration)
+    private static IServiceCollection AddHealthChecksInternal(this IServiceCollection services, IAppConfiguration appConfiguration)
+    {
+        var databaseProvider = appConfiguration.GetDatabaseProvider();
+        string? connectionString = appConfiguration.GetDatabaseConnectionString();
+
+        if (databaseProvider is DatabaseProviderEnum.None)
+            throw new Exception("Database provider not set.");
+
+        if (string.IsNullOrWhiteSpace(connectionString))
+            throw new Exception("Connection string not provided.");
+
+        var healthCheckBuilder = services.AddHealthChecks();
+
+        _ = databaseProvider switch
+        {
+            DatabaseProviderEnum.PostgreSql => healthCheckBuilder.AddNpgSql(connectionString),
+            DatabaseProviderEnum.SqlServer => healthCheckBuilder.AddSqlServer(connectionString),
+            _ => throw new NotSupportedException($"Database provider '{databaseProvider}' is not supported."),
+        };
+
+        return services;
+    }
+
+    private static IServiceCollection AddAuthenticationInternal(this IServiceCollection services, IAppConfiguration appConfiguration)
     {
         string? jwtSecret = appConfiguration.GetJwtSecretKey();
         string? jwtIssuer = appConfiguration.GetJwtIssuer();
@@ -128,7 +172,7 @@ public static class DependencyInjection
         return services;
     }
 
-    private static IServiceCollection AddAppAuthorization(this IServiceCollection services)
+    private static IServiceCollection AddAuthorizationInternal(this IServiceCollection services)
     {
         services.AddAuthorization();
 

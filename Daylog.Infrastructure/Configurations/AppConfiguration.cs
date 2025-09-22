@@ -53,6 +53,11 @@ public sealed class AppConfiguration(
         return !string.IsNullOrWhiteSpace(value);
     }
 
+    public void AssertConfigurationIsValid()
+    {
+        // Future implementation: Validate required configurations and throw exceptions if invalid.
+    }
+
     public string? GetDatabaseConnectionString()
     {
         if (!TryGetEnvironmentVariableValue(EnvVarDatabaseConnectionString, out string? connectionString))

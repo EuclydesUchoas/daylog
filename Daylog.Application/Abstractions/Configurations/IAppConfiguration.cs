@@ -5,6 +5,11 @@ namespace Daylog.Application.Abstractions.Configurations;
 public interface IAppConfiguration
 {
     /// <summary>
+    /// Asserts that the application configuration is valid.
+    /// </summary>
+    void AssertConfigurationIsValid();
+
+    /// <summary>
     /// Retrieves the connection string used to connect to the database.
     /// </summary>
     /// <returns>The database connection string if available; otherwise, <see langword="null"/>.</returns>

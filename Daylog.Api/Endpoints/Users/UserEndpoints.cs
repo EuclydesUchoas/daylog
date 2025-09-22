@@ -15,8 +15,8 @@ public sealed class UserEndpoints : IEndpoint
     public void MapRoutes(IEndpointRouteBuilder routeBuilder)
     {
         var group = routeBuilder
-            .MapGroup("/api/users")
-            .WithTags("Users")
+            .MapGroup("v1/users")
+            .WithTags(Tags.Users)
             .AllowAnonymous();
         
         group

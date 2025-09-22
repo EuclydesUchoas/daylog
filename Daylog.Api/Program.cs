@@ -4,6 +4,8 @@ using Daylog.Api.Middlewares;
 using Daylog.Application;
 using Daylog.Infrastructure;
 using Daylog.Infrastructure.Database.Factories;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +31,11 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDocumentation();
 }
+
+app.MapHealthChecks("/health", new HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 
 app
     .UseHttpsRedirection()

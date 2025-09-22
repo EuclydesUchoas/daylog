@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http.Json;
+﻿using Daylog.Api.Endpoints;
+using Microsoft.AspNetCore.Http.Json;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -14,9 +16,23 @@ public static class DependencyInjection
             options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
         });
 
-        //services.AddEndpointsApiExplorer();
+        services.AddEndpoints();
+        services.AddEndpointsApiExplorer();
         services.AddRequestLocalization();
         services.AddDocumentation();
+
+        return services;
+    }
+
+    public static IServiceCollection AddEndpoints(this IServiceCollection services)
+    {
+        var endpoints = ApiAssemblyReference.Assembly
+            .GetTypes()
+            .Where(type => !type.IsAbstract && !type.IsInterface && type.IsAssignableTo(typeof(IEndpoint)))
+            .Select(type => ServiceDescriptor.Singleton(typeof(IEndpoint), type))
+            .ToArray();
+
+        services.TryAddEnumerable(endpoints);
 
         return services;
     }
@@ -53,7 +69,7 @@ public static class DependencyInjection
                  document.Info = new()
                  {
                      Title = "Daylog API",
-                     Version = "v1",
+                     Version = ApiAssemblyReference.AssemblyVersion.ToString(),
                      Description = "API for Daylog, a daily logging application.",
                  };
 
