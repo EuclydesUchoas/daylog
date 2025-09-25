@@ -11,7 +11,7 @@ public static class WebApplicationExtensions
         app.MapOpenApi();
 
         var appConfiguration = app.Services.GetRequiredService<IAppConfiguration>();
-        var documentationProvider = appConfiguration.GetDocumentationProvider();
+        var documentationProvider = appConfiguration.DocumentationProvider;
 
         switch (documentationProvider)
         {

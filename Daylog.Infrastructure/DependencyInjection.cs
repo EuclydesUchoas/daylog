@@ -45,14 +45,8 @@ public static class DependencyInjection
 
     private static IServiceCollection AddAppDbContext(this IServiceCollection services, IAppConfiguration appConfiguration)
     {
-        var databaseProvider = appConfiguration.GetDatabaseProvider();
-        string? connectionString = appConfiguration.GetDatabaseConnectionString();
-        
-        if (databaseProvider is DatabaseProviderEnum.None)
-            throw new Exception("Database provider not set.");
-
-        if (string.IsNullOrWhiteSpace(connectionString))
-            throw new Exception("Connection string not provided.");
+        var databaseProvider = appConfiguration.DatabaseProvider;
+        string connectionString = appConfiguration.DatabaseConnectionString;
 
         services.AddScoped<CreatableInterceptor>();
         services.AddScoped<UpdatableInterceptor>();
@@ -81,14 +75,8 @@ public static class DependencyInjection
 
     private static IServiceCollection AddMigrationRunner(this IServiceCollection services, IAppConfiguration appConfiguration)
     {
-        var databaseProvider = appConfiguration.GetDatabaseProvider();
-        string? connectionString = appConfiguration.GetDatabaseConnectionString();
-
-        if (databaseProvider is DatabaseProviderEnum.None)
-            throw new Exception("Database provider not set.");
-
-        if (string.IsNullOrWhiteSpace(connectionString))
-            throw new Exception("Connection string not provided.");
+        var databaseProvider = appConfiguration.DatabaseProvider;
+        string connectionString = appConfiguration.DatabaseConnectionString;
 
         services
             .AddFluentMigratorCore()
@@ -112,14 +100,8 @@ public static class DependencyInjection
 
     private static IServiceCollection AddHealthChecksInternal(this IServiceCollection services, IAppConfiguration appConfiguration)
     {
-        var databaseProvider = appConfiguration.GetDatabaseProvider();
-        string? connectionString = appConfiguration.GetDatabaseConnectionString();
-
-        if (databaseProvider is DatabaseProviderEnum.None)
-            throw new Exception("Database provider not set.");
-
-        if (string.IsNullOrWhiteSpace(connectionString))
-            throw new Exception("Connection string not provided.");
+        var databaseProvider = appConfiguration.DatabaseProvider;
+        string connectionString = appConfiguration.DatabaseConnectionString;
 
         var healthCheckBuilder = services.AddHealthChecks();
 
@@ -135,22 +117,10 @@ public static class DependencyInjection
 
     private static IServiceCollection AddAuthenticationInternal(this IServiceCollection services, IAppConfiguration appConfiguration)
     {
-        string? jwtSecret = appConfiguration.GetJwtSecretKey();
-        string? jwtIssuer = appConfiguration.GetJwtIssuer();
-        string? jwtAudience = appConfiguration.GetJwtAudience();
-        int jwtTokenExpirationInMinutes = appConfiguration.GetJwtTokenExpirationInMinutes();
-
-        if (string.IsNullOrWhiteSpace(jwtSecret))
-            throw new Exception("JWT Secret Key not provided.");
-
-        if (string.IsNullOrWhiteSpace(jwtIssuer))
-            throw new Exception("JWT Issuer not provided.");
-
-        if (string.IsNullOrWhiteSpace(jwtAudience))
-            throw new Exception("JWT Audience not provided.");
-
-        if (jwtTokenExpirationInMinutes <= 0)
-            throw new Exception("JWT Token Expiration not provided or invalid.");
+        string jwtSecret = appConfiguration.JwtSecretKey;
+        string jwtIssuer = appConfiguration.JwtIssuer;
+        string jwtAudience = appConfiguration.JwtAudience;
+        int jwtTokenExpirationInMinutes = appConfiguration.JwtTokenExpirationInMinutes;
 
         services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

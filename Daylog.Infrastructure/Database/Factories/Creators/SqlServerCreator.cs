@@ -4,8 +4,8 @@ namespace Daylog.Infrastructure.Database.Factories.Creators;
 
 public sealed class SqlServerCreator : IDatabaseCreator
 {
-    private SqlConnectionStringBuilder _connectionStringBuilder;
-    private SqlConnectionStringBuilder _adminConnectionStringBuilder;
+    private readonly SqlConnectionStringBuilder _connectionStringBuilder;
+    private readonly SqlConnectionStringBuilder _adminConnectionStringBuilder;
 
     public SqlServerCreator(SqlConnectionStringBuilder connectionStringBuilder)
     {
@@ -19,11 +19,12 @@ public sealed class SqlServerCreator : IDatabaseCreator
         _adminConnectionStringBuilder = new SqlConnectionStringBuilder(connectionStringBuilder.ConnectionString)
         {
             UserID = AdminUsername,
-            InitialCatalog = null
+            InitialCatalog = AdminDatabase,
         };
     }
 
     public string AdminUsername { get; } = "master";
+    public string AdminDatabase { get; } = "master";
 
     public void CreateDatabase()
     {

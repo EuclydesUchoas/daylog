@@ -21,7 +21,7 @@ public sealed class GetPagedUsersService(
         if (requestDto is null)
             return Result.Failure<PagedEntity<User>>(ResultError.NullData);
 
-        var databaseProvider = appConfiguration.GetDatabaseProvider();
+        var databaseProvider = appConfiguration.DatabaseProvider;
 
         if (requestDto.IncludeTotalItems ?? false)
         {

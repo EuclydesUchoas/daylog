@@ -1,5 +1,6 @@
 ﻿using Daylog.Shared.Enums;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -30,21 +31,15 @@ public static class QueryableExtensions
     }
 
     private static readonly Type[] _unaccentMethodParameters = [
-            typeof(DbFunctions),
-            typeof(string),
-            ];
+        typeof(DbFunctions),
+        typeof(string),
+        ];
 
     private static readonly Type[] _iLikeMethodParameters = [
         typeof(DbFunctions),
-            typeof(string),
-            typeof(string),
-            ];
-
-    private static readonly Type[] _likeMethodParameters = [
-        typeof(DbFunctions),
-            typeof(string),
-            typeof(string),
-            ];
+        typeof(string),
+        typeof(string),
+        ];
 
     private static readonly MethodInfo _unaccentMethod = typeof(NpgsqlFullTextSearchDbFunctionsExtensions)
         .GetMethod("Unaccent", _unaccentMethodParameters)!;
@@ -52,13 +47,20 @@ public static class QueryableExtensions
     private static readonly MethodInfo _iLikeMethod = typeof(NpgsqlDbFunctionsExtensions)
         .GetMethod("ILike", _iLikeMethodParameters)!;
 
-    private static readonly MethodInfo _likeMethod = typeof(DbFunctionsExtensions)
-        .GetMethod("Like", _likeMethodParameters)!;
+    private static readonly MethodInfo _collateMethod = typeof(RelationalDbFunctionsExtensions)
+        .GetMethods(BindingFlags.Public | BindingFlags.Static)
+        .Single(x => x.IsGenericMethodDefinition && x.Name is "Collate" && x.GetParameters().Length is 3);
+    private static readonly MethodInfo _collateMethodString = _collateMethod.MakeGenericMethod(typeof(string));
+    private static readonly MethodInfo _collateMethodChar = _collateMethod.MakeGenericMethod(typeof(char));
 
     private static readonly MethodInfo _containsMethod = typeof(string)
         .GetMethod("Contains", [typeof(string)])!;
 
-    private static readonly ConstantExpression _efFunctionsValue = Expression.Constant(EF.Functions);
+    private static readonly ConstantExpression _efFunctionsExpression = Expression.Constant(EF.Functions);
+
+    private static readonly ConstantExpression _latin1CIExpression = Expression.Constant("SQL_Latin1_General_CP1_CI_AS", typeof(string));
+    private static readonly ConstantExpression _latin1AIExpression = Expression.Constant("SQL_Latin1_General_CP1_CS_AI", typeof(string));
+    private static readonly ConstantExpression _latin1CIAIExpression = Expression.Constant("SQL_Latin1_General_CP1_CI_AI", typeof(string));
 
     public static IQueryable<TSource> Search<TSource, TProperty>(this IQueryable<TSource> query, Expression<Func<TSource, TProperty>> propertySelector, TProperty searchTerm)
         => Search(query, propertySelector, searchTerm, DatabaseProviderEnum.None, false, false);
@@ -73,82 +75,171 @@ public static class QueryableExtensions
             throw new ArgumentException("When databaseProvider is None, both caseInsensitive and diacriticInsensitive must be false, and vice versa.");
         }
 
-        if (searchTerm == null)
+        query = databaseProvider switch
         {
-            return query;
-        }
-        
-        Expression propertyExpression = propertySelector.Body;
+            DatabaseProviderEnum.PostgreSql => SearchPostgreSql(query, propertySelector, searchTerm, caseInsensitive, diacriticInsensitive),
+            DatabaseProviderEnum.SqlServer => SearchSqlServer(query, propertySelector, searchTerm, caseInsensitive, diacriticInsensitive),
+            _ => throw new NotSupportedException($"The database provider '{databaseProvider}' is not supported."),
+        };
+
+        return query;
+    }
+
+    private static IQueryable<TSource> SearchPostgreSql<TSource, TProperty>(this IQueryable<TSource> query, Expression<Func<TSource, TProperty>> propertySelector, TProperty searchTerm, bool caseInsensitive, bool diacriticInsensitive)
+    {
+        Expression propertyExpression;
         Expression expressionBody;
         Expression searchTermExpression;
         Expression<Func<TSource, bool>> expressionResult;
 
-        static Expression GetDiacriticInsensitiveCallExpression(bool diacriticInsensitive, Expression propertyOrSearchTermExpression, DatabaseProviderEnum databaseProvider)
-            => diacriticInsensitive ? databaseProvider switch
-            {
-                DatabaseProviderEnum.PostgreSql => Expression.Call(_unaccentMethod, _efFunctionsValue, propertyOrSearchTermExpression),
-                _ => throw new NotSupportedException($"The database provider '{databaseProvider}' is not supported."),
-            } : propertyOrSearchTermExpression;
-
-        static Expression GetCaseInsensitiveCallExpression(bool caseInsensitive, Expression propertyExpression, Expression searchTermExpression, DatabaseProviderEnum databaseProvider)
-            => caseInsensitive ? databaseProvider switch
-            {
-                DatabaseProviderEnum.PostgreSql => Expression.Call(_iLikeMethod, _efFunctionsValue, propertyExpression, searchTermExpression),
-                DatabaseProviderEnum.SqlServer => Expression.Call(_likeMethod, _efFunctionsValue, propertyExpression, searchTermExpression),
-                _ => throw new NotSupportedException($"The database provider '{databaseProvider}' is not supported."),
-            } : Expression.Call(propertyExpression, _containsMethod, searchTermExpression);
-
-        if (searchTerm is string searchTermString)
+        switch (searchTerm)
         {
-            if (string.IsNullOrWhiteSpace(searchTermString))
-            {
-                return query;
-            }
+            case string searchTermString:
 
-            static string GetCaseInsensitiveStringPattern(bool caseInsensitive, string searchTermString, DatabaseProviderEnum databaseProvider)
-                => caseInsensitive ? databaseProvider switch
+                if (string.IsNullOrWhiteSpace(searchTermString))
                 {
-                    DatabaseProviderEnum.None => searchTermString,
-                    DatabaseProviderEnum.PostgreSql => $"%{searchTermString}%",
-                    DatabaseProviderEnum.SqlServer => $"%{searchTermString}%",
-                    _ => throw new NotSupportedException($"The database provider '{databaseProvider}' is not supported."),
-                } : searchTermString;
+                    return query;
+                }
 
-            searchTermString = GetCaseInsensitiveStringPattern(caseInsensitive, searchTermString, databaseProvider);
-            searchTermExpression = Expression.Constant(searchTermString, typeof(TProperty));
+                if (caseInsensitive)
+                {
+                    searchTermString = $"%{searchTermString}%";
+                }
 
-            propertyExpression = GetDiacriticInsensitiveCallExpression(diacriticInsensitive, propertyExpression, databaseProvider);
-            searchTermExpression = GetDiacriticInsensitiveCallExpression(diacriticInsensitive, searchTermExpression, databaseProvider);
+                propertyExpression = propertySelector.Body;
+                searchTermExpression = Expression.Constant(searchTermString, typeof(TProperty));
 
-            expressionBody = GetCaseInsensitiveCallExpression(caseInsensitive, propertyExpression, searchTermExpression, databaseProvider);
+                if (diacriticInsensitive)
+                {
+                    propertyExpression = Expression.Call(_unaccentMethod, _efFunctionsExpression, propertyExpression);
+                    searchTermExpression = Expression.Call(_unaccentMethod, _efFunctionsExpression, searchTermExpression);
+                }
 
-            expressionResult = Expression.Lambda<Func<TSource, bool>>(expressionBody, propertySelector.Parameters);
+                expressionBody = caseInsensitive
+                    ? Expression.Call(_iLikeMethod, _efFunctionsExpression, propertyExpression, searchTermExpression)
+                    : Expression.Call(propertyExpression, _containsMethod, searchTermExpression);
 
-            return query.Where(expressionResult);
+                break;
+
+            case char searchTermChar:
+
+                if (char.IsWhiteSpace(searchTermChar))
+                {
+                    return query;
+                }
+
+                propertyExpression = propertySelector.Body;
+                searchTermExpression = Expression.Constant(searchTermChar, typeof(TProperty));
+
+                if (diacriticInsensitive)
+                {
+                    propertyExpression = Expression.Call(_unaccentMethod, _efFunctionsExpression, propertyExpression);
+                    searchTermExpression = Expression.Call(_unaccentMethod, _efFunctionsExpression, searchTermExpression);
+                }
+
+                expressionBody = caseInsensitive
+                    ? Expression.Call(_iLikeMethod, _efFunctionsExpression, propertyExpression, searchTermExpression)
+                    : Expression.Equal(propertyExpression, searchTermExpression);
+
+                break;
+
+            default:
+
+                if (searchTerm is null)
+                {
+                    return query;
+                }
+
+                propertyExpression = propertySelector.Body;
+                searchTermExpression = Expression.Constant(searchTerm, typeof(TProperty));
+
+                expressionBody = Expression.Equal(propertyExpression, searchTermExpression);
+
+                break;
         }
 
-        if (searchTerm is char searchTermChar)
+        expressionResult = Expression.Lambda<Func<TSource, bool>>(expressionBody, propertySelector.Parameters);
+
+        return query.Where(expressionResult);
+    }
+
+    private static IQueryable<TSource> SearchSqlServer<TSource, TProperty>(this IQueryable<TSource> query, Expression<Func<TSource, TProperty>> propertySelector, TProperty searchTerm, bool caseInsensitive, bool diacriticInsensitive)
+    {
+        Expression propertyExpression;
+        Expression expressionBody;
+        Expression searchTermExpression;
+        Expression<Func<TSource, bool>> expressionResult;
+
+        switch (searchTerm)
         {
-            if (char.IsWhiteSpace(searchTermChar))
-            {
-                return query;
-            }
+            case string searchTermString:
 
-            searchTermExpression = Expression.Constant(searchTermChar, typeof(TProperty));
+                if (string.IsNullOrWhiteSpace(searchTermString))
+                {
+                    return query;
+                }
 
-            propertyExpression = GetDiacriticInsensitiveCallExpression(diacriticInsensitive, propertyExpression, databaseProvider);
-            searchTermExpression = GetDiacriticInsensitiveCallExpression(diacriticInsensitive, searchTermExpression, databaseProvider);
+                propertyExpression = propertySelector.Body;
+                searchTermExpression = Expression.Constant(searchTermString, typeof(TProperty));
 
-            expressionBody = GetCaseInsensitiveCallExpression(caseInsensitive, propertyExpression, searchTermExpression, databaseProvider);
+                if (caseInsensitive || diacriticInsensitive)
+                {
+                    Expression latin1Expression = (caseInsensitive, diacriticInsensitive) switch
+                    {
+                        (true, false) => _latin1CIExpression,
+                        (false, true) => _latin1AIExpression,
+                        (true, true) => _latin1CIAIExpression,
+                        _ => null,
+                    } ?? throw new InvalidOperationException("Invalid collation settings.");
 
-            expressionResult = Expression.Lambda<Func<TSource, bool>>(expressionBody, propertySelector.Parameters);
+                    propertyExpression = Expression.Call(_collateMethodString, _efFunctionsExpression, propertyExpression, latin1Expression);
+                }
 
-            return query.Where(expressionResult);
+                expressionBody = Expression.Call(propertyExpression, _containsMethod, searchTermExpression);
+
+                break;
+
+            case char searchTermChar:
+
+                if (char.IsWhiteSpace(searchTermChar))
+                {
+                    return query;
+                }
+
+                propertyExpression = propertySelector.Body;
+                searchTermExpression = Expression.Constant(searchTermChar, typeof(TProperty));
+
+                if (caseInsensitive || diacriticInsensitive)
+                {
+                    Expression latin1Expression = (caseInsensitive, diacriticInsensitive) switch
+                    {
+                        (true, false) => _latin1CIExpression,
+                        (false, true) => _latin1AIExpression,
+                        (true, true) => _latin1CIAIExpression,
+                        _ => null,
+                    } ?? throw new InvalidOperationException("Invalid collation settings.");
+
+                    propertyExpression = Expression.Call(_collateMethodString, _efFunctionsExpression, propertyExpression, latin1Expression);
+                }
+
+                expressionBody = Expression.Call(propertyExpression, _containsMethod, searchTermExpression);
+
+                break;
+
+            default:
+
+                if (searchTerm is null)
+                {
+                    return query;
+                }
+
+                propertyExpression = propertySelector.Body;
+                searchTermExpression = Expression.Constant(searchTerm, typeof(TProperty));
+
+                expressionBody = Expression.Equal(propertyExpression, searchTermExpression);
+
+                break;
         }
-
-        searchTermExpression = Expression.Constant(searchTerm, typeof(TProperty));
-
-        expressionBody = Expression.Equal(propertyExpression, searchTermExpression);
 
         expressionResult = Expression.Lambda<Func<TSource, bool>>(expressionBody, propertySelector.Parameters);
 

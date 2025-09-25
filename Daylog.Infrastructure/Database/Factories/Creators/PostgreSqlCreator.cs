@@ -21,11 +21,12 @@ public sealed class PostgreSqlCreator : IDatabaseCreator
         _adminConnectionStringBuilder = new NpgsqlConnectionStringBuilder(connectionStringBuilder.ConnectionString)
         {
             Username = AdminUsername,
-            Database = null
+            Database = AdminDatabase,
         };
     }
 
     public string AdminUsername { get; } = "postgres";
+    public string AdminDatabase { get; } = "postgres";
 
     public void CreateDatabase()
     {

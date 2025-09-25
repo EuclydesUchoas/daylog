@@ -1,6 +1,6 @@
 ﻿namespace Daylog.Api.Endpoints;
 
-public static class Tags
+public static class EndpointTags
 {
     public const string Users = "Users";
 

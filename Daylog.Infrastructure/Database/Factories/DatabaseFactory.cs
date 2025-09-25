@@ -21,14 +21,8 @@ public sealed class DatabaseFactory : IDatabaseFactory
 
     public DatabaseFactory(IAppConfiguration appConfiguration, IServiceScopeFactory serviceScopeFactory)
     {
-        var databaseProvider = appConfiguration.GetDatabaseProvider();
-        var connectionString = appConfiguration.GetDatabaseConnectionString();
-
-        if (databaseProvider is DatabaseProviderEnum.None)
-            throw new Exception("Database provider not set.");
-
-        if (string.IsNullOrWhiteSpace(connectionString))
-            throw new Exception("Connection string not provided.");
+        var databaseProvider = appConfiguration.DatabaseProvider;
+        var connectionString = appConfiguration.DatabaseConnectionString;
 
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
