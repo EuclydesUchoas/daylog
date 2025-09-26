@@ -8,6 +8,7 @@ using Daylog.Domain;
 using Daylog.Domain.Users;
 using Daylog.Shared.Extensions;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Daylog.Application.Users.Services;
 
@@ -23,14 +24,14 @@ public sealed class GetPagedUsersService(
 
         var databaseProvider = appConfiguration.DatabaseProvider;
 
+        var queryBase = appDbContext.Users.AsNoTracking()
+            .Search(x => x.Name, requestDto.Name, databaseProvider)
+            .Search(x => x.Email, requestDto.Email, databaseProvider)
+            .Search(x => x.Profile, requestDto.Profile, databaseProvider)
+            .OrderBy(x => x.Id);
+
         if (requestDto.IncludeTotalItems ?? false)
         {
-            var queryBase = appDbContext.Users.AsNoTracking()
-                .Search(x => x.Name, requestDto.Name, databaseProvider)
-                .Search(x => x.Email, requestDto.Email, databaseProvider)
-                .Search(x => x.Profile, requestDto.Profile, databaseProvider)
-                .OrderBy(x => x.Id);
-
             var queryPaged = queryBase
                 .Paginate(requestDto.PageNumber!.Value, requestDto.PageSize!.Value);
 
@@ -47,11 +48,7 @@ public sealed class GetPagedUsersService(
             return Result.Success(pagedUsersWithTotal);
         }
 
-        var users = await appDbContext.Users.AsNoTracking()
-            .Search(x => x.Name, requestDto.Name, databaseProvider)
-            .Search(x => x.Email, requestDto.Email, databaseProvider)
-            .Search(x => x.Profile, requestDto.Profile, databaseProvider)
-            .OrderBy(x => x.Id)
+        var users = await queryBase
             .Paginate(requestDto.PageNumber!.Value, requestDto.PageSize!.Value)
             .ToListAsync(cancellationToken);
 

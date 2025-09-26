@@ -53,8 +53,11 @@ public static class QueryableExtensions
     private static readonly MethodInfo _collateMethodString = _collateMethod.MakeGenericMethod(typeof(string));
     private static readonly MethodInfo _collateMethodChar = _collateMethod.MakeGenericMethod(typeof(char));
 
-    private static readonly MethodInfo _containsMethod = typeof(string)
+    private static readonly MethodInfo _containsMethodString = typeof(string)
         .GetMethod("Contains", [typeof(string)])!;
+
+    private static readonly MethodInfo _toStringMethodChar = typeof(char)
+        .GetMethod("ToString", [])!;
 
     private static readonly ConstantExpression _efFunctionsExpression = Expression.Constant(EF.Functions);
 
@@ -107,8 +110,8 @@ public static class QueryableExtensions
                 }
 
                 propertyExpression = propertySelector.Body;
-                searchTermExpression = Expression.Constant(searchTermString, typeof(TProperty));
-
+                searchTermExpression = Expression.Constant(searchTermString, typeof(string));
+                
                 if (diacriticInsensitive)
                 {
                     propertyExpression = Expression.Call(_unaccentMethod, _efFunctionsExpression, propertyExpression);
@@ -117,7 +120,7 @@ public static class QueryableExtensions
 
                 expressionBody = caseInsensitive
                     ? Expression.Call(_iLikeMethod, _efFunctionsExpression, propertyExpression, searchTermExpression)
-                    : Expression.Call(propertyExpression, _containsMethod, searchTermExpression);
+                    : Expression.Call(propertyExpression, _containsMethodString, searchTermExpression);
 
                 break;
 
@@ -129,7 +132,17 @@ public static class QueryableExtensions
                 }
 
                 propertyExpression = propertySelector.Body;
-                searchTermExpression = Expression.Constant(searchTermChar, typeof(TProperty));
+
+                if (caseInsensitive || diacriticInsensitive)
+                {
+                    propertyExpression = Expression.Call(propertyExpression, _toStringMethodChar);
+                    string searchTermCharString = searchTermChar.ToString();
+                    searchTermExpression = Expression.Constant(searchTermCharString, typeof(string));
+                }
+                else
+                {
+                    searchTermExpression = Expression.Constant(searchTermChar, typeof(char));
+                } 
 
                 if (diacriticInsensitive)
                 {
@@ -195,7 +208,7 @@ public static class QueryableExtensions
                     propertyExpression = Expression.Call(_collateMethodString, _efFunctionsExpression, propertyExpression, latin1Expression);
                 }
 
-                expressionBody = Expression.Call(propertyExpression, _containsMethod, searchTermExpression);
+                expressionBody = Expression.Call(propertyExpression, _containsMethodString, searchTermExpression);
 
                 break;
 
@@ -219,10 +232,10 @@ public static class QueryableExtensions
                         _ => null,
                     } ?? throw new InvalidOperationException("Invalid collation settings.");
 
-                    propertyExpression = Expression.Call(_collateMethodString, _efFunctionsExpression, propertyExpression, latin1Expression);
+                    propertyExpression = Expression.Call(_collateMethodChar, _efFunctionsExpression, propertyExpression, latin1Expression);
                 }
 
-                expressionBody = Expression.Call(propertyExpression, _containsMethod, searchTermExpression);
+                expressionBody = Expression.Equal(propertyExpression, searchTermExpression);
 
                 break;
 
