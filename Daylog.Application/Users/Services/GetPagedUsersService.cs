@@ -8,7 +8,6 @@ using Daylog.Domain;
 using Daylog.Domain.Users;
 using Daylog.Shared.Extensions;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace Daylog.Application.Users.Services;
 

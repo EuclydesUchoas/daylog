@@ -1,6 +1,5 @@
 ﻿using Daylog.Shared.Enums;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -61,9 +60,13 @@ public static class QueryableExtensions
 
     private static readonly ConstantExpression _efFunctionsExpression = Expression.Constant(EF.Functions);
 
-    private static readonly ConstantExpression _latin1CIExpression = Expression.Constant("SQL_Latin1_General_CP1_CI_AS", typeof(string));
-    private static readonly ConstantExpression _latin1AIExpression = Expression.Constant("SQL_Latin1_General_CP1_CS_AI", typeof(string));
-    private static readonly ConstantExpression _latin1CIAIExpression = Expression.Constant("SQL_Latin1_General_CP1_CI_AI", typeof(string));
+    private const string _latin1CICollate = "SQL_Latin1_General_CP1_CI_AS";
+    private const string _latin1AICollate = "SQL_Latin1_General_CP1_CS_AI";
+    private const string _latin1CIAICollate = "SQL_Latin1_General_CP1_CI_AI";
+
+    private static readonly ConstantExpression _latin1CIExpression = Expression.Constant(_latin1CICollate, typeof(string));
+    private static readonly ConstantExpression _latin1AIExpression = Expression.Constant(_latin1AICollate, typeof(string));
+    private static readonly ConstantExpression _latin1CIAIExpression = Expression.Constant(_latin1CIAICollate, typeof(string));
 
     public static IQueryable<TSource> Search<TSource, TProperty>(this IQueryable<TSource> query, Expression<Func<TSource, TProperty>> propertySelector, TProperty searchTerm)
         => Search(query, propertySelector, searchTerm, DatabaseProviderEnum.None, false, false);
@@ -80,14 +83,198 @@ public static class QueryableExtensions
 
         query = databaseProvider switch
         {
-            DatabaseProviderEnum.PostgreSql => SearchPostgreSql(query, propertySelector, searchTerm, caseInsensitive, diacriticInsensitive),
-            DatabaseProviderEnum.SqlServer => SearchSqlServer(query, propertySelector, searchTerm, caseInsensitive, diacriticInsensitive),
+            DatabaseProviderEnum.PostgreSql => SearchPostgreSql2(query, propertySelector, searchTerm, caseInsensitive, diacriticInsensitive),
+            DatabaseProviderEnum.SqlServer => SearchSqlServer2(query, propertySelector, searchTerm, caseInsensitive, diacriticInsensitive),
             _ => throw new NotSupportedException($"The database provider '{databaseProvider}' is not supported."),
         };
 
         return query;
     }
 
+    private static IQueryable<TSource> SearchPostgreSql2<TSource, TProperty>(this IQueryable<TSource> query, Expression<Func<TSource, TProperty>> propertySelector, TProperty searchTerm, bool caseInsensitive, bool diacriticInsensitive)
+    {
+        MemberExpression propertyExpression;
+        string propertyName;
+        Expression<Func<TSource, bool>> expressionResult;
+
+        switch (searchTerm)
+        {
+            case string searchTermString:
+
+                if (string.IsNullOrWhiteSpace(searchTermString))
+                {
+                    return query;
+                }
+
+                if (caseInsensitive)
+                {
+                    searchTermString = $"%{searchTermString}%";
+                }
+
+                propertyExpression = GetMemberExpression(propertySelector)
+                    ?? throw new ArgumentException("The property selector must be a member expression.");
+
+                propertyName = propertyExpression.Member.Name;
+
+                expressionResult = (caseInsensitive, diacriticInsensitive) switch
+                {
+                    (true, true) => (x) => EF.Functions.ILike(
+                        EF.Functions.Unaccent(EF.Property<string>(x!, propertyName)),
+                        EF.Functions.Unaccent(EF.Parameter(searchTermString))),
+
+                    (true, false) => (x) => EF.Functions.ILike(
+                        EF.Property<string>(x!, propertyName),
+                        EF.Parameter(searchTermString)),
+
+                    (false, true) => (x) => EF.Functions.Unaccent(EF.Property<string>(x!, propertyName))
+                        .Contains(EF.Functions.Unaccent(EF.Parameter(searchTermString))),
+
+                    _ => (x) => EF.Property<string>(x!, propertyName)
+                        .Contains(EF.Parameter(searchTermString)),
+                };
+
+                break;
+
+            case char searchTermChar:
+
+                if (char.IsWhiteSpace(searchTermChar))
+                {
+                    return query;
+                }
+
+                propertyExpression = GetMemberExpression(propertySelector)
+                    ?? throw new ArgumentException("The property selector must be a member expression.");
+
+                propertyName = propertyExpression.Member.Name;
+
+                expressionResult = (caseInsensitive, diacriticInsensitive) switch
+                {
+                    (true, true) => (x) => EF.Functions.ILike(
+                        EF.Functions.Unaccent(EF.Property<string>(x!, propertyName)),
+                        EF.Functions.Unaccent(EF.Parameter(searchTermChar.ToString()))),
+
+                    (true, false) => (x) => EF.Functions.ILike(
+                        EF.Property<string>(x!, propertyName),
+                        EF.Parameter(searchTermChar.ToString())),
+
+                    (false, true) => (x) => EF.Functions.Unaccent(EF.Property<string>(x!, propertyName))
+                        .Equals(EF.Functions.Unaccent(EF.Parameter(searchTermChar.ToString()))),
+
+                    _ => (x) => EF.Property<char>(x!, propertyName)
+                        .Equals(EF.Parameter(searchTermChar)),
+                };
+
+                break;
+
+            default:
+
+                if (searchTerm is null)
+                {
+                    return query;
+                }
+
+                propertyExpression = GetMemberExpression(propertySelector)
+                    ?? throw new ArgumentException("The property selector must be a member expression.");
+
+                propertyName = propertyExpression.Member.Name;
+
+                expressionResult = (x) => EF.Property<TProperty>(x!, propertyName)!
+                    .Equals(EF.Parameter(searchTerm));
+
+                break;
+        }
+
+        return query.Where(expressionResult);
+    }
+
+    private static IQueryable<TSource> SearchSqlServer2<TSource, TProperty>(this IQueryable<TSource> query, Expression<Func<TSource, TProperty>> propertySelector, TProperty searchTerm, bool caseInsensitive, bool diacriticInsensitive)
+    {
+        MemberExpression propertyExpression;
+        string propertyName;
+        Expression<Func<TSource, bool>> expressionResult;
+
+        switch (searchTerm)
+        {
+            case string searchTermString:
+
+                if (string.IsNullOrWhiteSpace(searchTermString))
+                {
+                    return query;
+                }
+
+                propertyExpression = GetMemberExpression(propertySelector)
+                    ?? throw new ArgumentException("The property selector must be a member expression.");
+
+                propertyName = propertyExpression.Member.Name;
+
+                expressionResult = (caseInsensitive, diacriticInsensitive) switch
+                {
+                    (true, true) => (x) => EF.Functions.Collate(EF.Property<string>(x!, propertyName), _latin1CIAICollate)
+                        .Contains(EF.Parameter(searchTermString)),
+
+                    (true, false) => (x) => EF.Functions.Collate(EF.Property<string>(x!, propertyName), _latin1CICollate)
+                        .Contains(EF.Parameter(searchTermString)),
+
+                    (false, true) => (x) => EF.Functions.Collate(EF.Property<string>(x!, propertyName), _latin1AICollate)
+                        .Contains(EF.Parameter(searchTermString)),
+
+                    _ => (x) => EF.Property<string>(x!, propertyName)
+                        .Contains(EF.Parameter(searchTermString)),
+                };
+
+                break;
+
+            case char searchTermChar:
+
+                if (char.IsWhiteSpace(searchTermChar))
+                {
+                    return query;
+                }
+
+                propertyExpression = GetMemberExpression(propertySelector)
+                    ?? throw new ArgumentException("The property selector must be a member expression.");
+
+                propertyName = propertyExpression.Member.Name;
+
+                expressionResult = (caseInsensitive, diacriticInsensitive) switch
+                {
+                    (true, true) => (x) => EF.Functions.Collate(EF.Property<char>(x!, propertyName), _latin1CIAICollate)
+                        .Equals(EF.Parameter(searchTermChar)),
+
+                    (true, false) => (x) => EF.Functions.Collate(EF.Property<char>(x!, propertyName), _latin1CICollate)
+                        .Equals(EF.Parameter(searchTermChar)),
+
+                    (false, true) => (x) => EF.Functions.Collate(EF.Property<char>(x!, propertyName), _latin1AICollate)
+                        .Equals(EF.Parameter(searchTermChar)),
+
+                    _ => (x) => EF.Property<char>(x!, propertyName)
+                        .Equals(EF.Parameter(searchTermChar)),
+                };
+
+                break;
+
+            default:
+
+                if (searchTerm is null)
+                {
+                    return query;
+                }
+
+                propertyExpression = GetMemberExpression(propertySelector)
+                    ?? throw new ArgumentException("The property selector must be a member expression.");
+
+                propertyName = propertyExpression.Member.Name;
+
+                expressionResult = (x) => EF.Property<TProperty>(x!, propertyName)!
+                    .Equals(EF.Parameter(searchTerm));
+
+                break;
+        }
+
+        return query.Where(expressionResult);
+    }
+
+    [Obsolete("This method is deprecated. Use SearchPostgreSql2 instead.")]
     private static IQueryable<TSource> SearchPostgreSql<TSource, TProperty>(this IQueryable<TSource> query, Expression<Func<TSource, TProperty>> propertySelector, TProperty searchTerm, bool caseInsensitive, bool diacriticInsensitive)
     {
         Expression propertyExpression;
@@ -110,14 +297,15 @@ public static class QueryableExtensions
                 }
 
                 propertyExpression = propertySelector.Body;
-                searchTermExpression = Expression.Constant(searchTermString, typeof(string));
+                searchTermExpression = Expression.Constant(new { SearchTerm = searchTermString });
+                searchTermExpression = Expression.PropertyOrField(searchTermExpression, "SearchTerm");
                 
                 if (diacriticInsensitive)
                 {
                     propertyExpression = Expression.Call(_unaccentMethod, _efFunctionsExpression, propertyExpression);
                     searchTermExpression = Expression.Call(_unaccentMethod, _efFunctionsExpression, searchTermExpression);
                 }
-
+                
                 expressionBody = caseInsensitive
                     ? Expression.Call(_iLikeMethod, _efFunctionsExpression, propertyExpression, searchTermExpression)
                     : Expression.Call(propertyExpression, _containsMethodString, searchTermExpression);
@@ -137,7 +325,8 @@ public static class QueryableExtensions
                 {
                     propertyExpression = Expression.Call(propertyExpression, _toStringMethodChar);
                     string searchTermCharString = searchTermChar.ToString();
-                    searchTermExpression = Expression.Constant(searchTermCharString, typeof(string));
+                    searchTermExpression = Expression.Constant(new { SearchTerm = searchTermCharString });
+                    searchTermExpression = Expression.PropertyOrField(searchTermExpression, "SearchTerm");
                 }
                 else
                 {
@@ -164,7 +353,8 @@ public static class QueryableExtensions
                 }
 
                 propertyExpression = propertySelector.Body;
-                searchTermExpression = Expression.Constant(searchTerm, typeof(TProperty));
+                searchTermExpression = Expression.Constant(new { SearchTerm = searchTerm });
+                searchTermExpression = Expression.PropertyOrField(searchTermExpression, "SearchTerm");
 
                 expressionBody = Expression.Equal(propertyExpression, searchTermExpression);
 
@@ -176,6 +366,7 @@ public static class QueryableExtensions
         return query.Where(expressionResult);
     }
 
+    [Obsolete("This method is deprecated. Use SearchSqlServer2 instead.")]
     private static IQueryable<TSource> SearchSqlServer<TSource, TProperty>(this IQueryable<TSource> query, Expression<Func<TSource, TProperty>> propertySelector, TProperty searchTerm, bool caseInsensitive, bool diacriticInsensitive)
     {
         Expression propertyExpression;
@@ -257,5 +448,16 @@ public static class QueryableExtensions
         expressionResult = Expression.Lambda<Func<TSource, bool>>(expressionBody, propertySelector.Parameters);
 
         return query.Where(expressionResult);
+    }
+
+    public static MemberExpression? GetMemberExpression<TSource, TProperty>(Expression<Func<TSource, TProperty>> propertySelector)
+    {
+        return propertySelector.Body switch
+        {
+            MemberExpression memberExpression => memberExpression,
+            MethodCallExpression methodCallExpression => methodCallExpression.Object as MemberExpression,
+            UnaryExpression unaryExpression => unaryExpression.Operand as MemberExpression,
+            _ => null
+        };
     }
 }
