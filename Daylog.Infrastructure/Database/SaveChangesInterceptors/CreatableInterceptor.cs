@@ -11,14 +11,14 @@ internal sealed class CreatableInterceptor(
 {
     public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
     {
-        if (eventData.Context is null)
+        if (eventData.Context is null || !eventData.Context.ChangeTracker.HasChanges())
         {
             return base.SavingChangesAsync(eventData, result, cancellationToken);
         }
 
         var entries = eventData.Context.ChangeTracker
             .Entries<ICreatable>()
-            .Where(e => e.State == EntityState.Added);
+            .Where(e => e.State is EntityState.Added);
 
         var actualDateTime = DateTime.UtcNow;
         var userId = userContext.UserId;

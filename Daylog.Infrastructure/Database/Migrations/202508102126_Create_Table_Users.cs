@@ -24,7 +24,7 @@ public sealed class _202508102126_Create_Table_Users : Migration
             .WithColumn("created_by_user_id").AsGuid().Nullable()
             .WithColumn("updated_at").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentUTCDateTime)
             .WithColumn("updated_by_user_id").AsGuid().Nullable()
-            .WithColumn("is_deleted").AsBoolean().NotNullable().WithDefaultValue(false)
+            .WithColumn("is_deleted").AsBoolean().NotNullable().WithDefaultValue(false).Indexed()
             .WithColumn("deleted_at").AsDateTime().Nullable()
             .WithColumn("deleted_by_user_id").AsGuid().Nullable();
     }

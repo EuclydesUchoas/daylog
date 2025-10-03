@@ -47,6 +47,7 @@ public static class DependencyInjection
         var databaseProvider = appConfiguration.DatabaseProvider;
         string connectionString = appConfiguration.DatabaseConnectionString;
 
+        services.AddScoped<OperationValidationInterceptor>();
         services.AddScoped<CreatableInterceptor>();
         services.AddScoped<UpdatableInterceptor>();
         services.AddScoped<SoftDeletableInterceptor>();
@@ -63,6 +64,7 @@ public static class DependencyInjection
             options
                 .UseSnakeCaseNamingConvention()
                 .AddInterceptors(
+                    sp.GetRequiredService<OperationValidationInterceptor>(),
                     sp.GetRequiredService<CreatableInterceptor>(),
                     sp.GetRequiredService<UpdatableInterceptor>(),
                     sp.GetRequiredService<SoftDeletableInterceptor>()

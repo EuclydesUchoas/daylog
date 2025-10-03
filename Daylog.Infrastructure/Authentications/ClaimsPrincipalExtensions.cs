@@ -10,7 +10,7 @@ public static class ClaimsPrincipalExtensions
         string? claimValue = claimsPrincipal?.FindFirstValue(ClaimTypes.PrimarySid);
 
         UserId? userId = !string.IsNullOrWhiteSpace(claimValue) && Guid.TryParse(claimValue, out Guid id) && !id.Equals(Guid.Empty)
-            ? UserId.CreateExisting(id) : null;
+            ? UserId.Existing(id) : null;
 
         return userId;
     }

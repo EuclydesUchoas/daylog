@@ -1,6 +1,6 @@
 ﻿namespace Daylog.Domain.Users;
 
-public sealed class User : IEntity, ICreatable, IUpdatable, ISoftDeletable
+public sealed class User : Entity, ICreatable, IUpdatable, ISoftDeletable
 {
     public UserId Id { get; private set; }
 
@@ -11,8 +11,6 @@ public sealed class User : IEntity, ICreatable, IUpdatable, ISoftDeletable
     public string Password { get; private set; } = null!;
 
     public UserProfileEnum Profile { get; private set; }
-
-    public ICollection<UserDepartment> UserDepartments { get; private set; } = null!;
 
     // Creatable
 
@@ -32,7 +30,6 @@ public sealed class User : IEntity, ICreatable, IUpdatable, ISoftDeletable
         Name = user.Name;
         Email = user.Email;
         Profile = user.Profile;
-        UserDepartments = user.UserDepartments;
     }
 
     // SoftDeletable
@@ -46,20 +43,19 @@ public sealed class User : IEntity, ICreatable, IUpdatable, ISoftDeletable
     // Entity Framework
     private User() { }
 
-    public static User CreateNew(string name, string email, string password, UserProfileEnum profile, ICollection<UserDepartment> userDepartments)
+    public static User New(string name, string email, string password, UserProfileEnum profile)
     {
         return new User
         {
-            Id = UserId.CreateNew(),
+            Id = UserId.New(),
             Name = name,
             Email = email,
             Password = password,
             Profile = profile,
-            UserDepartments = userDepartments,
         };
     }
 
-    public static User CreateExisting(UserId id, string name, string email, UserProfileEnum profile, ICollection<UserDepartment> userDepartments)
+    public static User Existing(UserId id, string name, string email, UserProfileEnum profile)
     {
         return new User
         {
@@ -67,7 +63,6 @@ public sealed class User : IEntity, ICreatable, IUpdatable, ISoftDeletable
             Name = name,
             Email = email,
             Profile = profile,
-            UserDepartments = userDepartments,
         };
     }
 }

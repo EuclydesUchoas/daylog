@@ -7,7 +7,7 @@ namespace Daylog.Infrastructure.Database.Extensions;
 internal static class EntityTypeBuilderExtensions
 {
     internal static void ConfigureCreatableEntityProperties<TEntity>(this EntityTypeBuilder<TEntity> builder)
-        where TEntity : class, IEntity, ICreatable
+        where TEntity : Entity, ICreatable
     {
         builder.Property(x => x.CreatedAt)
             .HasColumnName("created_at")
@@ -21,7 +21,7 @@ internal static class EntityTypeBuilderExtensions
     }
 
     internal static void ConfigureUpdatableEntityProperties<TEntity>(this EntityTypeBuilder<TEntity> builder)
-        where TEntity : class, IEntity, IUpdatable
+        where TEntity : Entity, IUpdatable
     {
         builder.Property(x => x.UpdatedAt)
             .HasColumnName("updated_at")
@@ -35,7 +35,7 @@ internal static class EntityTypeBuilderExtensions
     }
 
     internal static void ConfigureSoftDeletableEntityProperties<TEntity>(this EntityTypeBuilder<TEntity> builder)
-        where TEntity : class, IEntity, ISoftDeletable
+        where TEntity : Entity, ISoftDeletable
     {
         builder.Property(x => x.IsDeleted)
             .HasColumnName("is_deleted")

@@ -108,6 +108,8 @@ public sealed class AppConfiguration : IAppConfiguration
         return !string.IsNullOrWhiteSpace(value);
     }
 
+    // Loaders for specific configuration values
+
     private string? LoadDatabaseConnectionString()
     {
         if (!TryGetEnvironmentVariableValue(EnvVarDatabaseConnectionString, out string? connectionString))

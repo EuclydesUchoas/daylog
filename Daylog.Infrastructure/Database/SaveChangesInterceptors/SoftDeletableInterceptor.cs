@@ -11,14 +11,14 @@ internal sealed class SoftDeletableInterceptor(
 {
     public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
     {
-        if (eventData.Context is null)
+        if (eventData.Context is null || !eventData.Context.ChangeTracker.HasChanges())
         {
             return base.SavingChangesAsync(eventData, result, cancellationToken);
         }
         
         var entries = eventData.Context.ChangeTracker
             .Entries<ISoftDeletable>()
-            .Where(e => e.State == EntityState.Deleted);
+            .Where(e => e.State is EntityState.Deleted);
 
         var actualDateTime = DateTime.UtcNow;
         var userId = userContext.UserId;
@@ -31,11 +31,11 @@ internal sealed class SoftDeletableInterceptor(
             entry.Property(x => x.DeletedAt).CurrentValue = actualDateTime;
             entry.Property(x => x.DeletedByUserId).CurrentValue = userId;
 
-            foreach (var entryNavigation in entry.Navigations)
+            /*foreach (var entryNavigation in entry.Navigations)
             {
                 entryNavigation.IsLoaded = false;
                 entryNavigation.IsModified = false;
-            }
+            }*/
         }
 
         return base.SavingChangesAsync(eventData, result, cancellationToken);

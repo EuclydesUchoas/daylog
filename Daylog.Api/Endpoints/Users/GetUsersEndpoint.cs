@@ -1,0 +1,44 @@
+﻿using Daylog.Application.Shared.Dtos.Response;
+using Daylog.Application.Shared.Mappings;
+using Daylog.Application.Shared.Results;
+using Daylog.Application.Users.Dtos.Request;
+using Daylog.Application.Users.Dtos.Response;
+using Daylog.Application.Users.Mappings;
+using Daylog.Application.Users.Services.Contracts;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Daylog.Api.Endpoints.Users;
+
+public sealed class GetUsersEndpoint : IEndpoint
+{
+    public void MapRoute(IEndpointRouteBuilder routeBuilder)
+    {
+        routeBuilder
+            .MapGet("v1/users/", HandleAsync)
+            .WithSummary("Get Users")
+            .WithDescription("Get a list of all users.")
+            .AllowAnonymous()
+            .WithTags(EndpointTags.Users);
+    }
+
+    public static async Task<Results<Ok<Result<PagedResponseDto<UserResponseDto>>>, BadRequest<Result>, NotFound<Result<PagedResponseDto<UserResponseDto>>>>> HandleAsync(
+        [AsParameters] GetPagedUsersRequestDto requestDto,
+        [FromServices] IGetPagedUsersService getPagedUsersService,
+        CancellationToken cancellationToken
+        )
+    {
+        var result = await getPagedUsersService.HandleAsync(requestDto, cancellationToken);
+
+        if (result.IsSuccess)
+        {
+            var successResult = result.Cast(result, x => x.ToDto(x2 => x2.ToDto()!));
+
+            return (successResult.Data?.Items?.Any() ?? false)
+                ? TypedResults.Ok(successResult)
+                : TypedResults.NotFound(successResult);
+        }
+
+        return TypedResults.BadRequest(result.Base);
+    }
+}

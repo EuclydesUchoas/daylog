@@ -7,7 +7,7 @@ namespace Daylog.Application.Shared.Mappings;
 public static class PagedEntityMap
 {
     public static PagedEntity<TEntity> ToDomain<TEntity>(this PagedRequestDtoBase? pagedRequestDto)
-        where TEntity : IEntity
+        where TEntity : Entity
     {
         return new PagedEntity<TEntity>(
             pagedRequestDto?.PageNumber ?? 0,
@@ -17,7 +17,7 @@ public static class PagedEntityMap
     }
 
     public static PagedResponseDto<TResponseDto> ToDto<TEntity, TResponseDto>(this PagedEntity<TEntity> pagedEntity, Func<TEntity, TResponseDto> converter)
-        where TEntity : IEntity
+        where TEntity : Entity
         where TResponseDto : IResponseDto
     {
         return new PagedResponseDto<TResponseDto>(

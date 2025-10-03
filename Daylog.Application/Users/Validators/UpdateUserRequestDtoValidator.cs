@@ -6,7 +6,7 @@ namespace Daylog.Application.Users.Validators;
 
 public sealed class UpdateUserRequestDtoValidator : AbstractValidator<UpdateUserRequestDto>
 {
-    public UpdateUserRequestDtoValidator(IValidator<UpdateUserDepartmentRequestDto> updateUserDepartmentRequestDtoValidator)
+    public UpdateUserRequestDtoValidator()
     {
         RuleFor(x => x.Id)
             .NotEmpty()
@@ -27,10 +27,5 @@ public sealed class UpdateUserRequestDtoValidator : AbstractValidator<UpdateUser
             .WithMessage(UserMessages.ProfileIsRequired)
             .IsInEnum()
             .WithMessage(UserMessages.ProfileIsInvalid);
-
-        RuleFor(x => x.UserDepartments)
-            .NotEmpty()
-            .WithMessage(UserMessages.DepartmentsAreRequired)
-            .ForEach(x => x.SetValidator(updateUserDepartmentRequestDtoValidator));
     }
 }

@@ -36,10 +36,10 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
             .HasColumnName("profile")
             .IsRequired();
 
-        builder.HasMany(x => x.UserDepartments)
+        /*builder.HasMany(x => x.UserDepartments)
             .WithOne(x => x.User)
             .HasForeignKey(x => x.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Cascade);*/
 
         builder.ConfigureCreatableEntityProperties();
         builder.ConfigureUpdatableEntityProperties();

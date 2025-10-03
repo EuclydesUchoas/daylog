@@ -8,7 +8,6 @@ public sealed record UserResponseDto(
     string Name,
     string Email,
     UserProfileEnum Profile,
-    ICollection<UserDepartmentResponseDto> UserDepartments,
     DateTime CreatedAt,
     Guid? CreatedByUserId,
     DateTime UpdatedAt,

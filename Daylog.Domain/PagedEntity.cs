@@ -1,7 +1,7 @@
 ﻿namespace Daylog.Domain;
 
-public sealed class PagedEntity<TEntity> : IEntity
-    where TEntity : IEntity
+public sealed class PagedEntity<TEntity> : Entity
+    where TEntity : Entity
 {
     public int PageNumber { get; private set; }
 

@@ -1,13 +1,11 @@
 ﻿namespace Daylog.Domain.Users;
 
-public readonly record struct UserId(Guid Value) : IEntityId<UserId>
+public readonly record struct UserId(Guid Value)
+    : IEntityId<UserId>
 {
-    public static UserId Empty
-        => new(IEntityId.EmptyGuid());
-
-    public static UserId CreateNew()
+    public static UserId New()
         => new(IEntityId.NewGuid());
 
-    public static UserId CreateExisting(Guid value)
+    public static UserId Existing(Guid value)
         => new(value);
 }

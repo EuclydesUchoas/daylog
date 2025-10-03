@@ -7,6 +7,5 @@ public sealed record CreateUserRequestDto(
     string Name,
     string Email,
     string Password,
-    UserProfileEnum Profile,
-    ICollection<CreateUserDepartmentRequestDto> UserDepartments
+    UserProfileEnum Profile
     ) : IRequestDto;

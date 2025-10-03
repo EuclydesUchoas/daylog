@@ -40,7 +40,6 @@ public sealed class UpdateUserService(
         ArgumentNullException.ThrowIfNull(user, nameof(user));
 
         var userDb = await appDbContext.Users // Change Tracking is required for updates
-            .Include(x => x.UserDepartments)
             .FirstOrDefaultAsync(x => x.Id == user.Id, cancellationToken);
             //?? throw new KeyNotFoundException($"User with ID {user.Id} not found.");
 

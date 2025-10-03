@@ -11,14 +11,14 @@ internal sealed class UpdatableInterceptor(
 {
     public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
     {
-        if (eventData.Context is null)
+        if (eventData.Context is null || !eventData.Context.ChangeTracker.HasChanges())
         {
             return base.SavingChangesAsync(eventData, result, cancellationToken);
         }
 
         var entries = eventData.Context.ChangeTracker
             .Entries<IUpdatable>()
-            .Where(e => e.State == EntityState.Modified);
+            .Where(e => e.State is EntityState.Modified);
 
         var actualDateTime = DateTime.UtcNow;
         var userId = userContext.UserId;

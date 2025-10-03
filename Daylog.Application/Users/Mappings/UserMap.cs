@@ -15,7 +15,6 @@ public static class UserMap
             user.Name,
             user.Email,
             user.Profile,
-            user.UserDepartments?.Select(x => x.ToDto()).ToList()!,
             user.CreatedAt,
             user.CreatedByUserId?.Value,
             user.UpdatedAt,
@@ -38,23 +37,21 @@ public static class UserMap
 
     public static User? ToDomain(this CreateUserRequestDto? createUserRequestDto)
     {
-        return createUserRequestDto is not null ? User.CreateNew(
+        return createUserRequestDto is not null ? User.New(
             createUserRequestDto.Name,
             createUserRequestDto.Email,
             createUserRequestDto.Password,
-            createUserRequestDto.Profile,
-            createUserRequestDto.UserDepartments?.Select(x => x.ToDomain()).ToList()!
+            createUserRequestDto.Profile
         ) : null;
     }
 
     public static User? ToDomain(this UpdateUserRequestDto? updateUserRequestDto)
     {
-        return updateUserRequestDto is not null ? User.CreateExisting(
-            UserId.CreateExisting(updateUserRequestDto.Id),
+        return updateUserRequestDto is not null ? User.Existing(
+            UserId.Existing(updateUserRequestDto.Id),
             updateUserRequestDto.Name,
             updateUserRequestDto.Email,
-            updateUserRequestDto.Profile,
-            updateUserRequestDto.UserDepartments?.Select(x => x.ToDomain()).ToList()!
+            updateUserRequestDto.Profile
         ) : null;
     }
 }

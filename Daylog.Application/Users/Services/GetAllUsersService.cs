@@ -16,8 +16,6 @@ public sealed class GetAllUsersService(
             return [];
 
         var users = await appDbContext.Users.AsNoTracking()
-            .Include(x => x.UserDepartments)
-                .ThenInclude(x => x.Department)
             .ToListAsync(cancellationToken);
 
         return users;

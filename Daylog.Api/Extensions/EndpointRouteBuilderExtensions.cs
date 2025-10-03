@@ -14,7 +14,12 @@ public static class EndpointRouteBuilderExtensions
 
         foreach (var endpoint in endpoints)
         {
-            endpoint.MapRoutes(routeBuilder);
+            if (endpoint.GetType().GetMethod("HandleAsync") is null)
+            {
+                throw new InvalidOperationException($"The endpoint '{endpoint.GetType().FullName}' does not have a static 'HandleAsync' method.");
+            }
+
+            endpoint.MapRoute(routeBuilder);
         }
     }
 }
