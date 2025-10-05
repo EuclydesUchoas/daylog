@@ -1,7 +1,7 @@
-﻿using Daylog.Application.Abstractions.Authentications;
+﻿using Daylog.Application.Abstractions.Authentication;
 using Daylog.Application.Abstractions.Configurations;
 using Daylog.Application.Abstractions.Data;
-using Daylog.Infrastructure.Authentications;
+using Daylog.Infrastructure.Authentication;
 using Daylog.Infrastructure.Configurations;
 using Daylog.Infrastructure.Database.Data;
 using Daylog.Infrastructure.Database.Factories;
@@ -25,9 +25,9 @@ public static class DependencyInjection
             .AddServices(configuration, out IAppConfiguration appConfiguration)
             .AddAppDbContext(appConfiguration)
             .AddMigrationRunner(appConfiguration)
-            .AddHealthChecksInternal(appConfiguration)
-            .AddAuthenticationInternal(appConfiguration)
-            .AddAuthorizationInternal();
+            .AddHealthChecksCore(appConfiguration)
+            .AddAuthenticationCore(appConfiguration)
+            .AddAuthorizationCore();
 
         return services;
     }
@@ -99,7 +99,7 @@ public static class DependencyInjection
         return services;
     }
 
-    private static IServiceCollection AddHealthChecksInternal(this IServiceCollection services, IAppConfiguration appConfiguration)
+    private static IServiceCollection AddHealthChecksCore(this IServiceCollection services, IAppConfiguration appConfiguration)
     {
         var databaseProvider = appConfiguration.DatabaseProvider;
         string connectionString = appConfiguration.DatabaseConnectionString;
@@ -116,7 +116,7 @@ public static class DependencyInjection
         return services;
     }
 
-    private static IServiceCollection AddAuthenticationInternal(this IServiceCollection services, IAppConfiguration appConfiguration)
+    private static IServiceCollection AddAuthenticationCore(this IServiceCollection services, IAppConfiguration appConfiguration)
     {
         string jwtSecret = appConfiguration.JwtSecretKey;
         string jwtIssuer = appConfiguration.JwtIssuer;
@@ -143,7 +143,7 @@ public static class DependencyInjection
         return services;
     }
 
-    private static IServiceCollection AddAuthorizationInternal(this IServiceCollection services)
+    private static IServiceCollection AddAuthorizationCore(this IServiceCollection services)
     {
         services.AddAuthorization();
 

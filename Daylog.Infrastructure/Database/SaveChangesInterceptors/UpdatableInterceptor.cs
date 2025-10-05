@@ -1,4 +1,4 @@
-﻿using Daylog.Application.Abstractions.Authentications;
+﻿using Daylog.Application.Abstractions.Authentication;
 using Daylog.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;

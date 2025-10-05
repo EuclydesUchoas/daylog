@@ -1,6 +1,6 @@
 ﻿using Daylog.Domain.Users;
 
-namespace Daylog.Application.Abstractions.Authentications;
+namespace Daylog.Application.Abstractions.Authentication;
 
 public interface IUserContext
 {
