@@ -1,4 +1,5 @@
-﻿using Daylog.Application.Shared.Results;
+﻿using Daylog.Api.Resources.Endpoints;
+using Daylog.Application.Shared.Results;
 using Daylog.Application.Users.Dtos.Request;
 using Daylog.Application.Users.Dtos.Response;
 using Daylog.Application.Users.Mappings;
@@ -14,8 +15,8 @@ public sealed class CreateUserEndpoint : IEndpoint
     {
         routeBuilder
             .MapPost("v1/users", HandleAsync)
-            .WithSummary("Create User")
-            .WithDescription("Create a new user.")
+            .WithSummary(nameof(EndpointMessages.CreateUserSummary))
+            .WithDescription(nameof(EndpointMessages.CreateUserDescription))
             .AllowAnonymous()
             .WithTags(EndpointTags.Users);
     }

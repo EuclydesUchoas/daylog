@@ -1,4 +1,5 @@
-﻿using Daylog.Application.Shared.Dtos.Response;
+﻿using Daylog.Api.Resources.Endpoints;
+using Daylog.Application.Shared.Dtos.Response;
 using Daylog.Application.Shared.Mappings;
 using Daylog.Application.Shared.Results;
 using Daylog.Application.Users.Dtos.Request;
@@ -15,9 +16,9 @@ public sealed class GetUsersEndpoint : IEndpoint
     public void MapRoute(IEndpointRouteBuilder routeBuilder)
     {
         routeBuilder
-            .MapGet("v1/users/", HandleAsync)
-            .WithSummary("Get Users")
-            .WithDescription("Get a list of all users.")
+            .MapGet("v1/users", HandleAsync)
+            .WithSummary(nameof(EndpointMessages.GetUsersSummary))
+            .WithDescription(nameof(EndpointMessages.GetUsersDescription))
             .AllowAnonymous()
             .WithTags(EndpointTags.Users);
     }

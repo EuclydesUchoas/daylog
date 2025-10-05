@@ -1,4 +1,7 @@
-﻿using Daylog.Api.Endpoints;
+﻿using Azure;
+using Daylog.Api.Endpoints;
+using Daylog.Api.Resources.Documentation;
+using Daylog.Api.Resources.Endpoints;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Text.Json;
@@ -68,21 +71,59 @@ public static class DependencyInjection
              {
                  document.Info = new()
                  {
-                     Title = "Daylog API",
+                     Title = DocumentationMessages.InfoTitle,
                      Version = ApiAssemblyReference.AssemblyVersion.ToString(),
-                     Description = "API for Daylog, a daily logging application.",
+                     Description = DocumentationMessages.InfoDescription,
                  };
+
+                 foreach (var tag in document.Tags ?? [])
+                 {
+                     if (!string.IsNullOrWhiteSpace(tag?.Name))
+                     {
+                         string? tagDescription = DocumentationMessages.ResourceManager.GetString(tag.Name);
+                         if (!string.IsNullOrWhiteSpace(tagDescription))
+                         {
+                             tag.Description = tagDescription;
+                         }
+                     }
+                 }
 
                  return Task.CompletedTask;
              });
 
              options.AddOperationTransformer((operation, context, _) =>
              {
-                 foreach (var parameter in operation.Parameters ?? [])
+                 if (!string.IsNullOrWhiteSpace(operation.Summary))
                  {
-                     parameter.Name = JsonNamingPolicy.CamelCase.ConvertName(parameter.Name);
+                     string? summary = EndpointMessages.ResourceManager.GetString(operation.Summary);
+                     if (!string.IsNullOrWhiteSpace(summary))
+                     {
+                         operation.Summary = summary;
+                     }
                  }
 
+                 if (!string.IsNullOrWhiteSpace(operation.Description))
+                 {
+                     string? description = EndpointMessages.ResourceManager.GetString(operation.Description);
+                     if (!string.IsNullOrWhiteSpace(description))
+                     {
+                         operation.Description = description;
+                     }
+                 }
+
+                 foreach (var parameter in operation.Parameters ?? [])
+                 {
+                     if (!string.IsNullOrWhiteSpace(parameter?.Name))
+                     {
+                         parameter.Name = JsonNamingPolicy.CamelCase.ConvertName(parameter.Name);
+                     }
+                 }
+
+                 return Task.CompletedTask;
+             });
+
+             options.AddSchemaTransformer((schema, context, _) =>
+             {
                  return Task.CompletedTask;
              });
          });
