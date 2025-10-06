@@ -22,12 +22,84 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services
+            //.AddOptionsCore(configuration)
             .AddServices(configuration, out IAppConfiguration appConfiguration)
             .AddAppDbContext(appConfiguration)
             .AddMigrationRunner(appConfiguration)
             .AddHealthChecksCore(appConfiguration)
             .AddAuthenticationCore(appConfiguration)
             .AddAuthorizationCore();
+
+        return services;
+    }
+
+    private static IServiceCollection AddOptionsCore(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddOptions<JwtOptions>()
+            .Configure(jwtOptions =>
+            {
+                configuration.GetSection("Jwt").Bind(jwtOptions);
+
+                string? secret = Environment.GetEnvironmentVariable("DAYLOG_JWT_SECRET");
+                if (!string.IsNullOrWhiteSpace(secret))
+                {
+                    jwtOptions.Secret = secret;
+                }
+
+                string? issuer = Environment.GetEnvironmentVariable("DAYLOG_JWT_ISSUER");
+                if (!string.IsNullOrWhiteSpace(issuer))
+                {
+                    jwtOptions.Issuer = issuer;
+                }
+
+                string? audience = Environment.GetEnvironmentVariable("DAYLOG_JWT_AUDIENCE");
+                if (!string.IsNullOrWhiteSpace(audience))
+                {
+                    jwtOptions.Audience = audience;
+                }
+
+                string? tokenExpiration = Environment.GetEnvironmentVariable("DAYLOG_JWT_TOKEN_EXPIRATION_IN_MINUTES");
+                if (!string.IsNullOrWhiteSpace(tokenExpiration) && int.TryParse(tokenExpiration, out int expiration))
+                {
+                    jwtOptions.TokenExpirationInMinutes = expiration;
+                }
+            })
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
+        services.AddOptions<ConnectionStringsOptions>()
+            .Configure(connectionStringsOptions =>
+            {
+                configuration.GetSection("ConnectionStrings").Bind(connectionStringsOptions);
+
+                string? connectionString = Environment.GetEnvironmentVariable("DAYLOG_DATABASE_CONNNECTION_STRING");
+                if (!string.IsNullOrWhiteSpace(connectionString))
+                {
+                    connectionStringsOptions.Database = connectionString;
+                }
+            })
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
+        services.AddOptions<ProvidersOptions>()
+            .Configure(providersOptions =>
+            {
+                configuration.GetSection("Providers").Bind(providersOptions);
+
+                string? databaseProvider = Environment.GetEnvironmentVariable("DAYLOG_DATABASE_PROVIDER");
+                if (!string.IsNullOrWhiteSpace(databaseProvider) && Enum.TryParse<DatabaseProviderEnum>(databaseProvider, true, out var dbProvider))
+                {
+                    providersOptions.Database = dbProvider;
+                }
+
+                string? documentationProvider = Environment.GetEnvironmentVariable("DAYLOG_DOCUMENTATION_PROVIDER");
+                if (!string.IsNullOrWhiteSpace(documentationProvider) && Enum.TryParse<DocumentationProviderEnum>(documentationProvider, true, out var docProvider))
+                {
+                    providersOptions.Documentation = docProvider;
+                }
+            })
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
 
         return services;
     }

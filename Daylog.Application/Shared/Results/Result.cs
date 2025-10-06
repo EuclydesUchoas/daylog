@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using System.Text.Json.Serialization;
 
 namespace Daylog.Application.Shared.Results;
 
@@ -49,6 +50,9 @@ public sealed class Result<TData> : Result
     {
         Data = data;
     }
+
+    public Result<TDataOut> Cast<TDataOut>(Func<TData, TDataOut> dataConverter)
+        => Cast(this, dataConverter);
 
     public Result<TDataOut> Cast<TDataIn, TDataOut>(Result<TDataIn> result, Func<TDataIn, TDataOut> dataConverter)
         => new(dataConverter(result.Data!), result.IsSuccess, result.Error);

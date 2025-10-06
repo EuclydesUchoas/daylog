@@ -27,6 +27,10 @@
       "launchUrl": "documentation",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
+        //"DAYLOG_JWT__SECRET": "123",
+        //"DAYLOG_JWT__ISSUER": "daylog-api",
+        //"DAYLOG_JWT__AUDIENCE": "daylog-developers",
+        //"DAYLOG_JWT__TOKENEXPIRATIONINMINUTES": "60"
       }
     }
   }

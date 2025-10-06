@@ -33,7 +33,7 @@ public sealed class UpdateUserEndpoint : IEndpoint
 
         if (result.IsSuccess)
         {
-            var successResult = result.Cast(result, x => x.ToDto()!);
+            var successResult = result.Cast(x => x.ToDto()!);
 
             return TypedResults.Ok(successResult);
         }

@@ -21,7 +21,7 @@ public sealed class GetUserEndpoint : IEndpoint
             .WithTags(EndpointTags.Users);
     }
 
-    public static async Task<Results<Ok<Result<UserResponseDto>>, BadRequest<Result>, NotFound<Result>, InternalServerError<Result>>> HandleAsync(
+    public static async Task<Results<Ok<Result<UserResponseDto>>, BadRequest<Result>, NotFound<Result>>> HandleAsync(
         [FromRoute] Guid id,
         [FromServices] IGetUserByIdService getUserByIdService,
         CancellationToken cancellationToken
@@ -32,7 +32,7 @@ public sealed class GetUserEndpoint : IEndpoint
 
         if (result.IsSuccess)
         {
-            var successResult = result.Cast(result, x => x.ToDto()!);
+            var successResult = result.Cast(x => x.ToDto()!);
 
             return successResult.Data is not null
                 ? TypedResults.Ok(successResult)

@@ -33,7 +33,7 @@ public sealed class GetUsersEndpoint : IEndpoint
 
         if (result.IsSuccess)
         {
-            var successResult = result.Cast(result, x => x.ToDto(x2 => x2.ToDto()!));
+            var successResult = result.Cast(x => x.ToDto(x2 => x2.ToDto()!));
 
             return (successResult.Data?.Items?.Any() ?? false)
                 ? TypedResults.Ok(successResult)
