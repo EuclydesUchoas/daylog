@@ -1,5 +1,4 @@
-﻿using Daylog.Api.EndpointFilters;
-using Daylog.Api.Endpoints;
+﻿using Daylog.Api.Endpoints;
 
 namespace Daylog.Api.Extensions;
 
@@ -9,8 +8,8 @@ public static class EndpointRouteBuilderExtensions
     {
         var endpoints = routeBuilder.ServiceProvider.GetRequiredService<IEnumerable<IEndpoint>>();
 
-        routeBuilder = routeBuilder.MapGroup("/api")
-            .AddEndpointFilter<AssertResponseDtoEndpointFilter>();
+        routeBuilder = routeBuilder.MapGroup("/api");
+            //.AddEndpointFilter<AssertResponseDtoEndpointFilter>();
 
         foreach (var endpoint in endpoints)
         {

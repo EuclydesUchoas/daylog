@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace Daylog.Application.Shared.Results;
 

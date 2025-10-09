@@ -2,12 +2,10 @@ using Daylog.Api;
 using Daylog.Api.Extensions;
 using Daylog.Api.Middlewares;
 using Daylog.Application;
-using Daylog.Application.Abstractions.Configurations;
 using Daylog.Infrastructure;
 using Daylog.Infrastructure.Database.Factories;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);

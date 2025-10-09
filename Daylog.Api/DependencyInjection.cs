@@ -1,5 +1,4 @@
-﻿using Azure;
-using Daylog.Api.Endpoints;
+﻿using Daylog.Api.Endpoints;
 using Daylog.Api.Resources.Documentation;
 using Daylog.Api.Resources.Endpoints;
 using Microsoft.AspNetCore.Http.Json;
@@ -17,6 +16,7 @@ public static class DependencyInjection
         {
             options.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
             options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+            //options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
         });
 
         services.AddEndpoints();
@@ -65,6 +65,7 @@ public static class DependencyInjection
     {
         // Add services to the container.
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+        
         services.AddOpenApi(options =>
          {
              options.AddDocumentTransformer((document, context, _) =>
@@ -124,6 +125,16 @@ public static class DependencyInjection
 
              options.AddSchemaTransformer((schema, context, _) =>
              {
+                 // Convert enum schemas to string representation, but not works properly
+                 /*if (context.JsonTypeInfo.Type.IsEnum)
+                 {
+                     var enumNames = Enum.GetNames(context.JsonTypeInfo.Type);
+                     schema.Type = "string";
+                     schema.Format = null;
+                     schema.Enum = [.. enumNames.Select(name => new OpenApiString(name) as IOpenApiAny)];
+                     schema.Reference = null;
+                 }*/
+
                  return Task.CompletedTask;
              });
          });

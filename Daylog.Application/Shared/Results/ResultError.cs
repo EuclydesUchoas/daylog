@@ -8,9 +8,11 @@ namespace Daylog.Application.Shared.Results;
 [JsonDerivedType(typeof(ValidationResultError))]
 public record ResultError
 {
-    public static readonly ResultError None = new(ResultErrorCodes.None, AppMessages.NoErrors, ResultErrorTypeEnum.None);
+    public static ResultError None 
+        => new(ResultErrorCodes.None, AppMessages.NoErrors, ResultErrorTypeEnum.None);
 
-    public static readonly ResultError NullData = new(ResultErrorCodes.Null, AppMessages.DataIsNull, ResultErrorTypeEnum.Failure);
+    public static ResultError NullData 
+        => new(ResultErrorCodes.Null, AppMessages.DataIsNull, ResultErrorTypeEnum.Failure);
 
     public string Code { get; }
 
