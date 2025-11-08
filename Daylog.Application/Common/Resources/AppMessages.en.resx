@@ -1,0 +1,240 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AnErrorOcurred" xml:space="preserve">
+    <value>An error ocurred</value>
+  </data>
+  <data name="APersistenceErrorOcurred" xml:space="preserve">
+    <value>A persistence error ocurred</value>
+  </data>
+  <data name="AnUnknownErrorOcurred" xml:space="preserve">
+    <value>An unknown error ocurred</value>
+  </data>
+  <data name="AValidationErrorOcurred" xml:space="preserve">
+    <value>A validation error ocurred</value>
+  </data>
+  <data name="OneOrMoreValidationErrorsOcurred" xml:space="preserve">
+    <value>One or more validation errors occurred</value>
+  </data>
+  <data name="OnlyValidationErrorsCanByOfTypeValidation" xml:space="preserve">
+    <value>Only validation errors can be of type Validation</value>
+  </data>
+  <data name="DataIsNull" xml:space="preserve">
+    <value>Data is null</value>
+  </data>
+  <data name="IfCodeIsBlankErrorTypeMustBeNoneAndViceVersa" xml:space="preserve">
+    <value>If code is blank, errorType must be None, and vice versa</value>
+  </data>
+  <data name="NoErrors" xml:space="preserve">
+    <value>No errors</value>
+  </data>
+  <data name="OnlyStaticNoneInstanceCanBeOfTypeNone" xml:space="preserve">
+    <value>Only the static None instance can be of type None</value>
+  </data>
+  <data name="InvalidEndpointReturnType" xml:space="preserve">
+    <value>The endpoint '{0}' ({1}.{2}) returns an invalid type. Results must encapsulate Result&lt;T&gt; where T implements IResponseDto</value>
+  </data>
+  <data name="User_DepartmentIdIsRequired" xml:space="preserve">
+    <value>Department id is required</value>
+  </data>
+  <data name="User_DepartmentsAreRequired" xml:space="preserve">
+    <value>Departments are required</value>
+  </data>
+  <data name="User_EmailIsInvalid" xml:space="preserve">
+    <value>E-mail is invalid</value>
+  </data>
+  <data name="User_EmailIsRequired" xml:space="preserve">
+    <value>E-mail is required</value>
+  </data>
+  <data name="User_IdIsRequired" xml:space="preserve">
+    <value>Id is required</value>
+  </data>
+  <data name="User_NameIsRequired" xml:space="preserve">
+    <value>Name is required</value>
+  </data>
+  <data name="User_PasswordIsRequired" xml:space="preserve">
+    <value>Password is required</value>
+  </data>
+  <data name="User_PasswordLengthTooShort" xml:space="preserve">
+    <value>Password must be at least {0} characters long</value>
+  </data>
+  <data name="User_ProfileIsInvalid" xml:space="preserve">
+    <value>Profile is invalid</value>
+  </data>
+  <data name="User_ProfileIsRequired" xml:space="preserve">
+    <value>Profile is required</value>
+  </data>
+  <data name="User_SpecifiedEmailIsAlreadyInUse" xml:space="preserve">
+    <value>Specified email is already in use</value>
+  </data>
+  <data name="User_UserIsNotAuthorizedToPerformThisAction" xml:space="preserve">
+    <value>User is not authorized to perform this action</value>
+  </data>
+  <data name="User_UserNotFound" xml:space="preserve">
+    <value>User not found</value>
+  </data>
+  <data name="User_UserWithIdIsNotAuthorizedToPerformThisAction" xml:space="preserve">
+    <value>User with id '{0}' is not authorized to perform this action</value>
+  </data>
+  <data name="User_UserWithIdWasNotFound" xml:space="preserve">
+    <value>User with id '{0}' was not found</value>
+  </data>
+  <data name="User_UserWithSpecifiedEmailWasNotFound" xml:space="preserve">
+    <value>User with the specified email was not found</value>
+  </data>
+  <data name="Endpoint_CreateUserDescription" xml:space="preserve">
+    <value>Create a new user.</value>
+  </data>
+  <data name="Endpoint_CreateUserSummary" xml:space="preserve">
+    <value>Create User</value>
+  </data>
+  <data name="Endpoint_DeleteUserDescription" xml:space="preserve">
+    <value>Delete a user by ID.</value>
+  </data>
+  <data name="Endpoint_DeleteUserSummary" xml:space="preserve">
+    <value>Delete User</value>
+  </data>
+  <data name="Endpoint_GetUserDescription" xml:space="preserve">
+    <value>Get a user by ID.</value>
+  </data>
+  <data name="Endpoint_GetUsersDescription" xml:space="preserve">
+    <value>Get a list of all users.</value>
+  </data>
+  <data name="Endpoint_GetUsersSummary" xml:space="preserve">
+    <value>Get Users</value>
+  </data>
+  <data name="Endpoint_GetUserSummary" xml:space="preserve">
+    <value>Get User</value>
+  </data>
+  <data name="Endpoint_UpdateUserDescription" xml:space="preserve">
+    <value>Update an existing user by ID.</value>
+  </data>
+  <data name="Endpoint_UpdateUserSummary" xml:space="preserve">
+    <value>Update User</value>
+  </data>
+  <data name="Documentation_InfoDescription" xml:space="preserve">
+    <value>API for Daylog, a daily logging application.</value>
+  </data>
+  <data name="Documentation_InfoTitle" xml:space="preserve">
+    <value>Daylog API</value>
+  </data>
+  <data name="EndpointTags_Users" xml:space="preserve">
+    <value>Users</value>
+  </data>
+</root>

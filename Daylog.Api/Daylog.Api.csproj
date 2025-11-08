@@ -18,34 +18,12 @@
     <ProjectReference Include="..\Daylog.Application\Daylog.Application.csproj" />
     <ProjectReference Include="..\Daylog.Domain\Daylog.Domain.csproj" />
     <ProjectReference Include="..\Daylog.Infrastructure\Daylog.Infrastructure.csproj" />
+    <ProjectReference Include="..\Daylog.ServiceDefaults\Daylog.ServiceDefaults.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Logs\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Resources\Endpoints\EndpointMessages.Designer.cs">
-      <DependentUpon>EndpointMessages.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\Documentation\DocumentationMessages.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>DocumentationMessages.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Resources\Endpoints\EndpointMessages.resx">
-      <LastGenOutput>EndpointMessages.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Documentation\DocumentationMessages.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>DocumentationMessages.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <Folder Include="Resources\" />
   </ItemGroup>
 
 </Project>

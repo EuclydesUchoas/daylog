@@ -22,26 +22,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Shared\Resources\AppMessages.Designer.cs">
+    <Compile Update="Common\Resources\AppMessages.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>AppMessages.resx</DependentUpon>
     </Compile>
-    <Compile Update="Users\Resources\UserMessages.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>UserMessages.resx</DependentUpon>
-    </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Shared\Resources\AppMessages.resx">
+    <EmbeddedResource Update="Common\Resources\AppMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AppMessages.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Users\Resources\UserMessages.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>UserMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

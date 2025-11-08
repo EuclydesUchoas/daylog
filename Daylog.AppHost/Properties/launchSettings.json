@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "https": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "applicationUrl": "https://localhost:17231;http://localhost:15176",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DOTNET_ENVIRONMENT": "Development",
+        "ASPIRE_DASHBOARD_OTLP_ENDPOINT_URL": "https://localhost:21020",
+        "ASPIRE_RESOURCE_SERVICE_ENDPOINT_URL": "https://localhost:22113",
+        //"DAYLOG_DATABASE_CONNECTION_STRING": "User ID=postgres;Password=2507;Host=daylog-postgres-db;Port=5432;Database=daylog;",
+        "DAYLOG_DATABASE_PROVIDER": "PostgreSql"
+      }
+    },
+    "http": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "applicationUrl": "http://localhost:15176",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DOTNET_ENVIRONMENT": "Development",
+        "ASPIRE_DASHBOARD_OTLP_ENDPOINT_URL": "http://localhost:19118",
+        "ASPIRE_RESOURCE_SERVICE_ENDPOINT_URL": "http://localhost:20076"
+      }
+    }
+  }
+}

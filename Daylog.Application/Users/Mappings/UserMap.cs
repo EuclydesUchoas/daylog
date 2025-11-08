@@ -1,5 +1,5 @@
-﻿using Daylog.Application.Shared.Dtos.Response;
-using Daylog.Application.Shared.Mappings;
+﻿using Daylog.Application.Common.Dtos.Response;
+using Daylog.Application.Common.Mappings;
 using Daylog.Application.Users.Dtos.Request;
 using Daylog.Application.Users.Dtos.Response;
 using Daylog.Domain.Users;

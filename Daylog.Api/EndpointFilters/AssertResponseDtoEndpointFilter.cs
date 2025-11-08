@@ -1,5 +1,5 @@
 ﻿using Daylog.Application.Abstractions.Dtos;
-using Daylog.Application.Shared.Results;
+using Daylog.Application.Common.Results;
 
 namespace Daylog.Api.EndpointFilters;
 

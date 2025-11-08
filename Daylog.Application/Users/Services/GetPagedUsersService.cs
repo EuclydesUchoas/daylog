@@ -1,8 +1,8 @@
 ﻿using Daylog.Application.Abstractions.Configurations;
 using Daylog.Application.Abstractions.Data;
-using Daylog.Application.Shared;
-using Daylog.Application.Shared.Mappings;
-using Daylog.Application.Shared.Results;
+using Daylog.Application.Common;
+using Daylog.Application.Common.Mappings;
+using Daylog.Application.Common.Results;
 using Daylog.Application.Users.Dtos.Request;
 using Daylog.Application.Users.Services.Contracts;
 using Daylog.Domain.Users;

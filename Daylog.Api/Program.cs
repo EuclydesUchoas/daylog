@@ -4,11 +4,14 @@ using Daylog.Api.Middlewares;
 using Daylog.Application;
 using Daylog.Infrastructure;
 using Daylog.Infrastructure.Database.Factories;
+using Daylog.ServiceDefaults;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddServiceDefaults();
 
 builder.Host.UseSerilog((context, options) => options.ReadFrom.Configuration(context.Configuration));
 
@@ -18,6 +21,8 @@ builder.Services
     .AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
+
+app.MapDefaultEndpoints();
 
 /*var jwtOptions = app.Services.GetRequiredService<IOptions<JwtOptions>>();
 var connectionStringsOptions = app.Services.GetRequiredService<IOptions<ConnectionStringsOptions>>();

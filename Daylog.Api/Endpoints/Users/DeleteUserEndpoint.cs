@@ -1,5 +1,5 @@
-﻿using Daylog.Api.Resources.Endpoints;
-using Daylog.Application.Shared.Results;
+﻿using Daylog.Application.Common.Resources;
+using Daylog.Application.Common.Results;
 using Daylog.Application.Users.Dtos.Request;
 using Daylog.Application.Users.Services.Contracts;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -13,8 +13,8 @@ public sealed class DeleteUserEndpoint : IEndpoint
     {
         routeBuilder
             .MapDelete("v1/users/{id}", HandleAsync)
-            .WithSummary(nameof(EndpointMessages.DeleteUserSummary))
-            .WithDescription(nameof(EndpointMessages.DeleteUserDescription))
+            .WithSummary(nameof(AppMessages.Endpoint_DeleteUserSummary))
+            .WithDescription(nameof(AppMessages.Endpoint_DeleteUserDescription))
             .AllowAnonymous()
             .WithTags(EndpointTags.Users);
     }

@@ -1,6 +1,6 @@
 ﻿using Daylog.Application.Abstractions.Services;
-using Daylog.Application.Shared;
-using Daylog.Application.Shared.Results;
+using Daylog.Application.Common;
+using Daylog.Application.Common.Results;
 using Daylog.Application.Users.Dtos.Request;
 using Daylog.Domain.Users;
 

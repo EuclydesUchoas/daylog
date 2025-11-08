@@ -1,5 +1,5 @@
-﻿using Daylog.Api.Resources.Endpoints;
-using Daylog.Application.Shared.Results;
+﻿using Daylog.Application.Common.Resources;
+using Daylog.Application.Common.Results;
 using Daylog.Application.Users.Dtos.Request;
 using Daylog.Application.Users.Dtos.Response;
 using Daylog.Application.Users.Mappings;
@@ -15,8 +15,8 @@ public sealed class UpdateUserEndpoint : IEndpoint
     {
         routeBuilder
             .MapPut("v1/users/{id}", HandleAsync)
-            .WithSummary(nameof(EndpointMessages.UpdateUserSummary))
-            .WithDescription(nameof(EndpointMessages.UpdateUserDescription))
+            .WithSummary(nameof(AppMessages.Endpoint_UpdateUserSummary))
+            .WithDescription(nameof(AppMessages.Endpoint_UpdateUserDescription))
             .AllowAnonymous()
             .WithTags(EndpointTags.Users);
     }

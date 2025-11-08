@@ -1,25 +1,25 @@
-﻿using Daylog.Application.Shared.Results;
-using Daylog.Application.Users.Resources;
+﻿using Daylog.Application.Common.Resources;
+using Daylog.Application.Common.Results;
 
 namespace Daylog.Application.Users.Results;
 
 public static class UserResultErrors
 {
     public static ResultError NotFound(Guid id)
-        => ResultError.NotFound(UserResultErrorCodes.NotFound, string.Format(UserMessages.UserWithIdWasNotFound, id));
+        => ResultError.NotFound(UserResultErrorCodes.NotFound, string.Format(AppMessages.User_UserWithIdWasNotFound, id));
 
     public static ResultError NotFound()
-        => ResultError.NotFound(UserResultErrorCodes.NotFound, UserMessages.UserNotFound);
+        => ResultError.NotFound(UserResultErrorCodes.NotFound, AppMessages.User_UserNotFound);
 
     public static ResultError Unauthorized(Guid id)
-        => ResultError.Unauthorized(UserResultErrorCodes.Unauthorized, string.Format(UserMessages.UserWithIdIsNotAuthorizedToPerformThisAction, id));
+        => ResultError.Unauthorized(UserResultErrorCodes.Unauthorized, string.Format(AppMessages.User_UserWithIdIsNotAuthorizedToPerformThisAction, id));
 
     public static ResultError Unauthorized()
-        => ResultError.Unauthorized(UserResultErrorCodes.Unauthorized, UserMessages.UserIsNotAuthorizedToPerformThisAction);
+        => ResultError.Unauthorized(UserResultErrorCodes.Unauthorized, AppMessages.User_UserIsNotAuthorizedToPerformThisAction);
 
     public static ResultError NotFoundByEmail
-        => ResultError.NotFound(UserResultErrorCodes.NotFoundByEmail, UserMessages.UserWithSpecifiedEmailWasNotFound);
+        => ResultError.NotFound(UserResultErrorCodes.NotFoundByEmail, AppMessages.User_UserWithSpecifiedEmailWasNotFound);
 
     public static ResultError EmailNotUnique
-        => ResultError.Conflict(UserResultErrorCodes.EmailNotUnique, UserMessages.SpecifiedEmailIsAlreadyInUse);
+        => ResultError.Conflict(UserResultErrorCodes.EmailNotUnique, AppMessages.User_SpecifiedEmailIsAlreadyInUse);
 }

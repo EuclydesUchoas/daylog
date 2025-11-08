@@ -1,5 +1,5 @@
-﻿using Daylog.Application.Shared.Resources;
-using Daylog.Application.Shared.Results;
+﻿using Daylog.Application.Common.Resources;
+using Daylog.Application.Common.Results;
 using FluentValidation;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;

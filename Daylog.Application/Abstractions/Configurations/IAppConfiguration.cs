@@ -10,14 +10,14 @@ public interface IAppConfiguration
     void AssertConfigurationIsValid();
 
     /// <summary>
-    /// Gets the connection string used to connect to the database.
-    /// </summary>
-    string DatabaseConnectionString { get; }
-
-    /// <summary>
     /// Gets the database provider type.
     /// </summary>
     DatabaseProviderEnum DatabaseProvider { get; }
+
+    /// <summary>
+    /// Gets the connection string used to connect to the database.
+    /// </summary>
+    string DatabaseConnectionString { get; }
 
     /// <summary>
     /// Gets the documentation provider type.

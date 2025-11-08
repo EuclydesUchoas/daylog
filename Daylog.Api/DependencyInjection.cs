@@ -1,6 +1,5 @@
 ﻿using Daylog.Api.Endpoints;
-using Daylog.Api.Resources.Documentation;
-using Daylog.Api.Resources.Endpoints;
+using Daylog.Application.Common.Resources;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Text.Json;
@@ -16,7 +15,8 @@ public static class DependencyInjection
         {
             options.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
             options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-            //options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            /*options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;*/
         });
 
         services.AddEndpoints();
@@ -48,7 +48,7 @@ public static class DependencyInjection
             "pt",
             "pt-BR",
             ];
-
+        
         services.AddRequestLocalization(options =>
         {
             options.ApplyCurrentCultureToResponseHeaders = true;
@@ -72,16 +72,16 @@ public static class DependencyInjection
              {
                  document.Info = new()
                  {
-                     Title = DocumentationMessages.InfoTitle,
+                     Title = AppMessages.Documentation_InfoTitle,
                      Version = ApiAssemblyReference.AssemblyVersion.ToString(),
-                     Description = DocumentationMessages.InfoDescription,
+                     Description = AppMessages.Documentation_InfoDescription,
                  };
 
                  foreach (var tag in document.Tags ?? [])
                  {
                      if (!string.IsNullOrWhiteSpace(tag?.Name))
                      {
-                         string? tagDescription = DocumentationMessages.ResourceManager.GetString(tag.Name);
+                         string? tagDescription = AppMessages.ResourceManager.GetString(tag.Name);
                          if (!string.IsNullOrWhiteSpace(tagDescription))
                          {
                              tag.Description = tagDescription;
@@ -96,7 +96,7 @@ public static class DependencyInjection
              {
                  if (!string.IsNullOrWhiteSpace(operation.Summary))
                  {
-                     string? summary = EndpointMessages.ResourceManager.GetString(operation.Summary);
+                     string? summary = AppMessages.ResourceManager.GetString(operation.Summary);
                      if (!string.IsNullOrWhiteSpace(summary))
                      {
                          operation.Summary = summary;
@@ -105,7 +105,7 @@ public static class DependencyInjection
 
                  if (!string.IsNullOrWhiteSpace(operation.Description))
                  {
-                     string? description = EndpointMessages.ResourceManager.GetString(operation.Description);
+                     string? description = AppMessages.ResourceManager.GetString(operation.Description);
                      if (!string.IsNullOrWhiteSpace(description))
                      {
                          operation.Description = description;

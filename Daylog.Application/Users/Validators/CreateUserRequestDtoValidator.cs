@@ -1,5 +1,5 @@
-﻿using Daylog.Application.Users.Dtos.Request;
-using Daylog.Application.Users.Resources;
+﻿using Daylog.Application.Common.Resources;
+using Daylog.Application.Users.Dtos.Request;
 using FluentValidation;
 
 namespace Daylog.Application.Users.Validators;
@@ -10,24 +10,24 @@ public sealed class CreateUserRequestDtoValidator : AbstractValidator<CreateUser
     {
         RuleFor(x => x.Name)
             .NotEmpty()
-            .WithMessage(UserMessages.NameIsRequired);
+            .WithMessage(AppMessages.User_NameIsRequired);
 
         RuleFor(x => x.Email)
             .NotEmpty()
-            .WithMessage(UserMessages.EmailIsRequired)
+            .WithMessage(AppMessages.User_EmailIsRequired)
             .EmailAddress()
-            .WithMessage(UserMessages.EmailIsInvalid);
+            .WithMessage(AppMessages.User_EmailIsInvalid);
 
         RuleFor(x => x.Password)
             .NotEmpty()
-            .WithMessage(UserMessages.PasswordIsRequired)
+            .WithMessage(AppMessages.User_PasswordIsRequired)
             .MinimumLength(8)
-            .WithMessage(string.Format(UserMessages.PasswordLengthTooShort, '8'));
+            .WithMessage(string.Format(AppMessages.User_PasswordLengthTooShort, '8'));
 
         RuleFor(x => x.Profile)
             .NotEmpty()
-            .WithMessage(UserMessages.ProfileIsRequired)
+            .WithMessage(AppMessages.User_ProfileIsRequired)
             .IsInEnum()
-            .WithMessage(UserMessages.ProfileIsInvalid);
+            .WithMessage(AppMessages.User_ProfileIsInvalid);
     }
 }

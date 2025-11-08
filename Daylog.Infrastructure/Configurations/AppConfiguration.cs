@@ -10,6 +10,9 @@ public sealed class AppConfiguration : IAppConfiguration
     // Connection strings
     const string KeyConnectionStrings = "ConnectionStrings";
     const string KeyDatabaseConnectionString = "Database";
+    // Aspire
+    const string AspireDatabaseKeyPostgreSqlConnectionString = "daylog-postgres-db";
+    const string AspireDatabaseKeySqlServerConnectionString = "daylog-sqlserver-db";
     // Providers
     const string KeyProviders = "Providers";
     const string KeyDatabaseProvider = "Database";
@@ -28,24 +31,31 @@ public sealed class AppConfiguration : IAppConfiguration
     const string KeyPathJwtTokenExpirationInMinutes = $"{KeyJwt}:{KeyJwtTokenExpirationInMinutes}";
 
     // Environment variable names
-    // Connection strings
-    const string EnvVarDatabaseConnectionString = "DAYLOG_DATABASE_CONNNECTION_STRING";
+    const string EnvVarPrefix = "DAYLOG_";
     // Providers
-    const string EnvVarDatabaseProvider = "DAYLOG_DATABASE_PROVIDER";
-    const string EnvVarDocumentationProvider = "DAYLOG_DOCUMENTATION_PROVIDER";
+    const string EnvVarDatabaseProvider = $"{EnvVarPrefix}DATABASE_PROVIDER";
+    const string EnvVarDocumentationProvider = $"{EnvVarPrefix}DOCUMENTATION_PROVIDER";
+    // Connection strings
+    const string EnvVarDatabaseConnectionString = $"{EnvVarPrefix}DATABASE_CONNECTION_STRING";
     // JWT
-    const string EnvVarJwtSecret = "DAYLOG_JWT_SECRET";
-    const string EnvVarJwtIssuer = "DAYLOG_JWT_ISSUER";
-    const string EnvVarJwtAudience = "DAYLOG_JWT_AUDIENCE";
-    const string EnvVarJwtTokenExpiration = "DAYLOG_JWT_TOKEN_EXPIRATION_IN_MINUTES";
+    const string EnvVarJwtSecret = $"{EnvVarPrefix}JWT_SECRET";
+    const string EnvVarJwtIssuer = $"{EnvVarPrefix}JWT_ISSUER";
+    const string EnvVarJwtAudience = $"{EnvVarPrefix}JWT_AUDIENCE";
+    const string EnvVarJwtTokenExpiration = $"{EnvVarPrefix}JWT_TOKEN_EXPIRATION_IN_MINUTES";
+
+    private static readonly Dictionary<DatabaseProviderEnum, string> AspireDatabaseProviderConnectionStringKeys = new()
+    {
+        [DatabaseProviderEnum.PostgreSql] = AspireDatabaseKeyPostgreSqlConnectionString,
+        [DatabaseProviderEnum.SqlServer] = AspireDatabaseKeySqlServerConnectionString,
+    };
 
     // Implementation
 
     private readonly IConfiguration _configuration;
 
-    public string DatabaseConnectionString { get; }
-
     public DatabaseProviderEnum DatabaseProvider { get; }
+
+    public string DatabaseConnectionString { get; }
 
     public DocumentationProviderEnum DocumentationProvider { get; }
 
@@ -61,8 +71,8 @@ public sealed class AppConfiguration : IAppConfiguration
     {
         _configuration = configuration;
 
-        DatabaseConnectionString = LoadDatabaseConnectionString()!;
         DatabaseProvider = LoadDatabaseProvider();
+        DatabaseConnectionString = LoadDatabaseConnectionString()!;
         DocumentationProvider = LoadDocumentationProvider();
         JwtSecretKey = LoadJwtSecretKey()!;
         JwtIssuer = LoadJwtIssuer()!;
@@ -74,11 +84,11 @@ public sealed class AppConfiguration : IAppConfiguration
 
     public void AssertConfigurationIsValid()
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(DatabaseConnectionString, nameof(DatabaseConnectionString));
         if (DatabaseProvider is DatabaseProviderEnum.None)
         {
             throw new ArgumentException("Database provider is not configured properly.", nameof(DatabaseProvider));
         }
+        ArgumentException.ThrowIfNullOrWhiteSpace(DatabaseConnectionString, nameof(DatabaseConnectionString));
         if (DocumentationProvider is DocumentationProviderEnum.None)
         {
             throw new ArgumentException("Documentation provider is not configured properly.", nameof(DocumentationProvider));
@@ -110,20 +120,6 @@ public sealed class AppConfiguration : IAppConfiguration
 
     // Loaders for specific configuration values
 
-    private string? LoadDatabaseConnectionString()
-    {
-        if (!TryGetEnvironmentVariableValue(EnvVarDatabaseConnectionString, out string? connectionString))
-        {
-            connectionString = _configuration.GetConnectionString(KeyDatabaseConnectionString);
-            if (string.IsNullOrWhiteSpace(connectionString))
-            {
-                return null;
-            }
-        }
-
-        return connectionString;
-    }
-
     private DatabaseProviderEnum LoadDatabaseProvider()
     {
         if (!TryGetEnvironmentVariableValue(EnvVarDatabaseProvider, out string? databaseProviderName)
@@ -138,6 +134,25 @@ public sealed class AppConfiguration : IAppConfiguration
         }
 
         return DatabaseProviderEnum.None;
+    }
+
+    private string? LoadDatabaseConnectionString()
+    {
+        if (!TryGetEnvironmentVariableValue(EnvVarDatabaseConnectionString, out string? connectionString))
+        {
+            if (AspireDatabaseProviderConnectionStringKeys.TryGetValue(DatabaseProvider, out string? connectionStringKey)
+                && !string.IsNullOrWhiteSpace(connectionString = _configuration.GetConnectionString(connectionStringKey)))
+            {
+                return connectionString;
+            }
+            connectionString = _configuration.GetConnectionString(KeyDatabaseConnectionString);
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                return null;
+            }
+        }
+
+        return connectionString;
     }
 
     private DocumentationProviderEnum LoadDocumentationProvider()
