@@ -27,10 +27,20 @@
       "launchUrl": "documentation",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-        //"DAYLOG_JWT__SECRET": "123",
-        //"DAYLOG_JWT__ISSUER": "daylog-api",
-        //"DAYLOG_JWT__AUDIENCE": "daylog-developers",
-        //"DAYLOG_JWT__TOKENEXPIRATIONINMINUTES": "60"
+      }
+    },
+    "daylog.api.env": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "applicationUrl": "https://localhost:7176;http://localhost:5019",
+      "launchUrl": "documentation",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DAYLOG_JWT__SECRET": "123",
+        "DAYLOG_JWT__ISSUER": "daylog-api",
+        "DAYLOG_JWT__AUDIENCE": "daylog-developers",
+        "DAYLOG_JWT__TOKENEXPIRATIONINMINUTES": "60"
       }
     }
   }

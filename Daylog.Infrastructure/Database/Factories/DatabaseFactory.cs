@@ -70,7 +70,7 @@ public sealed class DatabaseFactory : IDatabaseFactory
         using var scope = _serviceScopeFactory.CreateScope();
 
         var runner = scope.ServiceProvider.GetRequiredService<IMigrationRunner>();
-
+        
         try
         {
             if (migrateUp) runner.MigrateUp();

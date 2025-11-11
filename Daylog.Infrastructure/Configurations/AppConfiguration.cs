@@ -93,13 +93,13 @@ public sealed class AppConfiguration : IAppConfiguration
         {
             throw new ArgumentException("Documentation provider is not configured properly.", nameof(DocumentationProvider));
         }
-        ArgumentException.ThrowIfNullOrWhiteSpace(JwtSecretKey, nameof(JwtSecretKey));
+        /*ArgumentException.ThrowIfNullOrWhiteSpace(JwtSecretKey, nameof(JwtSecretKey));
         ArgumentException.ThrowIfNullOrWhiteSpace(JwtIssuer, nameof(JwtIssuer));
         ArgumentException.ThrowIfNullOrWhiteSpace(JwtAudience, nameof(JwtAudience));
         if (JwtTokenExpirationInMinutes <= 0)
         {
             throw new ArgumentException("JWT token expiration time is not configured properly.", nameof(JwtTokenExpirationInMinutes));
-        }
+        }*/
     }
 
     // Helper methods to retrieve configuration values

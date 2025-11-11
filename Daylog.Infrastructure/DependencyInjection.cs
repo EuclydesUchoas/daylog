@@ -8,10 +8,13 @@ using Daylog.Infrastructure.Database.Factories;
 using Daylog.Infrastructure.Database.SaveChangesInterceptors;
 using Daylog.Shared.Enums;
 using FluentMigrator.Runner;
+using FluentMigrator.Runner.Processors;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -22,7 +25,7 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services
-            //.AddOptionsCore(configuration)
+            .AddOptionsCore(configuration)
             .AddServices(configuration, out IAppConfiguration appConfiguration)
             .AddAppDbContext(appConfiguration)
             .AddMigrationRunner(appConfiguration)
@@ -35,71 +38,10 @@ public static class DependencyInjection
 
     private static IServiceCollection AddOptionsCore(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddOptions<JwtOptions>()
-            .Configure(jwtOptions =>
-            {
-                configuration.GetSection("Jwt").Bind(jwtOptions);
-
-                string? secret = Environment.GetEnvironmentVariable("DAYLOG_JWT_SECRET");
-                if (!string.IsNullOrWhiteSpace(secret))
-                {
-                    jwtOptions.Secret = secret;
-                }
-
-                string? issuer = Environment.GetEnvironmentVariable("DAYLOG_JWT_ISSUER");
-                if (!string.IsNullOrWhiteSpace(issuer))
-                {
-                    jwtOptions.Issuer = issuer;
-                }
-
-                string? audience = Environment.GetEnvironmentVariable("DAYLOG_JWT_AUDIENCE");
-                if (!string.IsNullOrWhiteSpace(audience))
-                {
-                    jwtOptions.Audience = audience;
-                }
-
-                string? tokenExpiration = Environment.GetEnvironmentVariable("DAYLOG_JWT_TOKEN_EXPIRATION_IN_MINUTES");
-                if (!string.IsNullOrWhiteSpace(tokenExpiration) && int.TryParse(tokenExpiration, out int expiration))
-                {
-                    jwtOptions.TokenExpirationInMinutes = expiration;
-                }
-            })
-            .ValidateDataAnnotations()
-            .ValidateOnStart();
-
-        services.AddOptions<ConnectionStringsOptions>()
-            .Configure(connectionStringsOptions =>
-            {
-                configuration.GetSection("ConnectionStrings").Bind(connectionStringsOptions);
-
-                string? connectionString = Environment.GetEnvironmentVariable("DAYLOG_DATABASE_CONNNECTION_STRING");
-                if (!string.IsNullOrWhiteSpace(connectionString))
-                {
-                    connectionStringsOptions.Database = connectionString;
-                }
-            })
-            .ValidateDataAnnotations()
-            .ValidateOnStart();
-
-        services.AddOptions<ProvidersOptions>()
-            .Configure(providersOptions =>
-            {
-                configuration.GetSection("Providers").Bind(providersOptions);
-
-                string? databaseProvider = Environment.GetEnvironmentVariable("DAYLOG_DATABASE_PROVIDER");
-                if (!string.IsNullOrWhiteSpace(databaseProvider) && Enum.TryParse<DatabaseProviderEnum>(databaseProvider, true, out var dbProvider))
-                {
-                    providersOptions.Database = dbProvider;
-                }
-
-                string? documentationProvider = Environment.GetEnvironmentVariable("DAYLOG_DOCUMENTATION_PROVIDER");
-                if (!string.IsNullOrWhiteSpace(documentationProvider) && Enum.TryParse<DocumentationProviderEnum>(documentationProvider, true, out var docProvider))
-                {
-                    providersOptions.Documentation = docProvider;
-                }
-            })
-            .ValidateDataAnnotations()
-            .ValidateOnStart();
+        services
+            .Configure<ConnectionStringsOptions>(configuration.GetSection("ConnectionStrings"))
+            .Configure<ProvidersOptions>(configuration.GetSection("Providers"))
+            .Configure<JwtOptions>(configuration.GetSection("Jwt"));
 
         return services;
     }
@@ -116,16 +58,19 @@ public static class DependencyInjection
 
     private static IServiceCollection AddAppDbContext(this IServiceCollection services, IAppConfiguration appConfiguration)
     {
-        var databaseProvider = appConfiguration.DatabaseProvider;
-        string connectionString = appConfiguration.DatabaseConnectionString;
+        /*var databaseProvider = appConfiguration.DatabaseProvider;
+        string connectionString = appConfiguration.DatabaseConnectionString;*/
 
         services.AddScoped<OperationValidationInterceptor>();
         services.AddScoped<CreatableInterceptor>();
         services.AddScoped<UpdatableInterceptor>();
         services.AddScoped<SoftDeletableInterceptor>();
 
-        services.AddDbContext<IAppDbContext, AppDbContext>((sp, options) =>
+        services.AddDbContext<IAppDbContext, AppDbContext>((serviceProvider, options) =>
         {
+            var databaseProvider = serviceProvider.GetRequiredService<IOptions<ProvidersOptions>>().Value.Database;
+            var connectionString = serviceProvider.GetRequiredService<IOptions<ConnectionStringsOptions>>().Value.Database;
+
             options = databaseProvider switch
             {
                 DatabaseProviderEnum.PostgreSql => options.UseNpgsql(connectionString),
@@ -136,10 +81,10 @@ public static class DependencyInjection
             options
                 .UseSnakeCaseNamingConvention()
                 .AddInterceptors(
-                    sp.GetRequiredService<OperationValidationInterceptor>(),
-                    sp.GetRequiredService<CreatableInterceptor>(),
-                    sp.GetRequiredService<UpdatableInterceptor>(),
-                    sp.GetRequiredService<SoftDeletableInterceptor>()
+                    serviceProvider.GetRequiredService<OperationValidationInterceptor>(),
+                    serviceProvider.GetRequiredService<CreatableInterceptor>(),
+                    serviceProvider.GetRequiredService<UpdatableInterceptor>(),
+                    serviceProvider.GetRequiredService<SoftDeletableInterceptor>()
                 );
         });
 
@@ -148,42 +93,85 @@ public static class DependencyInjection
 
     private static IServiceCollection AddMigrationRunner(this IServiceCollection services, IAppConfiguration appConfiguration)
     {
-        var databaseProvider = appConfiguration.DatabaseProvider;
-        string connectionString = appConfiguration.DatabaseConnectionString;
+        /*var databaseProvider = appConfiguration.DatabaseProvider;
+        string connectionString = appConfiguration.DatabaseConnectionString;*/
 
         services
             .AddFluentMigratorCore()
             .ConfigureRunner(runner =>
             {
-                _ = databaseProvider switch
+                /*_ = databaseProvider switch
                 {
                     DatabaseProviderEnum.PostgreSql => runner.AddPostgres(),
                     DatabaseProviderEnum.SqlServer => runner.AddSqlServer(),
                     _ => throw new NotSupportedException($"Database provider '{databaseProvider}' is not supported."),
-                };
+                };*/
 
                 runner
-                    .WithGlobalConnectionString(connectionString)
+                    .AddPostgres()
+                    .AddSqlServer();
+
+                runner
+                    //.WithGlobalConnectionString(connectionString)
+                    .WithGlobalConnectionString(serviceProvider =>
+                    {
+                        var connectionString = serviceProvider.GetRequiredService<IOptions<ConnectionStringsOptions>>().Value.Database;
+
+                        return connectionString;
+                    })
                     .WithMigrationsIn(InfrastructureAssemblyReference.Assembly);
             })
             .AddLogging(logging => logging.AddFluentMigratorConsole());
+
+        services
+            .AddSingleton<IConfigureOptions<SelectingProcessorAccessorOptions>>(
+                serviceProvider =>
+                {
+                    var databaseProvider = serviceProvider.GetRequiredService<IOptions<ProvidersOptions>>().Value.Database;
+
+                    return new ConfigureNamedOptions<SelectingProcessorAccessorOptions>(
+                        Options.DefaultName,
+                        options =>
+                        {
+                            // PostgreSQL - PostgreSQL
+                            // Microsoft SQL Server - SqlServer
+
+                            options.ProcessorId = databaseProvider switch
+                            {
+                                DatabaseProviderEnum.PostgreSql => "PostgreSQL",
+                                DatabaseProviderEnum.SqlServer => "SqlServer",
+                                _ => throw new NotSupportedException($"Database provider '{databaseProvider}' is not supported."),
+                            };
+                        });
+                });
 
         return services;
     }
 
     private static IServiceCollection AddHealthChecksCore(this IServiceCollection services, IAppConfiguration appConfiguration)
     {
-        var databaseProvider = appConfiguration.DatabaseProvider;
-        string connectionString = appConfiguration.DatabaseConnectionString;
-
+        /*var databaseProvider = appConfiguration.DatabaseProvider;
+        string connectionString = appConfiguration.DatabaseConnectionString;*/
+        
         var healthCheckBuilder = services.AddHealthChecks();
 
-        _ = databaseProvider switch
+        static string ConnectionStringFactory(IServiceProvider serviceProvider)
+        {
+            var connectionString = serviceProvider.GetRequiredService<IOptions<ConnectionStringsOptions>>().Value.Database;
+
+            return connectionString;
+        }
+
+        healthCheckBuilder
+            .AddNpgSql(ConnectionStringFactory);
+            //.AddSqlServer(ConnectionStringFactory);
+
+        /*_ = databaseProvider switch
         {
             DatabaseProviderEnum.PostgreSql => healthCheckBuilder.AddNpgSql(connectionString),
             DatabaseProviderEnum.SqlServer => healthCheckBuilder.AddSqlServer(connectionString),
             _ => throw new NotSupportedException($"Database provider '{databaseProvider}' is not supported."),
-        };
+        };*/
 
         return services;
     }
