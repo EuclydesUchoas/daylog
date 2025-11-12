@@ -2,6 +2,8 @@
 using Daylog.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Daylog.Infrastructure.Database.Data;
 
@@ -18,7 +20,7 @@ public sealed class AppDbContext : DbContext, IAppDbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
-
+        
         optionsBuilder.EnableSensitiveDataLogging();
         //optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
     }
@@ -26,7 +28,7 @@ public sealed class AppDbContext : DbContext, IAppDbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
+        
         modelBuilder.ApplyConfigurationsFromAssembly(InfrastructureAssemblyReference.Assembly);
     }
 
@@ -38,5 +40,35 @@ public sealed class AppDbContext : DbContext, IAppDbContext
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken)
     {
         return base.SaveChangesAsync(cancellationToken);
+    }
+
+    public bool CreateDatabaseIfNotExists()
+    {
+        var databaseCreator = Database.GetService<IRelationalDatabaseCreator>();
+
+        bool exists = DatabaseExistsInternal(databaseCreator);
+
+        if (!exists)
+        {
+            databaseCreator.Create();
+        }
+
+        return !exists;
+    }
+
+    public bool DatabaseExists()
+    {
+        var databaseCreator = Database.GetService<IRelationalDatabaseCreator>();
+
+        bool exists = DatabaseExistsInternal(databaseCreator);
+
+        return exists;
+    }
+
+    private static bool DatabaseExistsInternal(IRelationalDatabaseCreator databaseCreator)
+    {
+        bool exists = databaseCreator.Exists();
+
+        return exists;
     }
 }

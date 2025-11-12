@@ -32,7 +32,7 @@ public sealed class PostgreSqlCreator : IDatabaseCreator
     {
         if (ExistsDatabase())
             return;
-
+        
         using (var connection = new NpgsqlConnection(_adminConnectionStringBuilder.ConnectionString))
         {
             connection.Open();
@@ -66,7 +66,6 @@ public sealed class PostgreSqlCreator : IDatabaseCreator
 
     public string? GetConnectionString()
     {
-        string? connectionString = _connectionStringBuilder.ToString();
         return _connectionStringBuilder.ConnectionString;
     }
 }

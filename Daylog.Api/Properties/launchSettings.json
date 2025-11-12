@@ -37,7 +37,12 @@
       "launchUrl": "documentation",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "DAYLOG_JWT__SECRET": "123",
+        "DAYLOG_PROVIDERS__DATABASE": "PostgreSql",
+        //"DAYLOG_PROVIDERS__DATABASE": "SqlServer",
+        "DAYLOG_PROVIDERS__DOCUMENTATION": "Swagger",
+        "DAYLOG_CONNECTIONSTRINGS__DATABASE": "User ID=postgres;Password=2507;Host=localhost;Port=5432;Database=daylog;",
+        //"DAYLOG_CONNECTIONSTRINGS__DATABASE": "Server=localhost;Database=daylog;Trusted_Connection=True;TrustServerCertificate=True;",
+        "DAYLOG_JWT__SECRETKEY": "123",
         "DAYLOG_JWT__ISSUER": "daylog-api",
         "DAYLOG_JWT__AUDIENCE": "daylog-developers",
         "DAYLOG_JWT__TOKENEXPIRATIONINMINUTES": "60"

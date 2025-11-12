@@ -1,11 +1,12 @@
-﻿using FluentMigrator.Runner;
-using FluentMigrator.Runner.Exceptions;
+﻿using Daylog.Application.Abstractions.Configurations;
+using Daylog.Application.Abstractions.Data;
 using Daylog.Infrastructure.Database.Factories.Creators;
+using Daylog.Shared.Enums;
+using FluentMigrator.Runner;
+using FluentMigrator.Runner.Exceptions;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
-using Daylog.Application.Abstractions.Configurations;
-using Daylog.Shared.Enums;
 
 namespace Daylog.Infrastructure.Database.Factories;
 
@@ -44,12 +45,31 @@ public sealed class DatabaseFactory : IDatabaseFactory
         };
     }
 
-    public void StartDatabase()
+    public void StartDatabase(bool legacyMode = false)
     {
         if (_databaseCreator is null)
+        {
             throw new Exception("Database creator not initialized.");
+        }
 
+        // New approach to create database if not exists
+        if (!legacyMode)
+        {
+            using var scope = _serviceScopeFactory.CreateScope();
+
+            var context = scope.ServiceProvider.GetRequiredService<IAppDbContext>();
+
+            context.CreateDatabaseIfNotExists();
+
+            _isDatabaseStarted = true;
+            return;
+        }
+
+        // Old approach to create database if not exists
+#pragma warning disable CS0618 // O tipo ou membro é obsoleto
         _databaseCreator.CreateDatabase();
+#pragma warning restore CS0618 // O tipo ou membro é obsoleto
+
         _isDatabaseStarted = true;
     }
 
@@ -65,7 +85,9 @@ public sealed class DatabaseFactory : IDatabaseFactory
     public void RunMigrations(bool migrateUp = true)
     {
         if (!_isDatabaseStarted)
+        {
             throw new InvalidOperationException("Database must be started before running migrations.");
+        }
 
         using var scope = _serviceScopeFactory.CreateScope();
 

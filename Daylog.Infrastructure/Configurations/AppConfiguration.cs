@@ -7,22 +7,26 @@ namespace Daylog.Infrastructure.Configurations;
 public sealed class AppConfiguration : IAppConfiguration
 {
     // Configuration keys
+
     // Connection strings
     const string KeyConnectionStrings = "ConnectionStrings";
     const string KeyDatabaseConnectionString = "Database";
+
     // Aspire
     const string AspireDatabaseKeyPostgreSqlConnectionString = "daylog-postgres-db";
     const string AspireDatabaseKeySqlServerConnectionString = "daylog-sqlserver-db";
+
     // Providers
     const string KeyProviders = "Providers";
     const string KeyDatabaseProvider = "Database";
     const string KeyPathDatabaseProvider = $"{KeyProviders}:{KeyDatabaseProvider}";
     const string KeyDocumentationProvider = "Documentation";
     const string KeyPathDocumentationProvider = $"{KeyProviders}:{KeyDocumentationProvider}";
+
     // JWT
     const string KeyJwt = "Jwt";
-    const string KeyJwtSecret = "Secret";
-    const string KeyPathJwtSecret = $"{KeyJwt}:{KeyJwtSecret}";
+    const string KeyJwtSecretKey = "SecretKey";
+    const string KeyPathJwtSecretKey = $"{KeyJwt}:{KeyJwtSecretKey}";
     const string KeyJwtIssuer = "Issuer";
     const string KeyPathJwtIssuer = $"{KeyJwt}:{KeyJwtIssuer}";
     const string KeyJwtAudience = "Audience";
@@ -32,13 +36,16 @@ public sealed class AppConfiguration : IAppConfiguration
 
     // Environment variable names
     const string EnvVarPrefix = "DAYLOG_";
+
     // Providers
     const string EnvVarDatabaseProvider = $"{EnvVarPrefix}DATABASE_PROVIDER";
     const string EnvVarDocumentationProvider = $"{EnvVarPrefix}DOCUMENTATION_PROVIDER";
+
     // Connection strings
     const string EnvVarDatabaseConnectionString = $"{EnvVarPrefix}DATABASE_CONNECTION_STRING";
+
     // JWT
-    const string EnvVarJwtSecret = $"{EnvVarPrefix}JWT_SECRET";
+    const string EnvVarJwtSecretKey = $"{EnvVarPrefix}JWT_SECRET_KEY";
     const string EnvVarJwtIssuer = $"{EnvVarPrefix}JWT_ISSUER";
     const string EnvVarJwtAudience = $"{EnvVarPrefix}JWT_AUDIENCE";
     const string EnvVarJwtTokenExpiration = $"{EnvVarPrefix}JWT_TOKEN_EXPIRATION_IN_MINUTES";
@@ -88,30 +95,33 @@ public sealed class AppConfiguration : IAppConfiguration
         {
             throw new ArgumentException("Database provider is not configured properly.", nameof(DatabaseProvider));
         }
+
         ArgumentException.ThrowIfNullOrWhiteSpace(DatabaseConnectionString, nameof(DatabaseConnectionString));
+
         if (DocumentationProvider is DocumentationProviderEnum.None)
         {
             throw new ArgumentException("Documentation provider is not configured properly.", nameof(DocumentationProvider));
         }
-        /*ArgumentException.ThrowIfNullOrWhiteSpace(JwtSecretKey, nameof(JwtSecretKey));
+
+        ArgumentException.ThrowIfNullOrWhiteSpace(JwtSecretKey, nameof(JwtSecretKey));
         ArgumentException.ThrowIfNullOrWhiteSpace(JwtIssuer, nameof(JwtIssuer));
         ArgumentException.ThrowIfNullOrWhiteSpace(JwtAudience, nameof(JwtAudience));
         if (JwtTokenExpirationInMinutes <= 0)
         {
             throw new ArgumentException("JWT token expiration time is not configured properly.", nameof(JwtTokenExpirationInMinutes));
-        }*/
+        }
     }
 
     // Helper methods to retrieve configuration values
 
-    static bool TryGetEnvironmentVariableValue(string key, out string? value)
+    private static bool TryGetEnvironmentVariableValue(string key, out string? value)
     {
         value = Environment.GetEnvironmentVariable(key);
 
         return !string.IsNullOrWhiteSpace(value);
     }
 
-    static bool TryGetConfigurationValue(IConfiguration configuration, string key, out string? value)
+    private static bool TryGetConfigurationValue(IConfiguration configuration, string key, out string? value)
     {
         value = configuration.GetValue<string>(key);
 
@@ -140,11 +150,15 @@ public sealed class AppConfiguration : IAppConfiguration
     {
         if (!TryGetEnvironmentVariableValue(EnvVarDatabaseConnectionString, out string? connectionString))
         {
-            if (AspireDatabaseProviderConnectionStringKeys.TryGetValue(DatabaseProvider, out string? connectionStringKey)
-                && !string.IsNullOrWhiteSpace(connectionString = _configuration.GetConnectionString(connectionStringKey)))
+            if (AspireDatabaseProviderConnectionStringKeys.TryGetValue(DatabaseProvider, out string? connectionStringKey))
             {
-                return connectionString;
+                connectionString = _configuration.GetConnectionString(connectionStringKey);
+                if (!string.IsNullOrWhiteSpace(connectionString))
+                {
+                    return connectionString;
+                }
             }
+
             connectionString = _configuration.GetConnectionString(KeyDatabaseConnectionString);
             if (string.IsNullOrWhiteSpace(connectionString))
             {
@@ -173,13 +187,13 @@ public sealed class AppConfiguration : IAppConfiguration
 
     private string? LoadJwtSecretKey()
     {
-        if (!TryGetEnvironmentVariableValue(EnvVarJwtSecret, out string? jwtSecret)
-            && !TryGetConfigurationValue(_configuration, KeyPathJwtSecret, out jwtSecret))
+        if (!TryGetEnvironmentVariableValue(EnvVarJwtSecretKey, out string? jwtSecretKey)
+            && !TryGetConfigurationValue(_configuration, KeyPathJwtSecretKey, out jwtSecretKey))
         {
             return null;
         }
 
-        return jwtSecret;
+        return jwtSecretKey;
     }
 
     private string? LoadJwtIssuer()

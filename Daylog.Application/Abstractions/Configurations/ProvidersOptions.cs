@@ -1,13 +1,10 @@
 ﻿using Daylog.Shared.Enums;
-using System.ComponentModel.DataAnnotations;
 
 namespace Daylog.Application.Abstractions.Configurations;
 
 public sealed class ProvidersOptions
 {
-    [Required, DeniedValues(DatabaseProviderEnum.None)]
-    public DatabaseProviderEnum Database { get; set; }
+    public required DatabaseProviderEnum Database { get; init; }
 
-    [Required, DeniedValues(DocumentationProviderEnum.None)]
-    public DocumentationProviderEnum Documentation { get; set; }
+    public required DocumentationProviderEnum Documentation { get; init; }
 }

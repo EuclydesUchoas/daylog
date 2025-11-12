@@ -1,9 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Daylog.Application.Abstractions.Configurations;
+﻿namespace Daylog.Application.Abstractions.Configurations;
 
 public sealed class ConnectionStringsOptions
 {
-    [Required]
-    public string Database { get; set; } = null!;
+    public required string Database { get; init; } = null!;
 }

@@ -63,7 +63,6 @@ public sealed class SqlServerCreator : IDatabaseCreator
 
     public string? GetConnectionString()
     {
-        string? connectionString = _connectionStringBuilder.ToString();
         return _connectionStringBuilder.ConnectionString;
     }
 }
