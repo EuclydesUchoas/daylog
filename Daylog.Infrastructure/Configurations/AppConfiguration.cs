@@ -77,6 +77,7 @@ public sealed class AppConfiguration : IAppConfiguration
     public AppConfiguration(IConfiguration configuration)
     {
         _configuration = configuration;
+        ArgumentNullException.ThrowIfNull(_configuration, nameof(configuration));
 
         DatabaseProvider = LoadDatabaseProvider();
         DatabaseConnectionString = LoadDatabaseConnectionString()!;
@@ -89,7 +90,7 @@ public sealed class AppConfiguration : IAppConfiguration
         AssertConfigurationIsValid();
     }
 
-    public void AssertConfigurationIsValid()
+    private void AssertConfigurationIsValid()
     {
         if (DatabaseProvider is DatabaseProviderEnum.None)
         {

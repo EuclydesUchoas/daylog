@@ -45,30 +45,32 @@ public sealed class DatabaseFactory : IDatabaseFactory
         };
     }
 
-    public void StartDatabase(bool legacyMode = false)
+    public void StartDatabase(DatabaseStarterStrategyEnum strategy = DatabaseStarterStrategyEnum.DefaultCreator)
     {
         if (_databaseCreator is null)
         {
             throw new Exception("Database creator not initialized.");
         }
 
-        // New approach to create database if not exists
-        if (!legacyMode)
+        switch (strategy)
         {
-            using var scope = _serviceScopeFactory.CreateScope();
+            case DatabaseStarterStrategyEnum.DefaultCreator:
+                // Old approach to create database if not exists
+                _databaseCreator.CreateDatabase();
+                break;
 
-            var context = scope.ServiceProvider.GetRequiredService<IAppDbContext>();
+            case DatabaseStarterStrategyEnum.AppDbContextLogic:
+                // New approach to create database if not exists
+                using (var scope = _serviceScopeFactory.CreateScope())
+                {
+                    var context = scope.ServiceProvider.GetRequiredService<IAppDbContext>();
+                    context.CreateDatabaseIfNotExists();
+                }
+                break;
 
-            context.CreateDatabaseIfNotExists();
-
-            _isDatabaseStarted = true;
-            return;
+            default:
+                throw new NotSupportedException($"Database starter strategy '{strategy}' is not supported.");
         }
-
-        // Old approach to create database if not exists
-#pragma warning disable CS0618 // O tipo ou membro é obsoleto
-        _databaseCreator.CreateDatabase();
-#pragma warning restore CS0618 // O tipo ou membro é obsoleto
 
         _isDatabaseStarted = true;
     }

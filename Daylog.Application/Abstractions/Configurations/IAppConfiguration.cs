@@ -5,11 +5,6 @@ namespace Daylog.Application.Abstractions.Configurations;
 public interface IAppConfiguration
 {
     /// <summary>
-    /// Asserts that the application configuration is valid.
-    /// </summary>
-    void AssertConfigurationIsValid();
-
-    /// <summary>
     /// Gets the database provider type.
     /// </summary>
     DatabaseProviderEnum DatabaseProvider { get; }

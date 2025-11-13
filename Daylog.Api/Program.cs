@@ -26,7 +26,7 @@ var app = builder.Build();
 
 var databaseFactory = app.Services.GetRequiredService<IDatabaseFactory>();
 
-databaseFactory.StartDatabase(legacyMode: false);
+databaseFactory.StartDatabase(DatabaseStarterStrategyEnum.DefaultCreator);
 databaseFactory.RunMigrations(migrateUp: true);
 
 app.UseRequestLocalization();

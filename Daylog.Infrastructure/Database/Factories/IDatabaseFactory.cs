@@ -5,7 +5,7 @@ namespace Daylog.Infrastructure.Database.Factories;
 
 public interface IDatabaseFactory
 {
-    void StartDatabase(bool legacyMode = false);
+    void StartDatabase(DatabaseStarterStrategyEnum strategy = DatabaseStarterStrategyEnum.DefaultCreator);
 
     IDatabaseCreator? GetDatabaseCreator();
 

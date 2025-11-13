@@ -8,6 +8,9 @@ public sealed class PostgreSqlCreator : IDatabaseCreator
     private readonly NpgsqlConnectionStringBuilder _connectionStringBuilder;
     private readonly NpgsqlConnectionStringBuilder _adminConnectionStringBuilder;
 
+    public const string _adminUsername = "postgres";
+    public const string _adminDatabase = "postgres";
+
     public PostgreSqlCreator(NpgsqlConnectionStringBuilder connectionStringBuilder)
     {
         if (string.IsNullOrWhiteSpace(connectionStringBuilder?.ConnectionString))
@@ -20,13 +23,13 @@ public sealed class PostgreSqlCreator : IDatabaseCreator
         _connectionStringBuilder = connectionStringBuilder;
         _adminConnectionStringBuilder = new NpgsqlConnectionStringBuilder(connectionStringBuilder.ConnectionString)
         {
-            Username = AdminUsername,
-            Database = AdminDatabase,
+            // It is not necessary to set the admin username
+            //Username = _adminUsername,
+            Database = _adminDatabase,
+            Pooling = false,
+            Multiplexing = false,
         };
     }
-
-    public string AdminUsername { get; } = "postgres";
-    public string AdminDatabase { get; } = "postgres";
 
     public void CreateDatabase()
     {

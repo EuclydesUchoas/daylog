@@ -3,7 +3,9 @@ using Daylog.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal;
 using Microsoft.EntityFrameworkCore.Storage;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal;
 
 namespace Daylog.Infrastructure.Database.Data;
 
@@ -44,6 +46,14 @@ public sealed class AppDbContext : DbContext, IAppDbContext
 
     public bool CreateDatabaseIfNotExists()
     {
+        // Tests
+        /*ISqlServerConnection;
+        SqlServerConnection;
+        SqlServerDatabaseCreator;
+        INpgsqlRelationalConnection;
+        NpgsqlRelationalConnection;
+        NpgsqlDatabaseCreator;*/
+
         var databaseCreator = Database.GetService<IRelationalDatabaseCreator>();
 
         bool exists = DatabaseExistsInternal(databaseCreator);

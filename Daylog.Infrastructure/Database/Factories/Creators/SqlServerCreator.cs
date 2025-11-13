@@ -7,6 +7,9 @@ public sealed class SqlServerCreator : IDatabaseCreator
     private readonly SqlConnectionStringBuilder _connectionStringBuilder;
     private readonly SqlConnectionStringBuilder _adminConnectionStringBuilder;
 
+    private const string _adminUsername = "master";
+    private const string _adminDatabase = "master";
+
     public SqlServerCreator(SqlConnectionStringBuilder connectionStringBuilder)
     {
         if (string.IsNullOrWhiteSpace(connectionStringBuilder?.ConnectionString))
@@ -18,13 +21,12 @@ public sealed class SqlServerCreator : IDatabaseCreator
         _connectionStringBuilder = connectionStringBuilder;
         _adminConnectionStringBuilder = new SqlConnectionStringBuilder(connectionStringBuilder.ConnectionString)
         {
-            UserID = AdminUsername,
-            InitialCatalog = AdminDatabase,
+            // It is not necessary to set the admin username
+            //UserID = _adminUsername,
+            InitialCatalog = _adminDatabase,
         };
+        _adminConnectionStringBuilder.Remove("AttachDBFilename");
     }
-
-    public string AdminUsername { get; } = "master";
-    public string AdminDatabase { get; } = "master";
 
     public void CreateDatabase()
     {
