@@ -7,6 +7,21 @@ namespace Daylog.Shared.Extensions;
 
 public static class QueryableExtensions
 {
+    private static DatabaseProviderEnum databaseProvider = DatabaseProviderEnum.None;
+
+    public static void DefineDatabaseProvider(DatabaseProviderEnum provider)
+    {
+        databaseProvider = provider;
+    }
+
+    private static void AssertDatabaseProviderIsDefined()
+    {
+        if (databaseProvider is DatabaseProviderEnum.None)
+        {
+            throw new InvalidOperationException("Database provider is not defined. Please call DefineDatabaseProvider method to set the database provider before using this extension.");
+        }
+    }
+
     public static IQueryable<TSource> Paginate<TSource>(this IQueryable<TSource> query, int pageNumber, int pageSize)
     {
         if (pageNumber > 0 && pageSize > 0)
@@ -41,22 +56,22 @@ public static class QueryableExtensions
         ];
 
     private static readonly MethodInfo _unaccentMethod = typeof(NpgsqlFullTextSearchDbFunctionsExtensions)
-        .GetMethod("Unaccent", _unaccentMethodParameters)!;
+        .GetMethod(nameof(NpgsqlFullTextSearchDbFunctionsExtensions.Unaccent), _unaccentMethodParameters)!;
 
     private static readonly MethodInfo _iLikeMethod = typeof(NpgsqlDbFunctionsExtensions)
-        .GetMethod("ILike", _iLikeMethodParameters)!;
+        .GetMethod(nameof(NpgsqlDbFunctionsExtensions.ILike), _iLikeMethodParameters)!;
 
     private static readonly MethodInfo _collateMethod = typeof(RelationalDbFunctionsExtensions)
         .GetMethods(BindingFlags.Public | BindingFlags.Static)
-        .Single(x => x.IsGenericMethodDefinition && x.Name is "Collate" && x.GetParameters().Length is 3);
+        .Single(x => x.IsGenericMethodDefinition && x.Name is nameof(RelationalDbFunctionsExtensions.Collate) && x.GetParameters().Length is 3);
     private static readonly MethodInfo _collateMethodString = _collateMethod.MakeGenericMethod(typeof(string));
     private static readonly MethodInfo _collateMethodChar = _collateMethod.MakeGenericMethod(typeof(char));
 
     private static readonly MethodInfo _containsMethodString = typeof(string)
-        .GetMethod("Contains", [typeof(string)])!;
+        .GetMethod(nameof(string.Contains), [typeof(string)])!;
 
     private static readonly MethodInfo _toStringMethodChar = typeof(char)
-        .GetMethod("ToString", [])!;
+        .GetMethod(nameof(char.ToString), [])!;
 
     private static readonly ConstantExpression _efFunctionsExpression = Expression.Constant(EF.Functions);
 
@@ -69,17 +84,11 @@ public static class QueryableExtensions
     private static readonly ConstantExpression _latin1CIAIExpression = Expression.Constant(_latin1CIAICollate, typeof(string));
 
     public static IQueryable<TSource> Search<TSource, TProperty>(this IQueryable<TSource> query, Expression<Func<TSource, TProperty>> propertySelector, TProperty searchTerm)
-        => Search(query, propertySelector, searchTerm, DatabaseProviderEnum.None, false, false);
+        => Search(query, propertySelector, searchTerm, true, true);
 
-    public static IQueryable<TSource> Search<TSource, TProperty>(this IQueryable<TSource> query, Expression<Func<TSource, TProperty>> propertySelector, TProperty searchTerm, DatabaseProviderEnum databaseProvider)
-        => Search(query, propertySelector, searchTerm, databaseProvider, true, true);
-
-    public static IQueryable<TSource> Search<TSource, TProperty>(this IQueryable<TSource> query, Expression<Func<TSource, TProperty>> propertySelector, TProperty searchTerm, DatabaseProviderEnum databaseProvider, bool caseInsensitive, bool diacriticInsensitive)
+    public static IQueryable<TSource> Search<TSource, TProperty>(this IQueryable<TSource> query, Expression<Func<TSource, TProperty>> propertySelector, TProperty searchTerm, bool caseInsensitive, bool diacriticInsensitive)
     {
-        if ((databaseProvider is DatabaseProviderEnum.None) == (caseInsensitive || diacriticInsensitive))
-        {
-            throw new ArgumentException("When databaseProvider is None, both caseInsensitive and diacriticInsensitive must be false, and vice versa.");
-        }
+        AssertDatabaseProviderIsDefined();
 
         query = databaseProvider switch
         {
@@ -150,14 +159,14 @@ public static class QueryableExtensions
                 expressionResult = (caseInsensitive, diacriticInsensitive) switch
                 {
                     (true, true) => (x) => EF.Functions.ILike(
-                        EF.Functions.Unaccent(EF.Property<string>(x!, propertyName)),
+                        EF.Functions.Unaccent(EF.Property<char>(x!, propertyName).ToString()),
                         EF.Functions.Unaccent(EF.Parameter(searchTermChar.ToString()))),
 
                     (true, false) => (x) => EF.Functions.ILike(
-                        EF.Property<string>(x!, propertyName),
+                        EF.Property<char>(x!, propertyName).ToString(),
                         EF.Parameter(searchTermChar.ToString())),
 
-                    (false, true) => (x) => EF.Functions.Unaccent(EF.Property<string>(x!, propertyName))
+                    (false, true) => (x) => EF.Functions.Unaccent(EF.Property<char>(x!, propertyName).ToString())
                         .Equals(EF.Functions.Unaccent(EF.Parameter(searchTermChar.ToString()))),
 
                     _ => (x) => EF.Property<char>(x!, propertyName)

@@ -1,5 +1,6 @@
 ﻿using Daylog.Application.Abstractions.Configurations;
 using Daylog.Shared.Enums;
+using Daylog.Shared.Extensions;
 using Microsoft.Extensions.Configuration;
 
 namespace Daylog.Infrastructure.Configurations;
@@ -88,6 +89,8 @@ public sealed class AppConfiguration : IAppConfiguration
         JwtTokenExpirationInMinutes = LoadJwtTokenExpirationInMinutes();
 
         AssertConfigurationIsValid();
+
+        QueryableExtensions.DefineDatabaseProvider(DatabaseProvider);
     }
 
     private void AssertConfigurationIsValid()

@@ -14,7 +14,7 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(x => x.Id)
             .HasColumnName("id")
-            .HasEntityIdConversion()
+            .HasGuidEntityIdConversion()
             .IsRequired();
 
         builder.Property(x => x.Name)

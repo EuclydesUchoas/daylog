@@ -3,9 +3,7 @@ using Daylog.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal;
 using Microsoft.EntityFrameworkCore.Storage;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal;
 
 namespace Daylog.Infrastructure.Database.Data;
 
@@ -24,7 +22,6 @@ public sealed class AppDbContext : DbContext, IAppDbContext
         base.OnConfiguring(optionsBuilder);
         
         optionsBuilder.EnableSensitiveDataLogging();
-        //optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

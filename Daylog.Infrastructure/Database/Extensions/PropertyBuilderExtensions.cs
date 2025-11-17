@@ -5,23 +5,43 @@ namespace Daylog.Infrastructure.Database.Extensions;
 
 internal static class PropertyBuilderExtensions
 {
-    public static PropertyBuilder<TEntityId> HasEntityIdConversion<TEntityId>(this PropertyBuilder<TEntityId> builder)
-        where TEntityId : struct, IEntityId<TEntityId>
+    public static PropertyBuilder<TGuidEntityId> HasGuidEntityIdConversion<TGuidEntityId>(this PropertyBuilder<TGuidEntityId> builder)
+        where TGuidEntityId : struct, IGuidEntityId<TGuidEntityId>
     {
-        var creator = TEntityId.Existing;
+        var creator = TGuidEntityId.Existing;
 
         return builder.HasConversion(
             x => x.Value,
             x => creator(x));
     }
 
-    public static PropertyBuilder<TEntityId?> HasEntityIdConversion<TEntityId>(this PropertyBuilder<TEntityId?> builder)
-        where TEntityId : struct, IEntityId<TEntityId>
+    public static PropertyBuilder<TGuidEntityId?> HasGuidEntityIdConversion<TGuidEntityId>(this PropertyBuilder<TGuidEntityId?> builder)
+        where TGuidEntityId : struct, IGuidEntityId<TGuidEntityId>
     {
-        var creator = TEntityId.Existing;
+        var creator = TGuidEntityId.Existing;
 
         return builder.HasConversion(
             x => x.HasValue ? x.Value.Value as Guid? : null,
+            x => x.HasValue ? creator(x.Value) : null);
+    }
+
+    public static PropertyBuilder<TNumberEntityId> HasNumberEntityIdConversion<TNumberEntityId>(this PropertyBuilder<TNumberEntityId> builder)
+        where TNumberEntityId : struct, INumberEntityId<TNumberEntityId>
+    {
+        var creator = TNumberEntityId.Existing;
+
+        return builder.HasConversion(
+            x => x.Value,
+            x => creator(x));
+    }
+
+    public static PropertyBuilder<TNumberEntityId?> HasNumberEntityIdConversion<TNumberEntityId>(this PropertyBuilder<TNumberEntityId?> builder)
+        where TNumberEntityId : struct, INumberEntityId<TNumberEntityId>
+    {
+        var creator = TNumberEntityId.Existing;
+
+        return builder.HasConversion(
+            x => x.HasValue ? x.Value.Value as long? : null,
             x => x.HasValue ? creator(x.Value) : null);
     }
 
