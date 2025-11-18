@@ -4,7 +4,7 @@ namespace Daylog.Domain.Users;
 
 public sealed class User : Entity, ICreatable, IUpdatable, ISoftDeletable
 {
-    public UserId Id { get; private set; }
+    public UserId Id { get; private set; } = null!;
 
     public string Name { get; private set; } = null!;
 
