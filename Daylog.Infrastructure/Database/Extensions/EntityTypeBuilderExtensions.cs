@@ -14,7 +14,7 @@ internal static class EntityTypeBuilderExtensions
             .HasDateTimeUTCConversion()
             .IsRequired();
 
-        builder.Property(x => x.CreatedByUserId)
+        builder.Property(x => x.CreatedByUserId!)
             .HasColumnName("created_by_user_id")
             .HasGuidEntityIdConversion()
             .IsRequired(false);
@@ -28,7 +28,7 @@ internal static class EntityTypeBuilderExtensions
             .HasDateTimeUTCConversion()
             .IsRequired();
 
-        builder.Property(x => x.UpdatedByUserId)
+        builder.Property(x => x.UpdatedByUserId!)
             .HasColumnName("updated_by_user_id")
             .HasGuidEntityIdConversion()
             .IsRequired(false);
@@ -46,7 +46,7 @@ internal static class EntityTypeBuilderExtensions
             .HasDateTimeUTCConversion()
             .IsRequired(false);
 
-        builder.Property(x => x.DeletedByUserId)
+        builder.Property(x => x.DeletedByUserId!)
             .HasColumnName("deleted_by_user_id")
             .HasGuidEntityIdConversion()
             .IsRequired(false);

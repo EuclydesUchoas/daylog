@@ -1,7 +1,8 @@
 ﻿using Daylog.Application.Abstractions.Configurations;
 using Daylog.Application.Abstractions.Data;
 using Daylog.Infrastructure.Database.Factories.Creators;
-using Daylog.Shared.Enums;
+using Daylog.Shared.Data;
+using Daylog.Shared.Data.Enums;
 using FluentMigrator.Runner;
 using FluentMigrator.Runner.Exceptions;
 using Microsoft.Data.SqlClient;
@@ -37,12 +38,28 @@ public sealed class DatabaseFactory : IDatabaseFactory
 
     private IDatabaseCreator BuildDatabaseCreator()
     {
-        return _databaseProvider switch
+        var databaseCreator = DatabaseProviderSwitch.For<IDatabaseCreator>(
+            _databaseProvider,
+            postgresql: () => new PostgreSqlCreator(new NpgsqlConnectionStringBuilder(_connectionString!)),
+            sqlServer: () => new SqlServerCreator(new SqlConnectionStringBuilder(_connectionString!))
+            );
+
+        return databaseCreator;
+
+        /*using var switcher = new DatabaseProviderSwitcher<IDatabaseCreator>
+        {
+            PostgreSql = () => new PostgreSqlCreator(new NpgsqlConnectionStringBuilder(_connectionString)),
+            SqlServer = () => new SqlServerCreator(new SqlConnectionStringBuilder(_connectionString)),
+        };
+
+        return switcher.Execute(_databaseProvider);*/
+
+        /*return _databaseProvider switch
         {
             DatabaseProviderEnum.SqlServer => new SqlServerCreator(new SqlConnectionStringBuilder(_connectionString)),
             DatabaseProviderEnum.PostgreSql => new PostgreSqlCreator(new NpgsqlConnectionStringBuilder(_connectionString)),
             _ => throw new NotSupportedException($"Database provider '{_databaseProvider}' is not supported.")
-        };
+        };*/
     }
 
     public void StartDatabase(DatabaseStarterStrategyEnum strategy = DatabaseStarterStrategyEnum.DefaultCreator)

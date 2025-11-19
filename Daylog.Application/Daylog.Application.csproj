@@ -18,7 +18,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Daylog.Domain\Daylog.Domain.csproj" />
-    <ProjectReference Include="..\Daylog.Shared\Daylog.Shared.csproj" />
+    <ProjectReference Include="..\Daylog.Shared.Core\Daylog.Shared.Core.csproj" />
+    <ProjectReference Include="..\Daylog.Shared.Data\Daylog.Shared.Data.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,5 +1,5 @@
 ﻿using Daylog.Infrastructure.Database.Factories.Creators;
-using Daylog.Shared.Enums;
+using Daylog.Shared.Data.Enums;
 
 namespace Daylog.Infrastructure.Database.Factories;
 

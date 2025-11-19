@@ -1,4 +1,5 @@
-﻿using Daylog.Shared.Enums;
+﻿using Daylog.Shared.Core.Enums;
+using Daylog.Shared.Data.Enums;
 
 namespace Daylog.Application.Abstractions.Configurations;
 

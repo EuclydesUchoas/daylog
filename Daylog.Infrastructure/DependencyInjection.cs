@@ -5,15 +5,18 @@ using Daylog.Infrastructure.Authentication;
 using Daylog.Infrastructure.Configurations;
 using Daylog.Infrastructure.Database.Data;
 using Daylog.Infrastructure.Database.Factories;
+using Daylog.Infrastructure.Database.Factories.Creators;
 using Daylog.Infrastructure.Database.SaveChangesInterceptors;
-using Daylog.Shared.Enums;
+using Daylog.Shared.Data;
 using FluentMigrator.Runner;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Npgsql;
 using System.Text;
 
 namespace Daylog.Infrastructure;
@@ -84,12 +87,26 @@ public static class DependencyInjection
 
         services.AddDbContext<IAppDbContext, AppDbContext>((serviceProvider, options) =>
         {
-            _ = databaseProvider switch
+            DatabaseProviderSwitch.For(
+                databaseProvider,
+                postgresql: () => options.UseNpgsql(connectionString),
+                sqlServer: () => options.UseSqlServer(connectionString)
+                );
+
+            /*using var switcher = new DatabaseProviderSwitcher<DdContextOptionsBuilder>
+            {
+                PostgreSql = () => options.UseNpgsql(connectionString),
+                SqlServer = () => options.UseSqlServer(connectionString),
+            };
+
+            switcher.Execute(databaseProvider);*/
+
+            /*_ = databaseProvider switch
             {
                 DatabaseProviderEnum.PostgreSql => options.UseNpgsql(connectionString),
                 DatabaseProviderEnum.SqlServer => options.UseSqlServer(connectionString),
                 _ => throw new NotSupportedException($"Database provider '{databaseProvider}' is not supported."),
-            };
+            };*/
 
             options
                 .UseSnakeCaseNamingConvention()
@@ -113,12 +130,26 @@ public static class DependencyInjection
             .AddFluentMigratorCore()
             .ConfigureRunner(runner =>
             {
-                _ = databaseProvider switch
+                DatabaseProviderSwitch.For(
+                    databaseProvider,
+                    postgresql: () => runner.AddPostgres(),
+                    sqlServer: () => runner.AddSqlServer()
+                    );
+
+                /*using var switcher = new DatabaseProviderSwitcher<IMigrationRunnerBuilder>
+                {
+                    PostgreSql = () => runner.AddPostgres(),
+                    SqlServer = () => runner.AddSqlServer(),
+                };
+
+                switcher.Execute(databaseProvider);*/
+
+                /*_ = databaseProvider switch
                 {
                     DatabaseProviderEnum.PostgreSql => runner.AddPostgres(),
                     DatabaseProviderEnum.SqlServer => runner.AddSqlServer(),
                     _ => throw new NotSupportedException($"Database provider '{databaseProvider}' is not supported."),
-                };
+                };*/
 
                 runner
                     .WithGlobalConnectionString(connectionString)
@@ -136,12 +167,19 @@ public static class DependencyInjection
 
         var healthCheckBuilder = services.AddHealthChecks();
 
-        _ = databaseProvider switch
+        DatabaseProviderSwitch.For(
+            databaseProvider,
+            postgresql: () => healthCheckBuilder.AddNpgSql(connectionString),
+            sqlServer: () => healthCheckBuilder.AddSqlServer(connectionString)
+            );
+
+        /*using var switcher = new DatabaseProviderSwitcher<IHealthChecksBuilder>
         {
-            DatabaseProviderEnum.PostgreSql => healthCheckBuilder.AddNpgSql(connectionString),
-            DatabaseProviderEnum.SqlServer => healthCheckBuilder.AddSqlServer(connectionString),
-            _ => throw new NotSupportedException($"Database provider '{databaseProvider}' is not supported."),
+            PostgreSql = () => healthCheckBuilder.AddNpgSql(connectionString),
+            SqlServer = () => healthCheckBuilder.AddSqlServer(connectionString),
         };
+
+        switcher.Execute(databaseProvider);*/
 
         return services;
     }

@@ -21,6 +21,7 @@
     <ProjectReference Include="..\Daylog.Domain\Daylog.Domain.csproj" />
     <ProjectReference Include="..\Daylog.Infrastructure\Daylog.Infrastructure.csproj" />
     <ProjectReference Include="..\Daylog.ServiceDefaults\Daylog.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\Daylog.Shared.Core\Daylog.Shared.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

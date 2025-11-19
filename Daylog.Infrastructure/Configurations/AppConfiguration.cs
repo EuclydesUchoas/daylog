@@ -1,6 +1,7 @@
 ﻿using Daylog.Application.Abstractions.Configurations;
-using Daylog.Shared.Enums;
-using Daylog.Shared.Extensions;
+using Daylog.Shared.Core.Enums;
+using Daylog.Shared.Data.Enums;
+using Daylog.Shared.Data.Extensions;
 using Microsoft.Extensions.Configuration;
 
 namespace Daylog.Infrastructure.Configurations;

@@ -1,5 +1,5 @@
 ﻿using Daylog.Application.Abstractions.Configurations;
-using Daylog.Shared.Enums;
+using Daylog.Shared.Data.Enums;
 using FluentMigrator;
 
 namespace Daylog.Infrastructure.Database.Migrations;

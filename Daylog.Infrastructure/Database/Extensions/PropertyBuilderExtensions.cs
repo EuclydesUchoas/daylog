@@ -5,16 +5,17 @@ namespace Daylog.Infrastructure.Database.Extensions;
 
 internal static class PropertyBuilderExtensions
 {
-    public static PropertyBuilder<TGuidEntityId> HasGuidEntityIdConversion<TGuidEntityId>(this PropertyBuilder<TGuidEntityId> builder)
+    internal static PropertyBuilder<TGuidEntityId> HasGuidEntityIdConversion<TGuidEntityId>(this PropertyBuilder<TGuidEntityId> builder)
         where TGuidEntityId : GuidEntityId<TGuidEntityId>
     {
         return builder.HasConversion(
-            x => x.Value,
-            x => GuidEntityId<TGuidEntityId>.Existing(x));
+            x => x != null ? x.Value as Guid? : null,
+            x => x.HasValue ? GuidEntityId<TGuidEntityId>.Existing(x.Value) : null!
+            );
     }
 
     // Is not needed currently
-    /*public static PropertyBuilder<TGuidEntityId?> HasGuidEntityIdConversion<TGuidEntityId>(this PropertyBuilder<TGuidEntityId?> builder)
+    /*internal static PropertyBuilder<TGuidEntityId?> HasGuidEntityIdConversion<TGuidEntityId>(this PropertyBuilder<TGuidEntityId?> builder)
         where TGuidEntityId : GuidEntityId<TGuidEntityId>
     {
         return builder.HasConversion(
@@ -22,15 +23,16 @@ internal static class PropertyBuilderExtensions
             x => x.HasValue ? GuidEntityId<TGuidEntityId>.Existing(x.Value) : null);
     }*/
 
-    public static PropertyBuilder<TNumberEntityId> HasNumberEntityIdConversion<TNumberEntityId>(this PropertyBuilder<TNumberEntityId> builder)
+    internal static PropertyBuilder<TNumberEntityId> HasNumberEntityIdConversion<TNumberEntityId>(this PropertyBuilder<TNumberEntityId> builder)
         where TNumberEntityId : NumberEntityId<TNumberEntityId>
     {
         return builder.HasConversion(
-            x => x.Value,
-            x => NumberEntityId<TNumberEntityId>.Existing(x));
+            x => x != null ? x.Value as long? : null,
+            x => x.HasValue ? NumberEntityId<TNumberEntityId>.Existing(x.Value) : null!
+            );
     }
 
-    /*public static PropertyBuilder<TNumberEntityId> HasNumberEntityIdConversion<TNumberEntityId>(this PropertyBuilder<TNumberEntityId> builder)
+    /*internal static PropertyBuilder<TNumberEntityId> HasNumberEntityIdConversion<TNumberEntityId>(this PropertyBuilder<TNumberEntityId> builder)
         where TNumberEntityId : struct, INumberEntityId<TNumberEntityId>
     {
         var creator = TNumberEntityId.Existing;
@@ -40,7 +42,7 @@ internal static class PropertyBuilderExtensions
             x => creator(x));
     }
 
-    public static PropertyBuilder<TNumberEntityId?> HasNumberEntityIdConversion<TNumberEntityId>(this PropertyBuilder<TNumberEntityId?> builder)
+    internal static PropertyBuilder<TNumberEntityId?> HasNumberEntityIdConversion<TNumberEntityId>(this PropertyBuilder<TNumberEntityId?> builder)
         where TNumberEntityId : struct, INumberEntityId<TNumberEntityId>
     {
         var creator = TNumberEntityId.Existing;
@@ -50,17 +52,19 @@ internal static class PropertyBuilderExtensions
             x => x.HasValue ? creator(x.Value) : null);
     }*/
 
-    public static PropertyBuilder<DateTime> HasDateTimeUTCConversion(this PropertyBuilder<DateTime> builder)
+    internal static PropertyBuilder<DateTime> HasDateTimeUTCConversion(this PropertyBuilder<DateTime> builder)
     {
         return builder.HasConversion(
             x => x.Kind != DateTimeKind.Utc ? DateTime.SpecifyKind(x, DateTimeKind.Utc) : x,
-            x => x.Kind != DateTimeKind.Utc ? DateTime.SpecifyKind(x, DateTimeKind.Utc) : x);
+            x => x.Kind != DateTimeKind.Utc ? DateTime.SpecifyKind(x, DateTimeKind.Utc) : x
+            );
     }
 
-    public static PropertyBuilder<DateTime?> HasDateTimeUTCConversion(this PropertyBuilder<DateTime?> builder)
+    internal static PropertyBuilder<DateTime?> HasDateTimeUTCConversion(this PropertyBuilder<DateTime?> builder)
     {
         return builder.HasConversion(
             x => x.HasValue && x.Value.Kind != DateTimeKind.Utc ? DateTime.SpecifyKind(x.Value, DateTimeKind.Utc) : x,
-            x => x.HasValue && x.Value.Kind != DateTimeKind.Utc ? DateTime.SpecifyKind(x.Value, DateTimeKind.Utc) : x);
+            x => x.HasValue && x.Value.Kind != DateTimeKind.Utc ? DateTime.SpecifyKind(x.Value, DateTimeKind.Utc) : x
+            );
     }
 }

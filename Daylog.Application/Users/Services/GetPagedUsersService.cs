@@ -1,12 +1,11 @@
-﻿using Daylog.Application.Abstractions.Configurations;
-using Daylog.Application.Abstractions.Data;
+﻿using Daylog.Application.Abstractions.Data;
 using Daylog.Application.Common;
 using Daylog.Application.Common.Mappings;
 using Daylog.Application.Common.Results;
 using Daylog.Application.Users.Dtos.Request;
 using Daylog.Application.Users.Services.Contracts;
 using Daylog.Domain.Users;
-using Daylog.Shared.Extensions;
+using Daylog.Shared.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Daylog.Application.Users.Services;
@@ -20,11 +19,16 @@ public sealed class GetPagedUsersService(
         if (requestDto is null)
             return Result.Failure<PagedData<User>>(ResultError.NullData);
 
+        var watch = System.Diagnostics.Stopwatch.StartNew();
+
         var queryBase = appDbContext.Users.AsNoTracking()
             .Search(x => x.Name, requestDto.Name)
             .Search(x => x.Email, requestDto.Email)
             .Search(x => x.Profile, requestDto.Profile)
             .OrderBy(x => x.Id);
+
+        watch.Stop();
+        var elapsedMs = watch.Elapsed.TotalMilliseconds;
 
         var queryPaged = queryBase
             .Paginate(requestDto.PageNumber!.Value, requestDto.PageSize!.Value);
