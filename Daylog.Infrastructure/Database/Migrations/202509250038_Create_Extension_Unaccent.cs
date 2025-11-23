@@ -1,5 +1,5 @@
 ﻿using Daylog.Application.Abstractions.Configurations;
-using Daylog.Shared.Data.Enums;
+using Daylog.Shared.Data.Extensions;
 using FluentMigrator;
 
 namespace Daylog.Infrastructure.Database.Migrations;
@@ -11,9 +11,9 @@ public sealed class _202509250038_Create_Extension_Unaccent(
 {
     public override void Down()
     {
-        if (appConfiguration.DatabaseProvider is DatabaseProviderEnum.PostgreSql)
+        if (appConfiguration.DatabaseProvider.IsPostgreSql())
         {
-            Execute.Sql("DROP EXTENSION IF EXISTS \"unaccent\"");
+            Execute.Sql("DROP EXTENSION IF EXISTS \"unaccent\";");
         }
     }
 
@@ -21,9 +21,9 @@ public sealed class _202509250038_Create_Extension_Unaccent(
 
     public override void Up()
     {
-        if (appConfiguration.DatabaseProvider is DatabaseProviderEnum.PostgreSql)
+        if (appConfiguration.DatabaseProvider.IsPostgreSql())
         {
-            Execute.Sql("CREATE EXTENSION IF NOT EXISTS \"unaccent\"");
+            Execute.Sql("CREATE EXTENSION IF NOT EXISTS \"unaccent\";");
         }
     }
 }
