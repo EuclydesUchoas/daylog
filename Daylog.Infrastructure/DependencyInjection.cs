@@ -109,7 +109,7 @@ public static class DependencyInjection
             };*/
 
             options
-                .UseSnakeCaseNamingConvention()
+                //.UseSnakeCaseNamingConvention()
                 .AddInterceptors(
                     serviceProvider.GetRequiredService<OperationValidationInterceptor>(),
                     serviceProvider.GetRequiredService<CreatableInterceptor>(),

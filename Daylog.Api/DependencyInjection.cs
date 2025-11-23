@@ -2,6 +2,7 @@
 using Daylog.Application.Common.Resources;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.OpenApi;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -77,14 +78,17 @@ public static class DependencyInjection
                      Description = AppMessages.Documentation_InfoDescription,
                  };
 
-                 foreach (var tag in document.Tags ?? [])
+                 if (document.Tags is not null)
                  {
-                     if (!string.IsNullOrWhiteSpace(tag?.Name))
+                     foreach (var tag in document.Tags)
                      {
-                         string? tagDescription = AppMessages.ResourceManager.GetString(tag.Name);
-                         if (!string.IsNullOrWhiteSpace(tagDescription))
+                         if (!string.IsNullOrWhiteSpace(tag?.Name))
                          {
-                             tag.Description = tagDescription;
+                             string? tagDescription = AppMessages.ResourceManager.GetString(tag.Name);
+                             if (!string.IsNullOrWhiteSpace(tagDescription))
+                             {
+                                 tag.Description = tagDescription;
+                             }
                          }
                      }
                  }
@@ -111,12 +115,12 @@ public static class DependencyInjection
                          operation.Description = description;
                      }
                  }
-
+                 
                  foreach (var parameter in operation.Parameters ?? [])
                  {
                      if (!string.IsNullOrWhiteSpace(parameter?.Name))
                      {
-                         parameter.Name = JsonNamingPolicy.CamelCase.ConvertName(parameter.Name);
+                         //parameter.Name = JsonNamingPolicy.CamelCase.ConvertName(parameter.Name);
                      }
                  }
 
