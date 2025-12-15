@@ -1,8 +1,7 @@
 ﻿using Daylog.Application.Abstractions.Services;
-using Daylog.Application.Common.Results;
 using Daylog.Application.Users.Dtos.Request;
-using Daylog.Domain.Users;
+using Daylog.Application.Users.Dtos.Response;
 
 namespace Daylog.Application.Users.Services.Contracts;
 
-public interface ICreateUserService : IService<CreateUserRequestDto, Result<User>>;
+public interface ICreateUserService : IService<CreateUserRequestDto, UserResponseDto>;

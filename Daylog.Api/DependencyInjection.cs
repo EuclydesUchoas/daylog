@@ -2,8 +2,6 @@
 using Daylog.Application.Common.Resources;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.OpenApi;
-using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Daylog.Api;

@@ -1,10 +1,10 @@
 ﻿using Daylog.Application.Abstractions.Data;
 using Daylog.Application.Common.Results;
 using Daylog.Application.Users.Dtos.Request;
+using Daylog.Application.Users.Dtos.Response;
 using Daylog.Application.Users.Mappings;
 using Daylog.Application.Users.Results;
 using Daylog.Application.Users.Services.Contracts;
-using Daylog.Domain.Users;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,17 +15,17 @@ public sealed class CreateUserService(
     IAppDbContext appDbContext
     ) : ICreateUserService
 {
-    public async Task<Result<User>> HandleAsync(CreateUserRequestDto requestDto, CancellationToken cancellationToken = default)
+    public async Task<Result<UserResponseDto>> HandleAsync(CreateUserRequestDto requestDto, CancellationToken cancellationToken = default)
     {
         if (requestDto is null)
         {
-            return Result.Failure<User>(ResultError.NullData);
+            return Result.Failure<UserResponseDto>(ResultError.NullData);
         }
 
         var validationResult = await validator.ValidateAsync(requestDto, cancellationToken);
         if (!validationResult.IsValid)
         {
-            return Result.Failure<User>(ResultError.Validation(validationResult.Errors));
+            return Result.Failure<UserResponseDto>(ResultError.Validation(validationResult.Errors));
         }
 
         bool emailIsInUse = await appDbContext.Users.AsNoTracking()
@@ -33,7 +33,7 @@ public sealed class CreateUserService(
 
         if (emailIsInUse)
         {
-            return Result.Failure<User>(UserResultErrors.EmailNotUnique);
+            return Result.Failure<UserResponseDto>(UserResultErrors.EmailNotUnique);
         }
 
         var user = requestDto.ToDomain();
@@ -43,6 +43,8 @@ public sealed class CreateUserService(
 
         await appDbContext.SaveChangesAsync(cancellationToken);
 
-        return Result.Success(user);
+        var responseDto = user.ToDto()!;
+
+        return Result.Success(responseDto);
     }
 }

@@ -1,10 +1,10 @@
 ﻿using Daylog.Application.Abstractions.Data;
 using Daylog.Application.Common.Results;
 using Daylog.Application.Users.Dtos.Request;
+using Daylog.Application.Users.Dtos.Response;
 using Daylog.Application.Users.Mappings;
 using Daylog.Application.Users.Results;
 using Daylog.Application.Users.Services.Contracts;
-using Daylog.Domain.Users;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,17 +15,17 @@ public sealed class UpdateUserService(
     IAppDbContext appDbContext
     ) : IUpdateUserService
 {
-    public async Task<Result<User>> HandleAsync(UpdateUserRequestDto requestDto, CancellationToken cancellationToken = default)
+    public async Task<Result<UserResponseDto>> HandleAsync(UpdateUserRequestDto requestDto, CancellationToken cancellationToken = default)
     {
         if (requestDto is null)
         {
-            return Result.Failure<User>(ResultError.NullData);
+            return Result.Failure<UserResponseDto>(ResultError.NullData);
         }
 
         var validationResult = await validator.ValidateAsync(requestDto, cancellationToken);
         if (!validationResult.IsValid)
         {
-            return Result.Failure<User>(ResultError.Validation(validationResult.Errors));
+            return Result.Failure<UserResponseDto>(ResultError.Validation(validationResult.Errors));
         }
 
         bool emailIsInUse = await appDbContext.Users.AsNoTracking()
@@ -33,7 +33,7 @@ public sealed class UpdateUserService(
 
         if (emailIsInUse)
         {
-            return Result.Failure<User>(UserResultErrors.EmailNotUnique);
+            return Result.Failure<UserResponseDto>(UserResultErrors.EmailNotUnique);
         }
 
         var user = requestDto.ToDomain();
@@ -45,13 +45,15 @@ public sealed class UpdateUserService(
 
         if (userDb is null)
         {
-            return Result.Failure<User>(UserResultErrors.NotFound(user.Id.Value));
+            return Result.Failure<UserResponseDto>(UserResultErrors.NotFound(user.Id.Value));
         }
 
         userDb.Update(user);
 
         await appDbContext.SaveChangesAsync(cancellationToken);
 
-        return Result.Success(userDb);
+        var userDto = userDb.ToDto()!;
+
+        return Result.Success(userDto);
     }
 }

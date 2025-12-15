@@ -1,5 +1,4 @@
 ﻿using Daylog.Application.Common.Dtos.Response;
-using Daylog.Application.Common.Mappings;
 using Daylog.Application.Common.Resources;
 using Daylog.Application.Common.Results;
 using Daylog.Application.Users.Dtos.Request;
@@ -23,7 +22,7 @@ public sealed class GetUsersEndpoint : IEndpoint
             .WithTags(EndpointTags.Users);
     }
 
-    public static async Task<Results<Ok<Result<PagedResponseDto<UserResponseDto>>>, BadRequest<Result>, NotFound<Result<PagedResponseDto<UserResponseDto>>>>> HandleAsync(
+    public static async Task<Results<Ok<Result<IPagedResponseDto<UserResponseDto>>>, BadRequest<Result>, NotFound<Result<IPagedResponseDto<UserResponseDto>>>>> HandleAsync(
         [AsParameters] GetPagedUsersRequestDto requestDto,
         [FromServices] IGetPagedUsersService getPagedUsersService,
         CancellationToken cancellationToken
@@ -33,11 +32,9 @@ public sealed class GetUsersEndpoint : IEndpoint
 
         if (result.IsSuccess)
         {
-            var successResult = result.Cast(x => x.ToDto(x2 => x2.ToDto()!));
-
-            return (successResult.Data?.Items?.Any() ?? false)
-                ? TypedResults.Ok(successResult)
-                : TypedResults.NotFound(successResult);
+            return (result.Data?.Items?.Any() ?? false)
+                ? TypedResults.Ok(result)
+                : TypedResults.NotFound(result);
         }
 
         return TypedResults.BadRequest(result.Base);

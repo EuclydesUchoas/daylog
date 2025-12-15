@@ -1,7 +1,10 @@
 ﻿using Daylog.Application.Abstractions.Data;
+using Daylog.Application.Common.Dtos.Response;
+using Daylog.Application.Common.Results;
 using Daylog.Application.Users.Dtos.Request;
+using Daylog.Application.Users.Dtos.Response;
+using Daylog.Application.Users.Mappings;
 using Daylog.Application.Users.Services.Contracts;
-using Daylog.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace Daylog.Application.Users.Services;
@@ -10,14 +13,19 @@ public sealed class GetAllUsersService(
     IAppDbContext appDbContext
     ) : IGetAllUsersService
 {
-    public async Task<IEnumerable<User>> HandleAsync(GetAllUsersRequestDto requestDto, CancellationToken cancellationToken = default)
+    public async Task<Result<ICollectionResponseDto<UserResponseDto>>> HandleAsync(GetAllUsersRequestDto requestDto, CancellationToken cancellationToken = default)
     {
         if (requestDto is null)
-            return [];
+        {
+            return Result.Failure<ICollectionResponseDto<UserResponseDto>>(ResultError.NullData);
+        }
 
-        var users = await appDbContext.Users.AsNoTracking()
+        var usersDtos = await appDbContext.Users.AsNoTracking()
+            .SelectUserResponseDto()
             .ToListAsync(cancellationToken);
 
-        return users;
+        var responseDto = ICollectionResponseDto<UserResponseDto>.FromItems(usersDtos);
+
+        return Result.Success(responseDto);
     }
 }

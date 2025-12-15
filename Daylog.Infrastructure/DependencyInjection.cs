@@ -5,18 +5,15 @@ using Daylog.Infrastructure.Authentication;
 using Daylog.Infrastructure.Configurations;
 using Daylog.Infrastructure.Database.Data;
 using Daylog.Infrastructure.Database.Factories;
-using Daylog.Infrastructure.Database.Factories.Creators;
 using Daylog.Infrastructure.Database.SaveChangesInterceptors;
 using Daylog.Shared.Data;
 using FluentMigrator.Runner;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Npgsql;
 using System.Text;
 
 namespace Daylog.Infrastructure;

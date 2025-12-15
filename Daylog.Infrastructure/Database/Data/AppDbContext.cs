@@ -53,7 +53,7 @@ public sealed class AppDbContext : DbContext, IAppDbContext
 
         var databaseCreator = Database.GetService<IRelationalDatabaseCreator>();
 
-        bool exists = DatabaseExistsInternal(databaseCreator);
+        bool exists = DatabaseExists(databaseCreator);
 
         if (!exists)
         {
@@ -67,12 +67,12 @@ public sealed class AppDbContext : DbContext, IAppDbContext
     {
         var databaseCreator = Database.GetService<IRelationalDatabaseCreator>();
 
-        bool exists = DatabaseExistsInternal(databaseCreator);
+        bool exists = DatabaseExists(databaseCreator);
 
         return exists;
     }
 
-    private static bool DatabaseExistsInternal(IRelationalDatabaseCreator databaseCreator)
+    private static bool DatabaseExists(IRelationalDatabaseCreator databaseCreator)
     {
         bool exists = databaseCreator.Exists();
 

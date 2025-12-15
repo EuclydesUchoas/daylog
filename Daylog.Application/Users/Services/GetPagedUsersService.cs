@@ -1,8 +1,9 @@
 ﻿using Daylog.Application.Abstractions.Data;
-using Daylog.Application.Common;
-using Daylog.Application.Common.Mappings;
+using Daylog.Application.Common.Dtos.Response;
 using Daylog.Application.Common.Results;
 using Daylog.Application.Users.Dtos.Request;
+using Daylog.Application.Users.Dtos.Response;
+using Daylog.Application.Users.Mappings;
 using Daylog.Application.Users.Services.Contracts;
 using Daylog.Domain.Users;
 using Daylog.Shared.Data.Extensions;
@@ -14,10 +15,12 @@ public sealed class GetPagedUsersService(
     IAppDbContext appDbContext
     ) : IGetPagedUsersService
 {
-    public async Task<Result<PagedData<User>>> HandleAsync(GetPagedUsersRequestDto requestDto, CancellationToken cancellationToken = default)
+    public async Task<Result<IPagedResponseDto<UserResponseDto>>> HandleAsync(GetPagedUsersRequestDto requestDto, CancellationToken cancellationToken = default)
     {
         if (requestDto is null)
-            return Result.Failure<PagedData<User>>(ResultError.NullData);
+        {
+            return Result.Failure<IPagedResponseDto<UserResponseDto>>(ResultError.NullData);
+        }
 
         var watch = System.Diagnostics.Stopwatch.StartNew();
 
@@ -25,7 +28,8 @@ public sealed class GetPagedUsersService(
             .Search(x => x.Name, requestDto.Name)
             .Search(x => x.Email, requestDto.Email)
             .Search(x => x.Profile, requestDto.Profile)
-            .OrderBy(x => x.Id);
+            .OrderBy(x => x.Id)
+            .SelectUserResponseDto();
 
         watch.Stop();
         var elapsedMs = watch.Elapsed.TotalMilliseconds;
@@ -37,24 +41,26 @@ public sealed class GetPagedUsersService(
         {
             var pagedUsersWithTotal = await queryBase
                 .GroupBy(x => 1)
-                .Select(x => new PagedData<User>(
+                .Select(x => IPagedResponseDto<UserResponseDto>.FromItems(
                     requestDto.PageNumber!.Value,
                     requestDto.PageSize!.Value,
+                    //queryPaged.Select(x2 => x2.ToDto()!),
                     queryPaged.ToList(),
                     x.Count()
                     ))
-                .FirstOrDefaultAsync(cancellationToken) ?? requestDto.ToPagedData<User>();
+                .FirstOrDefaultAsync(cancellationToken) ?? IPagedResponseDto<UserResponseDto>.Empty(requestDto);
 
             return Result.Success(pagedUsersWithTotal);
         }
 
-        var users = await queryPaged
+        var usersDtos = await queryPaged
+            //.Select(x => x.ToDto()!)
             .ToListAsync(cancellationToken);
 
-        var pagedUsers = new PagedData<User>(
+        var pagedUsers = IPagedResponseDto<UserResponseDto>.FromItems(
             requestDto.PageNumber!.Value,
             requestDto.PageSize!.Value,
-            users,
+            usersDtos,
             null
             );
 

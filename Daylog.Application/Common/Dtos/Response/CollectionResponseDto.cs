@@ -2,7 +2,19 @@
 
 namespace Daylog.Application.Common.Dtos.Response;
 
-public sealed record CollectionResponseDto<TResponseDto>(
+file sealed record CollectionResponseDto<TResponseDto>(
     IEnumerable<TResponseDto> Items
-    ) : IResponseDto
+    ) : ICollectionResponseDto<TResponseDto>
     where TResponseDto : IResponseDto;
+
+public interface ICollectionResponseDto<TResponseDto> : IResponseDto
+    where TResponseDto : IResponseDto
+{
+    IEnumerable<TResponseDto> Items { get; }
+
+    public static ICollectionResponseDto<TResponseDto> Empty 
+        => new CollectionResponseDto<TResponseDto>([]);
+
+    public static ICollectionResponseDto<TResponseDto> FromItems(IEnumerable<TResponseDto> items)
+        => new CollectionResponseDto<TResponseDto>(items);
+}

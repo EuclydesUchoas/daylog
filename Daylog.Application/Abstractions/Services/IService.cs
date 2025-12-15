@@ -1,16 +1,17 @@
 ﻿using Daylog.Application.Abstractions.Dtos;
+using Daylog.Application.Common.Results;
 
 namespace Daylog.Application.Abstractions.Services;
 
-public interface IService<TRequestDto, TResponse> 
+public interface IService<TRequestDto, TResponseDto> 
     where TRequestDto : class, IRequestDto
-    //where TResponse : Result
+    where TResponseDto : class?, IResponseDto?
 {
-    Task<TResponse> HandleAsync(TRequestDto requestDto, CancellationToken cancellationToken = default);
+    Task<Result<TResponseDto>> HandleAsync(TRequestDto requestDto, CancellationToken cancellationToken = default);
 }
 
 public interface IService<TRequestDto> 
     where TRequestDto : class, IRequestDto
 {
-    Task HandleAsync(TRequestDto requestDto, CancellationToken cancellationToken = default);
+    Task<Result> HandleAsync(TRequestDto requestDto, CancellationToken cancellationToken = default);
 }
