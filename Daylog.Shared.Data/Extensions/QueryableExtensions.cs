@@ -1,7 +1,9 @@
 ﻿using Daylog.Shared.Data.Enums;
+using Daylog.Shared.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Daylog.Shared.Data.Extensions;
 
@@ -22,16 +24,56 @@ public static class QueryableExtensions
         }
     }
 
-    public static IQueryable<TSource> Paginate<TSource>(this IQueryable<TSource> query, int pageNumber, int pageSize)
+    public static IQueryable<TSource> Paginate<TSource, TKeyOrder>(this IQueryable<TSource> query, int pageNumber, int pageSize, Expression<Func<TSource, TKeyOrder>> orderByExpression)
     {
-        if (pageNumber > 0 && pageSize > 0)
-        {
-            query = query
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize);
-        }
+        pageNumber = Math.Max(pageNumber, 0);
+        pageSize = Math.Max(pageSize, 0);
+
+        query = query
+            .OrderBy(orderByExpression)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize);
 
         return query;
+    }
+
+    public static IQueryable<TCast> Paginate<TSource, TKeyOrder, TCast>(this IQueryable<TSource> query, int pageNumber, int pageSize, Expression<Func<TSource, TKeyOrder>> orderByExpression, Func<IQueryable<TSource>, IQueryable<TCast>> funcSourceConverter)
+    {
+        pageNumber = Math.Max(pageNumber, 0);
+        pageSize = Math.Max(pageSize, 0);
+
+        query = query
+            .OrderBy(orderByExpression)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize);
+
+        var queryConverted = funcSourceConverter(query);
+
+        return queryConverted;
+    }
+
+    public static IQueryable<ItemsWithTotal<TSource>> PaginateWithTotal<TSource, TKeyOrder>(this IQueryable<TSource> query, int pageNumber, int pageSize, Expression<Func<TSource, TKeyOrder>> orderByExpression)
+    {
+        var queryPaged = query
+            .Paginate(pageNumber, pageSize, orderByExpression);
+
+        var queryWithTotal = query
+            .GroupBy(x => 1)
+            .Select(x => new ItemsWithTotal<TSource>(queryPaged.ToList(), x.Count()));
+
+        return queryWithTotal;
+    }
+
+    public static IQueryable<ItemsWithTotal<TCast>> PaginateWithTotal<TSource, TKeyOrder, TCast>(this IQueryable<TSource> query, int pageNumber, int pageSize, Expression<Func<TSource, TKeyOrder>> orderByExpression, Func<IQueryable<TSource>, IQueryable<TCast>> funcSourceConverter)
+    {
+        var queryPaged = query
+            .Paginate(pageNumber, pageSize, orderByExpression, funcSourceConverter);
+
+        var queryWithTotal = query
+            .GroupBy(x => 1)
+            .Select(x => new ItemsWithTotal<TCast>(queryPaged.ToList(), x.Count()));
+
+        return queryWithTotal;
     }
 
     public static IQueryable<TSource> WhereIf<TSource>(this IQueryable<TSource> query, Expression<Func<TSource, bool>> predicate, bool condition)

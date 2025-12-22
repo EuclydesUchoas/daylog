@@ -3,7 +3,6 @@ using Daylog.Application.Common.Resources;
 using Daylog.Application.Common.Results;
 using Daylog.Application.Users.Dtos.Request;
 using Daylog.Application.Users.Dtos.Response;
-using Daylog.Application.Users.Mappings;
 using Daylog.Application.Users.Services.Contracts;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;

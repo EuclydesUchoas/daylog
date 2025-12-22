@@ -24,21 +24,6 @@ public static class UserMap
     public static IEnumerable<UserResponseDto> ToDto(this IEnumerable<User> users)
         => users.Select(x => x.ToDto()!);
 
-    public static IQueryable<UserResponseDto> SelectUserResponseDto(this IQueryable<User> users)
-        => users.Select(x => new UserResponseDto(
-            x.Id.Value,
-            x.Name,
-            x.Email,
-            x.Profile,
-            x.CreatedAt,
-            x.CreatedByUserId!.Value,
-            x.UpdatedAt,
-            x.UpdatedByUserId!.Value,
-            x.IsDeleted,
-            x.DeletedAt,
-            x.DeletedByUserId!.Value
-        ));
-
     public static User? ToDomain(this CreateUserRequestDto? createUserRequestDto)
         => createUserRequestDto is not null ? User.New(
             createUserRequestDto.Name,
@@ -54,4 +39,19 @@ public static class UserMap
             updateUserRequestDto.Email,
             updateUserRequestDto.Profile
         ) : null;
+
+    public static IQueryable<UserResponseDto> SelectUserResponseDto(this IQueryable<User> users)
+        => users.Select(x => new UserResponseDto(
+            x.Id.Value,
+            x.Name,
+            x.Email,
+            x.Profile,
+            x.CreatedAt,
+            x.CreatedByUserId!.Value,
+            x.UpdatedAt,
+            x.UpdatedByUserId!.Value,
+            x.IsDeleted,
+            x.DeletedAt,
+            x.DeletedByUserId!.Value
+        ));
 }
