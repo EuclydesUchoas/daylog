@@ -43,7 +43,7 @@ public abstract record GuidEntityId<TEntityId>(Guid Value)
         => Create(Guid.CreateVersion7());
 
     public static TEntityId Existing(Guid value)
-        => Create(value);
+        => value != Guid.Empty ? Create(value) : throw new ArgumentException("The GUID value cannot be empty.", nameof(value));
 }
 
 public abstract record NumberEntityId<TEntityId>(long Value)
@@ -54,5 +54,5 @@ public abstract record NumberEntityId<TEntityId>(long Value)
         => Create(0L);
 
     public static TEntityId Existing(long value)
-        => Create(value);
+        => value > 0L ? Create(value) : throw new ArgumentException("The numeric value must be greater than zero.", nameof(value));
 }

@@ -1,6 +1,4 @@
-﻿using System.Linq.Expressions;
-
-namespace Daylog.Domain.Users;
+﻿namespace Daylog.Domain.Users;
 
 public sealed class User : Entity, ICreatable, IUpdatable, ISoftDeletable
 {
@@ -67,10 +65,4 @@ public sealed class User : Entity, ICreatable, IUpdatable, ISoftDeletable
             Profile = profile,
         };
     }
-
-    public static readonly Expression<Func<User, User>> SelectNameEmail = x => new User
-    {
-        Name = x.Name,
-        Email = x.Email,
-    };
 }

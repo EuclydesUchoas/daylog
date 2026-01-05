@@ -6,7 +6,7 @@ namespace Daylog.Application.Users.Mappings;
 
 public static class UserMap
 {
-    public static UserResponseDto? ToDto(this User? user)
+    public static UserResponseDto? ToUserResponseDto(this User? user)
         => user is not null ? new UserResponseDto(
             user.Id.Value,
             user.Name,
@@ -21,10 +21,10 @@ public static class UserMap
             user.DeletedByUserId?.Value
         ) : null;
 
-    public static IEnumerable<UserResponseDto> ToDto(this IEnumerable<User> users)
-        => users.Select(x => x.ToDto()!);
+    public static IEnumerable<UserResponseDto> ToUserResponseDto(this IEnumerable<User> users)
+        => users.Select(x => x.ToUserResponseDto()!);
 
-    public static User? ToDomain(this CreateUserRequestDto? createUserRequestDto)
+    public static User? ToUser(this CreateUserRequestDto? createUserRequestDto)
         => createUserRequestDto is not null ? User.New(
             createUserRequestDto.Name,
             createUserRequestDto.Email,
@@ -32,7 +32,7 @@ public static class UserMap
             createUserRequestDto.Profile
         ) : null;
 
-    public static User? ToDomain(this UpdateUserRequestDto? updateUserRequestDto)
+    public static User? ToUser(this UpdateUserRequestDto? updateUserRequestDto)
         => updateUserRequestDto is not null ? User.Existing(
             UserId.Existing(updateUserRequestDto.Id),
             updateUserRequestDto.Name,

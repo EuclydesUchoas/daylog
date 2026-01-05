@@ -36,14 +36,14 @@ public sealed class CreateUserService(
             return Result.Failure<UserResponseDto>(UserResultErrors.EmailNotUnique);
         }
 
-        var user = requestDto.ToDomain();
+        var user = requestDto.ToUser();
         ArgumentNullException.ThrowIfNull(user, nameof(user));
 
         appDbContext.Users.Add(user);
 
         await appDbContext.SaveChangesAsync(cancellationToken);
 
-        var responseDto = user.ToDto()!;
+        var responseDto = user.ToUserResponseDto()!;
 
         return Result.Success(responseDto);
     }

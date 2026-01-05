@@ -1,5 +1,6 @@
 ﻿using Daylog.Application.Abstractions.Data;
 using Daylog.Application.Common.Dtos.Response;
+using Daylog.Application.Common.Mappings;
 using Daylog.Application.Common.Results;
 using Daylog.Application.Users.Dtos.Request;
 using Daylog.Application.Users.Dtos.Response;
@@ -24,7 +25,7 @@ public sealed class GetAllUsersService(
             .SelectUserResponseDto()
             .ToListAsync(cancellationToken);
 
-        var responseDto = ICollectionResponseDto<UserResponseDto>.FromItems(usersDtos);
+        var responseDto = usersDtos.ToCollectionResponseDto();
 
         return Result.Success(responseDto);
     }

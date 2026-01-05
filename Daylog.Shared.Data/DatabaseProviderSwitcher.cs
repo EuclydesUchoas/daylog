@@ -98,11 +98,16 @@ public static class DatabaseProviderSwitch
         ArgumentNullException.ThrowIfNull(postgresql, nameof(postgresql));
         ArgumentNullException.ThrowIfNull(sqlServer, nameof(sqlServer));
 
-        (databaseProvider switch
+        switch (databaseProvider)
         {
-            DatabaseProviderEnum.PostgreSql => postgresql,
-            DatabaseProviderEnum.SqlServer => sqlServer,
-            _ => throw new NotSupportedException($"The database provider '{databaseProvider}' is not supported.")
-        })();
+            case DatabaseProviderEnum.PostgreSql:
+                postgresql();
+                break;
+            case DatabaseProviderEnum.SqlServer:
+                sqlServer();
+                break;
+            default:
+                throw new NotSupportedException($"The database provider '{databaseProvider}' is not supported.");
+        }
     }
 }

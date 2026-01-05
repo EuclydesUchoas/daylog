@@ -36,7 +36,7 @@ public sealed class UpdateUserService(
             return Result.Failure<UserResponseDto>(UserResultErrors.EmailNotUnique);
         }
 
-        var user = requestDto.ToDomain();
+        var user = requestDto.ToUser();
         ArgumentNullException.ThrowIfNull(user, nameof(user));
 
         var userDb = await appDbContext.Users // Change Tracking is required for updates
@@ -52,7 +52,7 @@ public sealed class UpdateUserService(
 
         await appDbContext.SaveChangesAsync(cancellationToken);
 
-        var userDto = userDb.ToDto()!;
+        var userDto = userDb.ToUserResponseDto()!;
 
         return Result.Success(userDto);
     }
