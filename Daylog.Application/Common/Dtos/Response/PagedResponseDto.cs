@@ -3,7 +3,7 @@
 namespace Daylog.Application.Common.Dtos.Response;
 
 file sealed class PagedResponseDto<TResponseDto> : IPagedResponseDto<TResponseDto>
-    where TResponseDto : class, IResponseDto
+    where TResponseDto : IResponseDto
 {
     public int PageNumber { get; private set; }
 
@@ -30,17 +30,17 @@ file sealed class PagedResponseDto<TResponseDto> : IPagedResponseDto<TResponseDt
     }
 
     public PagedResponseDto<TResponseDtoOut> Cast<TResponseDtoOut>(Func<TResponseDto, TResponseDtoOut> dataConverter)
-        where TResponseDtoOut : class, IResponseDto
+        where TResponseDtoOut : IResponseDto
         => Cast(this, dataConverter);
 
     public static PagedResponseDto<TResponseDtoOut> Cast<TResponseDtoIn, TResponseDtoOut>(PagedResponseDto<TResponseDtoIn> pagedData, Func<TResponseDtoIn, TResponseDtoOut> dataConverter)
-        where TResponseDtoIn : class, IResponseDto
-        where TResponseDtoOut : class, IResponseDto
+        where TResponseDtoIn : IResponseDto
+        where TResponseDtoOut : IResponseDto
         => new(pagedData.PageNumber, pagedData.PageSize, pagedData.Items?.Select(dataConverter)!);
 }
 
 public interface IPagedResponseDto<TResponseDto> : IResponseDto
-    where TResponseDto : class, IResponseDto
+    where TResponseDto : IResponseDto
 {
     int PageNumber { get; }
 

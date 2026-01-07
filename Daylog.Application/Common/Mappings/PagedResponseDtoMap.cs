@@ -7,7 +7,7 @@ namespace Daylog.Application.Common.Mappings;
 public static class PagedResponseDtoMap
 {
     public static IPagedResponseDto<TResponseDto> ToPagedResponseDto<TResponseDto>(this IEnumerable<TResponseDto> items, PagedRequestDtoBase pagedRequestDto)
-        where TResponseDto : class, IResponseDto
+        where TResponseDto : IResponseDto
         => IPagedResponseDto<TResponseDto>.FromItems(
             pagedRequestDto.PageNumber!.Value,
             pagedRequestDto.PageSize!.Value,
@@ -16,7 +16,7 @@ public static class PagedResponseDtoMap
             );
 
     public static IPagedResponseDto<TResponseDto> ToPagedResponseDto<TResponseDto>(this IEnumerable<TResponseDto> items, int total, PagedRequestDtoBase pagedRequestDto)
-        where TResponseDto : class, IResponseDto
+        where TResponseDto : IResponseDto
         => IPagedResponseDto<TResponseDto>.FromItems(
             pagedRequestDto.PageNumber!.Value,
             pagedRequestDto.PageSize!.Value,
@@ -25,7 +25,7 @@ public static class PagedResponseDtoMap
             );
 
     public static IPagedResponseDto<TResponseDto> ToPagedResponseDto<TResponseDto>(this ItemsWithTotal<TResponseDto> itemsWithTotal, PagedRequestDtoBase pagedRequestDto)
-        where TResponseDto : class, IResponseDto
+        where TResponseDto : IResponseDto
         => IPagedResponseDto<TResponseDto>.FromItems(
             pagedRequestDto.PageNumber!.Value,
             pagedRequestDto.PageSize!.Value,
