@@ -1,10 +1,8 @@
-﻿using Daylog.Domain.Users;
-
-namespace Daylog.Domain;
+﻿namespace Daylog.Domain;
 
 public interface ICreatable
 {
     DateTime CreatedAt { get; }
 
-    UserId? CreatedByUserId { get; }
+    Guid? CreatedByUserId { get; }
 }

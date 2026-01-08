@@ -1,6 +1,4 @@
-﻿using Daylog.Domain.Users;
-
-namespace Daylog.Domain;
+﻿namespace Daylog.Domain;
 
 public interface ISoftDeletable
 {
@@ -8,5 +6,5 @@ public interface ISoftDeletable
 
     DateTime? DeletedAt { get; }
 
-    UserId? DeletedByUserId { get; }
+    Guid? DeletedByUserId { get; }
 }

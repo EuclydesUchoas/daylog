@@ -2,7 +2,7 @@
 
 namespace Daylog.Application.Common.Dtos.Response;
 
-file sealed class PagedResponseDto<TResponseDto> : IPagedResponseDto<TResponseDto>
+file sealed class OffsetPaginationResponseDto<TResponseDto> : IOffsetPaginationResponseDto<TResponseDto>
     where TResponseDto : IResponseDto
 {
     public int PageNumber { get; private set; }
@@ -18,10 +18,10 @@ file sealed class PagedResponseDto<TResponseDto> : IPagedResponseDto<TResponseDt
             ? PageSize > 0 ? (int)Math.Ceiling(TotalItems.Value / (double)PageSize) : 0
             : null;
 
-    public PagedResponseDto(int pageNumber, int pageSize, IEnumerable<TResponseDto> items)
+    public OffsetPaginationResponseDto(int pageNumber, int pageSize, IEnumerable<TResponseDto> items)
         : this(pageNumber, pageSize, items, null) { }
 
-    public PagedResponseDto(int pageNumber, int pageSize, IEnumerable<TResponseDto> items, int? totalItems)
+    public OffsetPaginationResponseDto(int pageNumber, int pageSize, IEnumerable<TResponseDto> items, int? totalItems)
     {
         PageNumber = pageNumber;
         PageSize = pageSize;
@@ -29,17 +29,17 @@ file sealed class PagedResponseDto<TResponseDto> : IPagedResponseDto<TResponseDt
         TotalItems = totalItems;
     }
 
-    public PagedResponseDto<TResponseDtoOut> Cast<TResponseDtoOut>(Func<TResponseDto, TResponseDtoOut> dataConverter)
+    public OffsetPaginationResponseDto<TResponseDtoOut> Cast<TResponseDtoOut>(Func<TResponseDto, TResponseDtoOut> dataConverter)
         where TResponseDtoOut : IResponseDto
         => Cast(this, dataConverter);
 
-    public static PagedResponseDto<TResponseDtoOut> Cast<TResponseDtoIn, TResponseDtoOut>(PagedResponseDto<TResponseDtoIn> pagedData, Func<TResponseDtoIn, TResponseDtoOut> dataConverter)
+    public static OffsetPaginationResponseDto<TResponseDtoOut> Cast<TResponseDtoIn, TResponseDtoOut>(OffsetPaginationResponseDto<TResponseDtoIn> pagedData, Func<TResponseDtoIn, TResponseDtoOut> dataConverter)
         where TResponseDtoIn : IResponseDto
         where TResponseDtoOut : IResponseDto
         => new(pagedData.PageNumber, pagedData.PageSize, pagedData.Items?.Select(dataConverter)!);
 }
 
-public interface IPagedResponseDto<TResponseDto> : IResponseDto
+public interface IOffsetPaginationResponseDto<TResponseDto> : IResponseDto
     where TResponseDto : IResponseDto
 {
     int PageNumber { get; }
@@ -52,15 +52,15 @@ public interface IPagedResponseDto<TResponseDto> : IResponseDto
 
     int? TotalPages { get; }
 
-    public static IPagedResponseDto<TResponseDto> Empty()
-        => new PagedResponseDto<TResponseDto>(0, 0, []);
+    public static IOffsetPaginationResponseDto<TResponseDto> Empty()
+        => new OffsetPaginationResponseDto<TResponseDto>(0, 0, []);
 
-    public static IPagedResponseDto<TResponseDto> Empty(PagedRequestDtoBase pagedRequestDtoBase)
+    public static IOffsetPaginationResponseDto<TResponseDto> Empty(OffsetPaginationRequestDtoBase pagedRequestDtoBase)
         => FromItems(pagedRequestDtoBase.PageNumber ?? 0, pagedRequestDtoBase.PageSize ?? 0, [], pagedRequestDtoBase?.IncludeTotalItems is true ? 0 : null);
 
-    public static IPagedResponseDto<TResponseDto> FromItems(PagedRequestDtoBase pagedRequestDtoBase, IEnumerable<TResponseDto> items)
+    public static IOffsetPaginationResponseDto<TResponseDto> FromItems(OffsetPaginationRequestDtoBase pagedRequestDtoBase, IEnumerable<TResponseDto> items)
         => FromItems(pagedRequestDtoBase.PageNumber ?? 0, pagedRequestDtoBase.PageSize ?? 0, items, pagedRequestDtoBase?.IncludeTotalItems is true ? 0 : null);
 
-    public static IPagedResponseDto<TResponseDto> FromItems(int pageNumber, int pageSize, IEnumerable<TResponseDto> items, int? totalItems = null)
-        => new PagedResponseDto<TResponseDto>(pageNumber, pageSize, items, totalItems);
+    public static IOffsetPaginationResponseDto<TResponseDto> FromItems(int pageNumber, int pageSize, IEnumerable<TResponseDto> items, int? totalItems = null)
+        => new OffsetPaginationResponseDto<TResponseDto>(pageNumber, pageSize, items, totalItems);
 }

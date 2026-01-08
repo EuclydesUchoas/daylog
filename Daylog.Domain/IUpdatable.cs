@@ -6,7 +6,7 @@ public interface IUpdatable
 {
     DateTime UpdatedAt { get; }
 
-    UserId? UpdatedByUserId { get; }
+    Guid? UpdatedByUserId { get; }
 
     void Update(User user);
 }

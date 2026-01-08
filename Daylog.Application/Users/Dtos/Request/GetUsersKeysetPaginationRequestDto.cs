@@ -3,7 +3,8 @@ using Daylog.Domain.Users;
 
 namespace Daylog.Application.Users.Dtos.Request;
 
-public sealed class GetPagedUsersRequestDto : PagedRequestDtoBase, IRequestDto
+public sealed class GetUsersKeysetPaginationRequestDto<TIdentity> : KeysetPaginationRequestDtoBase<TIdentity>, IRequestDto
+    where TIdentity : struct, IComparable<TIdentity>, IEquatable<TIdentity>
 {
     public string? Name { get; init; }
 

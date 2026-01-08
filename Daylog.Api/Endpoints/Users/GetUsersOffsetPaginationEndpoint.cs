@@ -9,25 +9,25 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Daylog.Api.Endpoints.Users;
 
-public sealed class GetUsersEndpoint : IEndpoint
+public sealed class GetUsersOffsetPaginationEndpoint : IEndpoint
 {
     public void MapRoute(IEndpointRouteBuilder routeBuilder)
     {
         routeBuilder
-            .MapGet("v1/users", HandleAsync)
+            .MapGet("v1/users/offset", HandleAsync)
             .WithSummary(nameof(AppMessages.Endpoint_GetUsersSummary))
             .WithDescription(nameof(AppMessages.Endpoint_GetUsersDescription))
             .AllowAnonymous()
             .WithTags(EndpointTags.Users);
     }
 
-    public static async Task<Results<Ok<Result<IPagedResponseDto<UserResponseDto>>>, BadRequest<Result>, NotFound<Result<IPagedResponseDto<UserResponseDto>>>>> HandleAsync(
-        [AsParameters] GetPagedUsersRequestDto requestDto,
-        [FromServices] IGetPagedUsersService getPagedUsersService,
+    public static async Task<Results<Ok<Result<IOffsetPaginationResponseDto<UserResponseDto>>>, BadRequest<Result>, NotFound<Result<IOffsetPaginationResponseDto<UserResponseDto>>>>> HandleAsync(
+        [AsParameters] GetUsersOffsetPaginationRequestDto requestDto,
+        [FromServices] IGetUsersOffsetPaginationService getUsersOffsetPaginationService,
         CancellationToken cancellationToken
         )
     {
-        var result = await getPagedUsersService.HandleAsync(requestDto, cancellationToken);
+        var result = await getUsersOffsetPaginationService.HandleAsync(requestDto, cancellationToken);
 
         if (result.IsSuccess)
         {

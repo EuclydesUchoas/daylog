@@ -4,29 +4,29 @@ using Daylog.Shared.Data.Models;
 
 namespace Daylog.Application.Common.Mappings;
 
-public static class PagedResponseDtoMap
+public static class OffsetPaginationResponseDtoMap
 {
-    public static IPagedResponseDto<TResponseDto> ToPagedResponseDto<TResponseDto>(this IEnumerable<TResponseDto> items, PagedRequestDtoBase pagedRequestDto)
+    public static IOffsetPaginationResponseDto<TResponseDto> ToPagedResponseDto<TResponseDto>(this IEnumerable<TResponseDto> items, OffsetPaginationRequestDtoBase pagedRequestDto)
         where TResponseDto : IResponseDto
-        => IPagedResponseDto<TResponseDto>.FromItems(
+        => IOffsetPaginationResponseDto<TResponseDto>.FromItems(
             pagedRequestDto.PageNumber!.Value,
             pagedRequestDto.PageSize!.Value,
             items,
             null
             );
 
-    public static IPagedResponseDto<TResponseDto> ToPagedResponseDto<TResponseDto>(this IEnumerable<TResponseDto> items, int total, PagedRequestDtoBase pagedRequestDto)
+    public static IOffsetPaginationResponseDto<TResponseDto> ToPagedResponseDto<TResponseDto>(this IEnumerable<TResponseDto> items, int total, OffsetPaginationRequestDtoBase pagedRequestDto)
         where TResponseDto : IResponseDto
-        => IPagedResponseDto<TResponseDto>.FromItems(
+        => IOffsetPaginationResponseDto<TResponseDto>.FromItems(
             pagedRequestDto.PageNumber!.Value,
             pagedRequestDto.PageSize!.Value,
             items,
             pagedRequestDto.IncludeTotalItems.HasValue && pagedRequestDto.IncludeTotalItems.Value ? total : null
             );
 
-    public static IPagedResponseDto<TResponseDto> ToPagedResponseDto<TResponseDto>(this ItemsWithTotal<TResponseDto> itemsWithTotal, PagedRequestDtoBase pagedRequestDto)
+    public static IOffsetPaginationResponseDto<TResponseDto> ToPagedResponseDto<TResponseDto>(this ItemsWithTotal<TResponseDto> itemsWithTotal, OffsetPaginationRequestDtoBase pagedRequestDto)
         where TResponseDto : IResponseDto
-        => IPagedResponseDto<TResponseDto>.FromItems(
+        => IOffsetPaginationResponseDto<TResponseDto>.FromItems(
             pagedRequestDto.PageNumber!.Value,
             pagedRequestDto.PageSize!.Value,
             itemsWithTotal.Items,

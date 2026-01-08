@@ -3,7 +3,6 @@ using Daylog.Application.Common.Results;
 using Daylog.Application.Users.Dtos.Request;
 using Daylog.Application.Users.Results;
 using Daylog.Application.Users.Services.Contracts;
-using Daylog.Domain.Users;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,7 +27,7 @@ public sealed class DeleteUserService(
         }
 
         var user = await appDbContext.Users.AsNoTracking()
-            .FirstOrDefaultAsync(u => u.Id == new UserId(requestDto.Id), cancellationToken);
+            .FirstOrDefaultAsync(u => u.Id == requestDto.Id, cancellationToken);
 
         if (user is null)
         {

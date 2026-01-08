@@ -1,6 +1,6 @@
 ﻿namespace Daylog.Application.Abstractions.Dtos;
 
-public abstract class PagedRequestDtoBase : IRequestDto
+public abstract class OffsetPaginationRequestDtoBase : IRequestDto
 {
     private int _pageNumber = 1;
     public int? PageNumber

@@ -2,6 +2,7 @@
 using Daylog.Infrastructure.Database.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Daylog.Infrastructure.Users.EntityConfigurations;
 
@@ -14,7 +15,6 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(x => x.Id)
             .HasColumnName("id")
-            .HasGuidEntityIdConversion()
             .IsRequired();
 
         builder.Property(x => x.Name)

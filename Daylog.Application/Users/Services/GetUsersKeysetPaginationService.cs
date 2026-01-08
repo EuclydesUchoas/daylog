@@ -1,0 +1,45 @@
+﻿using Daylog.Application.Abstractions.Data;
+using Daylog.Application.Common.Dtos.Response;
+using Daylog.Application.Common.Mappings;
+using Daylog.Application.Common.Results;
+using Daylog.Application.Users.Dtos.Request;
+using Daylog.Application.Users.Dtos.Response;
+using Daylog.Application.Users.Extensions;
+using Daylog.Application.Users.Services.Contracts;
+using Daylog.Shared.Data.Extensions;
+using Daylog.Shared.Data.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace Daylog.Application.Users.Services;
+
+public sealed class GetUsersKeysetPaginationService(
+    IAppDbContext appDbContext
+    ) : IGetUsersKeysetPaginationService
+{
+    public async Task<Result<IKeysetPaginationResponseDto<UserResponseDto, Guid>>> HandleAsync(GetUsersKeysetPaginationRequestDto<Guid> requestDto, CancellationToken cancellationToken = default)
+    {
+        if (requestDto is null)
+        {
+            return Result.Failure<IKeysetPaginationResponseDto<UserResponseDto, Guid>>(ResultError.NullData);
+        }
+
+        var paginationOptions = new KeysetPaginationOptions<UserResponseDto, Guid, object>(
+            requestDto.PageSize!.Value,
+            x => x.Id,
+            requestDto.LastIdentity,
+            x => x.Name,
+            true
+            );
+
+        var paginationResult = await appDbContext.Users.AsNoTracking()
+            .Search(x => x.Name, requestDto.Name)
+            .Search(x => x.Email, requestDto.Email)
+            .Search(x => x.Profile, requestDto.Profile)
+            .SelectUserResponseDto()
+            .KeysetPaginationAsync(paginationOptions);
+
+        var users = paginationResult.ToPagedResponseDto();
+
+        return Result.Success(users);
+    }
+}

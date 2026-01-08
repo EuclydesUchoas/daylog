@@ -1,24 +1,25 @@
 ﻿using Daylog.Application.Users.Dtos.Request;
 using Daylog.Application.Users.Dtos.Response;
+using Daylog.Application.Users.Extensions;
 using Daylog.Domain.Users;
 
-namespace Daylog.Application.Users.Mappings;
+namespace Daylog.Application.Users.Extensions;
 
-public static class UserMap
+public static class UserMappingExtensions
 {
     public static UserResponseDto? ToUserResponseDto(this User? user)
         => user is not null ? new UserResponseDto(
-            user.Id.Value,
+            user.Id,
             user.Name,
             user.Email,
             user.Profile,
             user.CreatedAt,
-            user.CreatedByUserId?.Value,
+            user.CreatedByUserId,
             user.UpdatedAt,
-            user.UpdatedByUserId?.Value,
+            user.UpdatedByUserId,
             user.IsDeleted,
             user.DeletedAt,
-            user.DeletedByUserId?.Value
+            user.DeletedByUserId
         ) : null;
 
     public static IEnumerable<UserResponseDto> ToUserResponseDto(this IEnumerable<User> users)
@@ -34,24 +35,9 @@ public static class UserMap
 
     public static User? ToUser(this UpdateUserRequestDto? updateUserRequestDto)
         => updateUserRequestDto is not null ? User.Existing(
-            UserId.Existing(updateUserRequestDto.Id),
+            updateUserRequestDto.Id,
             updateUserRequestDto.Name,
             updateUserRequestDto.Email,
             updateUserRequestDto.Profile
         ) : null;
-
-    public static IQueryable<UserResponseDto> SelectUserResponseDto(this IQueryable<User> users)
-        => users.Select(x => new UserResponseDto(
-            x.Id.Value,
-            x.Name,
-            x.Email,
-            x.Profile,
-            x.CreatedAt,
-            x.CreatedByUserId!.Value,
-            x.UpdatedAt,
-            x.UpdatedByUserId!.Value,
-            x.IsDeleted,
-            x.DeletedAt,
-            x.DeletedByUserId!.Value
-        ));
 }

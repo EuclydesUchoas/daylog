@@ -2,7 +2,7 @@
 using Daylog.Application.Common.Results;
 using Daylog.Application.Users.Dtos.Request;
 using Daylog.Application.Users.Dtos.Response;
-using Daylog.Application.Users.Mappings;
+using Daylog.Application.Users.Extensions;
 using Daylog.Application.Users.Results;
 using Daylog.Application.Users.Services.Contracts;
 using FluentValidation;
@@ -45,7 +45,7 @@ public sealed class UpdateUserService(
 
         if (userDb is null)
         {
-            return Result.Failure<UserResponseDto>(UserResultErrors.NotFound(user.Id.Value));
+            return Result.Failure<UserResponseDto>(UserResultErrors.NotFound(user.Id));
         }
 
         userDb.Update(user);

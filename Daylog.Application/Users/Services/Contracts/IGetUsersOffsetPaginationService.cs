@@ -5,4 +5,4 @@ using Daylog.Application.Users.Dtos.Response;
 
 namespace Daylog.Application.Users.Services.Contracts;
 
-public interface IGetPagedUsersService : IService<GetPagedUsersRequestDto, IPagedResponseDto<UserResponseDto>>;
+public interface IGetUsersOffsetPaginationService : IService<GetUsersOffsetPaginationRequestDto, IOffsetPaginationResponseDto<UserResponseDto>>;

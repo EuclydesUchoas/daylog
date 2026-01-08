@@ -2,7 +2,7 @@
 
 public sealed class User : Entity, ICreatable, IUpdatable, ISoftDeletable
 {
-    public UserId Id { get; private set; } = null!;
+    public Guid Id { get; private set; }
 
     public string Name { get; private set; } = null!;
 
@@ -16,13 +16,13 @@ public sealed class User : Entity, ICreatable, IUpdatable, ISoftDeletable
 
     public DateTime CreatedAt { get; private set; }
 
-    public UserId? CreatedByUserId { get; private set; }
+    public Guid? CreatedByUserId { get; private set; }
 
     // Updatable
 
     public DateTime UpdatedAt { get; private set; }
 
-    public UserId? UpdatedByUserId { get; private set; }
+    public Guid? UpdatedByUserId { get; private set; }
 
     public void Update(User user)
     {
@@ -38,7 +38,7 @@ public sealed class User : Entity, ICreatable, IUpdatable, ISoftDeletable
 
     public DateTime? DeletedAt { get; private set; }
 
-    public UserId? DeletedByUserId { get; private set; }
+    public Guid? DeletedByUserId { get; private set; }
 
     // Entity Framework
     private User() { }
@@ -47,7 +47,7 @@ public sealed class User : Entity, ICreatable, IUpdatable, ISoftDeletable
     {
         return new User
         {
-            Id = UserId.New(),
+            Id = Guid.CreateVersion7(),
             Name = name,
             Email = email,
             Password = password,
@@ -55,7 +55,7 @@ public sealed class User : Entity, ICreatable, IUpdatable, ISoftDeletable
         };
     }
 
-    public static User Existing(UserId id, string name, string email, UserProfileEnum profile)
+    public static User Existing(Guid id, string name, string email, UserProfileEnum profile)
     {
         return new User
         {

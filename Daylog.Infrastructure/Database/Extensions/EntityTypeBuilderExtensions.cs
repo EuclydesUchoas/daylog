@@ -16,7 +16,6 @@ internal static class EntityTypeBuilderExtensions
 
         builder.Property(x => x.CreatedByUserId!)
             .HasColumnName("created_by_user_id")
-            .HasGuidEntityIdConversion()
             .IsRequired(false);
     }
 
@@ -30,7 +29,6 @@ internal static class EntityTypeBuilderExtensions
 
         builder.Property(x => x.UpdatedByUserId!)
             .HasColumnName("updated_by_user_id")
-            .HasGuidEntityIdConversion()
             .IsRequired(false);
     }
 
@@ -48,7 +46,6 @@ internal static class EntityTypeBuilderExtensions
 
         builder.Property(x => x.DeletedByUserId!)
             .HasColumnName("deleted_by_user_id")
-            .HasGuidEntityIdConversion()
             .IsRequired(false);
 
         builder.HasQueryFilter(x => !x.IsDeleted);
