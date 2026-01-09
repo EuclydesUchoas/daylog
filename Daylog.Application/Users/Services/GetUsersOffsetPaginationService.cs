@@ -8,7 +8,6 @@ using Daylog.Application.Users.Extensions;
 using Daylog.Application.Users.Services.Contracts;
 using Daylog.Shared.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace Daylog.Application.Users.Services;
 
@@ -22,47 +21,6 @@ public sealed class GetUsersOffsetPaginationService(
         {
             return Result.Failure<IOffsetPaginationResponseDto<UserResponseDto>>(ResultError.NullData);
         }
-
-        var test2 = appDbContext.Users.AsNoTracking()
-            .Search(x => x.Name, requestDto.Name)
-            .Search(x => x.Email, requestDto.Email)
-            .Search(x => x.Profile, requestDto.Profile);
-
-        Guid? lastId = null;
-        //Guid lastId = Guid.Parse("019b430b-3d48-7918-a8ec-8df3f7618da2");
-
-        var test3 = test2
-            .OrderBy(x => x.Id)
-            .WhereIf(x => x.Id > lastId, lastId.HasValue)
-            .Take(requestDto.PageSize!.Value + 1)
-            .SelectUserResponseDto()
-            .ToList();
-
-        bool hasMore = test3.Count > requestDto.PageSize!.Value;
-        if (hasMore)
-        {
-            test3.RemoveAt(test3.Count - 1);
-        }
-
-        var test3_1 = new KeySetPaginationResult<UserResponseDto>
-        {
-            Items = test3,
-            LastId = test3.Count > 0 ? test3[^1].Id : null,
-            HasMore = hasMore
-        };
-
-        /*var test4 = test2
-            .OrderBy(x => x.Id)
-            .WhereIf(x => x.Id > lastId, lastId.HasValue)
-            .Take(requestDto.PageSize!.Value + 1)
-            //.GroupBy(x => 1)
-            .Select(chunk => new
-            {
-                Items = chunk.ToList(),
-                //LastId = chunk.Select(x => x.Id).Last(),
-                HasMore = chunk.ElementAtOrDefault(requestDto.PageSize!.Value) != null,
-            })
-            .FirstOrDefault();*/
 
         var queryBase = appDbContext.Users.AsNoTracking()
             .Search(x => x.Name, requestDto.Name)
@@ -89,38 +47,4 @@ public sealed class GetUsersOffsetPaginationService(
 
         return Result.Success(pagedUsers);
     }
-}
-
-public static class GetPagedUsersServiceExtensions
-{
-    private static readonly Expression<Func<Domain.Users.User, Test1>> ToTest1Expression = user => new Test1
-    {
-        Name = user.Name,
-        Email = user.Email
-    };
-
-    private static readonly Func<Domain.Users.User, Test1> ToTest1Func = ToTest1Expression.Compile();
-
-    public static Test1 ToTest1(this Domain.Users.User user)
-        => ToTest1Func(user);
-
-
-    public static IQueryable<Test1> SelectTest1(this IQueryable<Domain.Users.User> queryable)
-        => queryable.Select(ToTest1Expression);
-}
-
-public sealed class Test1
-{
-    public required string Name { get; init; }
-
-    public required string Email { get; init; }
-}
-
-public sealed class KeySetPaginationResult<TItems>
-{
-    public required IEnumerable<TItems> Items { get; init; }
-
-    public required Guid? LastId { get; init; }
-
-    public required bool HasMore { get; init; }
 }

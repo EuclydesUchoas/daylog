@@ -8,7 +8,7 @@ public static class KeysetPaginationResponseDtoMap
 {
     public static IKeysetPaginationResponseDto<TResponseDto, TIdentity> ToPagedResponseDto<TResponseDto, TIdentity>(this IEnumerable<TResponseDto> items, KeysetPaginationRequestDtoBase<TIdentity> pagedRequestDto, TIdentity? lastIdentity = null)
         where TResponseDto : IResponseDto
-        where TIdentity : struct, IComparable<TIdentity>, IEquatable<TIdentity>
+        where TIdentity : struct
         => IKeysetPaginationResponseDto<TResponseDto, TIdentity>.FromItems(
             pagedRequestDto.PageSize!.Value,
             lastIdentity,
@@ -17,7 +17,7 @@ public static class KeysetPaginationResponseDtoMap
 
     public static IKeysetPaginationResponseDto<TResponseDto, TIdentity> ToPagedResponseDto<TResponseDto, TIdentity>(this KeysetPaginationResult<TResponseDto, TIdentity> paginationResult)
         where TResponseDto : IResponseDto
-        where TIdentity : struct, IComparable<TIdentity>, IEquatable<TIdentity>
+        where TIdentity : struct
         => IKeysetPaginationResponseDto<TResponseDto, TIdentity>.FromItems(
             paginationResult.PageSize,
             paginationResult.LastIdentity,

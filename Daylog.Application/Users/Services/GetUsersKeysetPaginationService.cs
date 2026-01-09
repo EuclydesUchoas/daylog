@@ -23,13 +23,14 @@ public sealed class GetUsersKeysetPaginationService(
             return Result.Failure<IKeysetPaginationResponseDto<UserResponseDto, Guid>>(ResultError.NullData);
         }
 
-        var paginationOptions = new KeysetPaginationOptions<UserResponseDto, Guid, object>(
-            requestDto.PageSize!.Value,
-            x => x.Id,
-            requestDto.LastIdentity,
-            x => x.Name,
-            true
-            );
+        var paginationOptions = new KeysetPaginationOptions<UserResponseDto, Guid>
+        {
+            PageSize = requestDto.PageSize!.Value,
+            IdentitySelectorExpression = x => x.Id,
+            LastIdentity = requestDto.LastIdentity,
+            OrderByExpression = requestDto.OrderBy.HasValue ? x => EF.Property<object>(x, requestDto.OrderBy.Value.ToString()) : null,
+            OrderByDescending = requestDto.OrderByDescending!.Value,
+        };
 
         var paginationResult = await appDbContext.Users.AsNoTracking()
             .Search(x => x.Name, requestDto.Name)

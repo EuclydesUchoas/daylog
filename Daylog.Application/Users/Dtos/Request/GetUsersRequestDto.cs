@@ -2,4 +2,4 @@
 
 namespace Daylog.Application.Users.Dtos.Request;
 
-public sealed record GetAllUsersRequestDto : IRequestDto;
+public sealed record GetUsersRequestDto : IRequestDto;

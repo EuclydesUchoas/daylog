@@ -1,6 +1,5 @@
 ﻿using Daylog.Application.Users.Dtos.Request;
 using Daylog.Application.Users.Dtos.Response;
-using Daylog.Application.Users.Extensions;
 using Daylog.Domain.Users;
 
 namespace Daylog.Application.Users.Extensions;

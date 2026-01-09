@@ -4,7 +4,7 @@ namespace Daylog.Application.Common.Dtos.Response;
 
 file sealed class KeysetPaginationResponseDto<TResponseDto, TIdentity> : IKeysetPaginationResponseDto<TResponseDto, TIdentity>
     where TResponseDto : IResponseDto
-    where TIdentity : struct, IComparable<TIdentity>, IEquatable<TIdentity>
+    where TIdentity : struct
 {
     public int PageSize { get; private set; }
 
@@ -25,7 +25,7 @@ file sealed class KeysetPaginationResponseDto<TResponseDto, TIdentity> : IKeyset
 
 public interface IKeysetPaginationResponseDto<TResponseDto, TIdentity> : IResponseDto
     where TResponseDto : IResponseDto
-    where TIdentity : struct, IComparable<TIdentity>, IEquatable<TIdentity>
+    where TIdentity : struct
 {
     int PageSize { get; }
 

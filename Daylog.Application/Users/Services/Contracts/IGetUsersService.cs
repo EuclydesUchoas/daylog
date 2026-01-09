@@ -5,4 +5,4 @@ using Daylog.Application.Users.Dtos.Response;
 
 namespace Daylog.Application.Users.Services.Contracts;
 
-public interface IGetAllUsersService : IService<GetAllUsersRequestDto, ICollectionResponseDto<UserResponseDto>>;
+public interface IGetUsersService : IService<GetUsersRequestDto, ICollectionResponseDto<UserResponseDto>>;

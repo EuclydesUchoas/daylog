@@ -10,11 +10,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Daylog.Application.Users.Services;
 
-public sealed class GetAllUsersService(
+public sealed class GetUsersService(
     IAppDbContext appDbContext
-    ) : IGetAllUsersService
+    ) : IGetUsersService
 {
-    public async Task<Result<ICollectionResponseDto<UserResponseDto>>> HandleAsync(GetAllUsersRequestDto requestDto, CancellationToken cancellationToken = default)
+    public async Task<Result<ICollectionResponseDto<UserResponseDto>>> HandleAsync(GetUsersRequestDto requestDto, CancellationToken cancellationToken = default)
     {
         if (requestDto is null)
         {

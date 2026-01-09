@@ -6,4 +6,4 @@ public sealed record KeysetPaginationResult<TItems, TIdentity>(
     TIdentity? LastIdentity,
     IEnumerable<TItems> Items
     )
-    where TIdentity : struct, IComparable<TIdentity>, IEquatable<TIdentity>;
+    where TIdentity : struct;

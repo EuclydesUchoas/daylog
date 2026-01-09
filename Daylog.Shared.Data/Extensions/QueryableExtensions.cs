@@ -62,9 +62,26 @@ public static class QueryableExtensions
 
         string identityPropertyName = identityPropertyMemberExpression.Member.Name;
 
+        if (options.OrderByExpression is null)
+        {
+            query = query
+                .OrderBy(options.IdentitySelectorExpression)
+                .WhereIf(x => EF.Property<Guid>(x!, identityPropertyName) > lastIdentity!.Value, lastIdentity.HasValue);
+        }
+        else
+        {
+            query = options.OrderByDescending
+                ? query.OrderByDescending(options.OrderByExpression)
+                    //.ThenByDescending(x => EF.Property<Guid>(x!, identityPropertyName) == null) // Nulls last
+                    .ThenByDescending(options.IdentitySelectorExpression)
+                    .WhereIf(x => EF.Property<Guid>(x!, identityPropertyName) < lastIdentity!.Value, lastIdentity.HasValue)
+                : query.OrderBy(options.OrderByExpression)
+                    //.ThenBy(x => EF.Property<Guid>(x!, identityPropertyName) == null) // Nulls first
+                    .ThenBy(options.IdentitySelectorExpression)
+                    .WhereIf(x => EF.Property<Guid>(x!, identityPropertyName) > lastIdentity!.Value, lastIdentity.HasValue);
+        }
+
         var items = await query
-            .OrderBy(options.IdentitySelectorExpression)
-            .WhereIf(x => EF.Property<Guid>(x!, identityPropertyName) > lastIdentity!.Value, lastIdentity.HasValue)
             .Take(options.PageSize + 1)
             .ToListAsync();
 
@@ -93,11 +110,11 @@ public static class QueryableExtensions
         return result;
     }
 
-    public static async Task<KeysetPaginationResult<TSource, Guid>> KeysetPaginationAsync<TSource, TOrder>(this IQueryable<TSource> query, KeysetPaginationOptions<TSource, Guid, TOrder> options)
+    public static async Task<KeysetPaginationResult<TSource, long>> KeysetPaginationAsync<TSource>(this IQueryable<TSource> query, KeysetPaginationOptions<TSource, long> options)
     {
         var lastIdentity = options.LastIdentity;
 
-        if (lastIdentity.HasValue && lastIdentity.Value == Guid.Empty)
+        if (lastIdentity.HasValue && lastIdentity.Value <= 0)
         {
             lastIdentity = null;
         }
@@ -105,19 +122,26 @@ public static class QueryableExtensions
         MemberExpression identityPropertyMemberExpression = GetMemberExpression(options.IdentitySelectorExpression)
             ?? throw new ArgumentException("The identity selector must be a member expression.");
 
-        MemberExpression orderByMemberExpression = GetMemberExpression(options.OrderByExpression)
-            ?? throw new ArgumentException("The order by selector must be a member expression.");
-
         string identityPropertyName = identityPropertyMemberExpression.Member.Name;
-        string orderByPropertyName = orderByMemberExpression.Member.Name;
 
-        query = options.OrderByDescending
-            ? query.OrderByDescending(options.OrderByExpression)
-                .ThenByDescending(options.IdentitySelectorExpression)
-                .WhereIf(x => EF.Property<Guid>(x!, identityPropertyName) < lastIdentity!.Value, lastIdentity.HasValue)
-            : query.OrderBy(options.OrderByExpression)
-                .ThenBy(options.IdentitySelectorExpression)
-                .WhereIf(x => EF.Property<Guid>(x!, identityPropertyName) > lastIdentity!.Value, lastIdentity.HasValue);
+        if (options.OrderByExpression is null)
+        {
+            query = query
+                .OrderBy(options.IdentitySelectorExpression)
+                .WhereIf(x => EF.Property<long>(x!, identityPropertyName) > lastIdentity!.Value, lastIdentity.HasValue);
+        }
+        else
+        {
+            query = options.OrderByDescending
+                ? query.OrderByDescending(options.OrderByExpression)
+                    //.ThenByDescending(x => EF.Property<long>(x!, identityPropertyName) == null) // Nulls last
+                    .ThenByDescending(options.IdentitySelectorExpression)
+                    .WhereIf(x => EF.Property<long>(x!, identityPropertyName) < lastIdentity!.Value, lastIdentity.HasValue)
+                : query.OrderBy(options.OrderByExpression)
+                    //.ThenBy(x => EF.Property<long>(x!, identityPropertyName) == null) // Nulls first
+                    .ThenBy(options.IdentitySelectorExpression)
+                    .WhereIf(x => EF.Property<long>(x!, identityPropertyName) > lastIdentity!.Value, lastIdentity.HasValue);
+        }
 
         var items = await query
             .Take(options.PageSize + 1)
@@ -130,48 +154,6 @@ public static class QueryableExtensions
         }
 
         lastIdentity = null;
-        if (items.Count > 0)
-        {
-            var identityProperty = typeof(TSource).GetProperty(identityPropertyName)
-                ?? throw new InvalidOperationException($"The type '{typeof(TSource).FullName}' does not contain a property named '{identityPropertyName}'.");
-
-            lastIdentity = identityProperty.GetValue(items[^1]) as Guid?;
-        }
-
-        var result = new KeysetPaginationResult<TSource, Guid>(
-            options.PageSize,
-            hasMore,
-            lastIdentity,
-            items
-            );
-
-        return result;
-    }
-
-    public static async Task<KeysetPaginationResult<TSource, long>> KeysetPaginationAsync<TSource>(this IQueryable<TSource> query, int pageSize, Expression<Func<TSource, long>> identityPropertySelectorExpression, long? lastIdentity)
-    {
-        if (lastIdentity.HasValue && lastIdentity.Value <= 0L)
-        {
-            lastIdentity = null;
-        }
-
-        MemberExpression identityPropertyMemberExpression = GetMemberExpression(identityPropertySelectorExpression)
-            ?? throw new ArgumentException("The identity selector must be a member expression.");
-
-        string identityPropertyName = identityPropertyMemberExpression.Member.Name;
-
-        var items = await query
-            .OrderBy(identityPropertySelectorExpression)
-            .WhereIf(x => EF.Property<long>(x!, identityPropertyName) > lastIdentity!.Value, lastIdentity.HasValue)
-            .Take(pageSize + 1)
-            .ToListAsync();
-
-        bool hasMore = items.Count > pageSize;
-        if (hasMore)
-        {
-            items.RemoveAt(items.Count - 1);
-        }
-
         if (items.Count > 0)
         {
             var identityProperty = typeof(TSource).GetProperty(identityPropertyName)
@@ -181,7 +163,7 @@ public static class QueryableExtensions
         }
 
         var result = new KeysetPaginationResult<TSource, long>(
-            pageSize,
+            options.PageSize,
             hasMore,
             lastIdentity,
             items

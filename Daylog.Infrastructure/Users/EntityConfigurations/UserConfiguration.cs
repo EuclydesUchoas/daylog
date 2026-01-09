@@ -2,7 +2,6 @@
 using Daylog.Infrastructure.Database.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Daylog.Infrastructure.Users.EntityConfigurations;
 
