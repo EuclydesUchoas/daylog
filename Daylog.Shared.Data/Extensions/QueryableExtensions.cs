@@ -64,13 +64,15 @@ public static class QueryableExtensions
 
         if (options.OrderByExpression is null)
         {
-            query = query
-                .OrderBy(options.IdentitySelectorExpression)
-                .WhereIf(x => EF.Property<Guid>(x!, identityPropertyName) > lastIdentity!.Value, lastIdentity.HasValue);
+            query = options.OrderByDescending is OrderByDirectionEnum.Descending
+                ? query.OrderByDescending(options.IdentitySelectorExpression)
+                    .WhereIf(x => EF.Property<Guid>(x!, identityPropertyName) < lastIdentity!.Value, lastIdentity.HasValue)
+                : query.OrderBy(options.IdentitySelectorExpression)
+                    .WhereIf(x => EF.Property<Guid>(x!, identityPropertyName) > lastIdentity!.Value, lastIdentity.HasValue);
         }
         else
         {
-            query = options.OrderByDescending
+            query = options.OrderByDescending is OrderByDirectionEnum.Descending
                 ? query.OrderByDescending(options.OrderByExpression)
                     //.ThenByDescending(x => EF.Property<Guid>(x!, identityPropertyName) == null) // Nulls last
                     .ThenByDescending(options.IdentitySelectorExpression)
@@ -126,13 +128,15 @@ public static class QueryableExtensions
 
         if (options.OrderByExpression is null)
         {
-            query = query
-                .OrderBy(options.IdentitySelectorExpression)
-                .WhereIf(x => EF.Property<long>(x!, identityPropertyName) > lastIdentity!.Value, lastIdentity.HasValue);
+            query = options.OrderByDescending is OrderByDirectionEnum.Descending
+                ? query.OrderByDescending(options.IdentitySelectorExpression)
+                    .WhereIf(x => EF.Property<long>(x!, identityPropertyName) < lastIdentity!.Value, lastIdentity.HasValue)
+                : query.OrderBy(options.IdentitySelectorExpression)
+                    .WhereIf(x => EF.Property<long>(x!, identityPropertyName) > lastIdentity!.Value, lastIdentity.HasValue);
         }
         else
         {
-            query = options.OrderByDescending
+            query = options.OrderByDescending is OrderByDirectionEnum.Descending
                 ? query.OrderByDescending(options.OrderByExpression)
                     //.ThenByDescending(x => EF.Property<long>(x!, identityPropertyName) == null) // Nulls last
                     .ThenByDescending(options.IdentitySelectorExpression)

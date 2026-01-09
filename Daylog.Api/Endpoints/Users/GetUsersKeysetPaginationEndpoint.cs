@@ -15,19 +15,19 @@ public sealed class GetUsersKeysetPaginationEndpoint : IEndpoint
     {
         routeBuilder
             .MapGet("v1/users/keyset", HandleAsync)
-            .WithSummary(nameof(AppMessages.Endpoint_GetUsersSummary))
-            .WithDescription(nameof(AppMessages.Endpoint_GetUsersDescription))
+            .WithSummary(nameof(AppMessages.Endpoint_GetUsersKeysetPaginationSummary))
+            .WithDescription(nameof(AppMessages.Endpoint_GetUsersKeysetPaginationDescription))
             .AllowAnonymous()
             .WithTags(EndpointTags.Users);
     }
 
     public static async Task<Results<Ok<Result<IKeysetPaginationResponseDto<UserResponseDto, Guid>>>, BadRequest<Result>, NotFound<Result<IKeysetPaginationResponseDto<UserResponseDto, Guid>>>>> HandleAsync(
-        [AsParameters] GetUsersKeysetPaginationRequestDto<Guid> requestDto,
+        [AsParameters] GetUsersKeysetPaginationRequestDto getUsersKeysetPaginationRequestDto,
         [FromServices] IGetUsersKeysetPaginationService getUsersKeysetPaginationService,
         CancellationToken cancellationToken
         )
     {
-        var result = await getUsersKeysetPaginationService.HandleAsync(requestDto, cancellationToken);
+        var result = await getUsersKeysetPaginationService.HandleAsync(getUsersKeysetPaginationRequestDto, cancellationToken);
 
         if (result.IsSuccess)
         {

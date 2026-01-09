@@ -26,8 +26,8 @@ public sealed class GetUserEndpoint : IEndpoint
         CancellationToken cancellationToken
         )
     {
-        var requestDto = new GetUserByIdRequestDto(id);
-        var result = await getUserByIdService.HandleAsync(requestDto, cancellationToken);
+        var getUserByIdRequestDto = new GetUserByIdRequestDto(id);
+        var result = await getUserByIdService.HandleAsync(getUserByIdRequestDto, cancellationToken);
 
         if (result.IsSuccess)
         {

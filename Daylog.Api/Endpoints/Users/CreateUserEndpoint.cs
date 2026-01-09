@@ -21,12 +21,12 @@ public sealed class CreateUserEndpoint : IEndpoint
     }
 
     public static async Task<Results<Ok<Result<UserResponseDto>>, BadRequest<Result>, Conflict<Result>>> HandleAsync(
-        [FromBody] CreateUserRequestDto requestDto,
+        [FromBody] CreateUserRequestDto createUserRequestDto,
         [FromServices] ICreateUserService createUserService,
         CancellationToken cancellationToken
         )
     {
-        var result = await createUserService.HandleAsync(requestDto, cancellationToken);
+        var result = await createUserService.HandleAsync(createUserRequestDto, cancellationToken);
 
         if (result.IsSuccess)
         {

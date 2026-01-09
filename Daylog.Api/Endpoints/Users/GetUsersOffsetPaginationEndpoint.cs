@@ -15,19 +15,19 @@ public sealed class GetUsersOffsetPaginationEndpoint : IEndpoint
     {
         routeBuilder
             .MapGet("v1/users/offset", HandleAsync)
-            .WithSummary(nameof(AppMessages.Endpoint_GetUsersSummary))
-            .WithDescription(nameof(AppMessages.Endpoint_GetUsersDescription))
+            .WithSummary(nameof(AppMessages.Endpoint_GetUsersOffsetPaginationSummary))
+            .WithDescription(nameof(AppMessages.Endpoint_GetUsersOffsetPaginationDescription))
             .AllowAnonymous()
             .WithTags(EndpointTags.Users);
     }
 
     public static async Task<Results<Ok<Result<IOffsetPaginationResponseDto<UserResponseDto>>>, BadRequest<Result>, NotFound<Result<IOffsetPaginationResponseDto<UserResponseDto>>>>> HandleAsync(
-        [AsParameters] GetUsersOffsetPaginationRequestDto requestDto,
+        [AsParameters] GetUsersOffsetPaginationRequestDto getUsersOffsetPaginationRequestDto,
         [FromServices] IGetUsersOffsetPaginationService getUsersOffsetPaginationService,
         CancellationToken cancellationToken
         )
     {
-        var result = await getUsersOffsetPaginationService.HandleAsync(requestDto, cancellationToken);
+        var result = await getUsersOffsetPaginationService.HandleAsync(getUsersOffsetPaginationRequestDto, cancellationToken);
 
         if (result.IsSuccess)
         {

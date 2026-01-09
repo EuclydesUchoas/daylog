@@ -5,4 +5,4 @@ using Daylog.Application.Users.Dtos.Response;
 
 namespace Daylog.Application.Users.Services.Contracts;
 
-public interface IGetUsersKeysetPaginationService : IService<GetUsersKeysetPaginationRequestDto<Guid>, IKeysetPaginationResponseDto<UserResponseDto, Guid>>;
+public interface IGetUsersKeysetPaginationService : IService<GetUsersKeysetPaginationRequestDto, IKeysetPaginationResponseDto<UserResponseDto, Guid>>;

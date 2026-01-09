@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace Daylog.Application.Users.Enums;
+﻿namespace Daylog.Application.Users.Enums;
 
 public enum UserOrderByEnum
 {

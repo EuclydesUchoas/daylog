@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using Daylog.Shared.Data.Enums;
+using System.Linq.Expressions;
 
 namespace Daylog.Shared.Data.Models;
 
@@ -47,5 +48,5 @@ public sealed class KeysetPaginationOptions<TSource, TIdentity>
 
     public Expression<Func<TSource, object>>? OrderByExpression { get; init; }
 
-    public bool OrderByDescending { get; init; } = false;
+    public OrderByDirectionEnum OrderByDescending { get; init; } = OrderByDirectionEnum.Ascending;
 }

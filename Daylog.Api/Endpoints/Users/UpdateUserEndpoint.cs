@@ -22,13 +22,13 @@ public sealed class UpdateUserEndpoint : IEndpoint
 
     public static async Task<Results<Ok<Result<UserResponseDto>>, BadRequest<Result>, NotFound<Result>, Conflict<Result>>> HandleAsync(
         [FromRoute] Guid id,
-        [FromBody] UpdateUserRequestDto requestDto,
+        [FromBody] UpdateUserRequestDto updateUserRequestDto,
         [FromServices] IUpdateUserService updateUserService,
         CancellationToken cancellationToken
         )
     {
-        requestDto = requestDto with { Id = id };
-        var result = await updateUserService.HandleAsync(requestDto, cancellationToken);
+        updateUserRequestDto = updateUserRequestDto with { Id = id };
+        var result = await updateUserService.HandleAsync(updateUserRequestDto, cancellationToken);
 
         if (result.IsSuccess)
         {

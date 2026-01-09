@@ -25,8 +25,8 @@ public sealed class DeleteUserEndpoint : IEndpoint
         CancellationToken cancellationToken
         )
     {
-        var requestDto = new DeleteUserRequestDto(id);
-        var result = await deleteUserService.HandleAsync(requestDto, cancellationToken);
+        var deleteUserRequestDto = new DeleteUserRequestDto(id);
+        var result = await deleteUserService.HandleAsync(deleteUserRequestDto, cancellationToken);
 
         if (result.IsSuccess)
         {

@@ -199,37 +199,49 @@
     <value>User with the specified email was not found</value>
   </data>
   <data name="Endpoint_CreateUserDescription" xml:space="preserve">
-    <value>Create a new user.</value>
+    <value>Create a new user</value>
   </data>
   <data name="Endpoint_CreateUserSummary" xml:space="preserve">
     <value>Create User</value>
   </data>
   <data name="Endpoint_DeleteUserDescription" xml:space="preserve">
-    <value>Delete a user by ID.</value>
+    <value>Delete a user by ID</value>
   </data>
   <data name="Endpoint_DeleteUserSummary" xml:space="preserve">
     <value>Delete User</value>
   </data>
   <data name="Endpoint_GetUserDescription" xml:space="preserve">
-    <value>Get a user by ID.</value>
+    <value>Get a user by ID</value>
   </data>
   <data name="Endpoint_GetUsersDescription" xml:space="preserve">
-    <value>Get a list of all users.</value>
+    <value>Get a list of all users</value>
+  </data>
+  <data name="Endpoint_GetUsersKeysetPaginationDescription" xml:space="preserve">
+    <value>Get a list of users with keyset pagination</value>
+  </data>
+  <data name="Endpoint_GetUsersOffsetPaginationDescription" xml:space="preserve">
+    <value>Get a list of users with offset pagination</value>
   </data>
   <data name="Endpoint_GetUsersSummary" xml:space="preserve">
     <value>Get Users</value>
+  </data>
+  <data name="Endpoint_GetUsersKeysetPaginationSummary" xml:space="preserve">
+    <value>Get Users With Keyset Pagination</value>
+  </data>
+  <data name="Endpoint_GetUsersOffsetPaginationSummary" xml:space="preserve">
+    <value>Get Users With Offset Pagination</value>
   </data>
   <data name="Endpoint_GetUserSummary" xml:space="preserve">
     <value>Get User</value>
   </data>
   <data name="Endpoint_UpdateUserDescription" xml:space="preserve">
-    <value>Update an existing user by ID.</value>
+    <value>Update an existing user by ID</value>
   </data>
   <data name="Endpoint_UpdateUserSummary" xml:space="preserve">
     <value>Update User</value>
   </data>
   <data name="Documentation_InfoDescription" xml:space="preserve">
-    <value>API for Daylog, a daily logging application.</value>
+    <value>API for Daylog, a daily logging application</value>
   </data>
   <data name="Documentation_InfoTitle" xml:space="preserve">
     <value>Daylog API</value>

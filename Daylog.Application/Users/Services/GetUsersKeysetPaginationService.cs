@@ -16,7 +16,7 @@ public sealed class GetUsersKeysetPaginationService(
     IAppDbContext appDbContext
     ) : IGetUsersKeysetPaginationService
 {
-    public async Task<Result<IKeysetPaginationResponseDto<UserResponseDto, Guid>>> HandleAsync(GetUsersKeysetPaginationRequestDto<Guid> requestDto, CancellationToken cancellationToken = default)
+    public async Task<Result<IKeysetPaginationResponseDto<UserResponseDto, Guid>>> HandleAsync(GetUsersKeysetPaginationRequestDto requestDto, CancellationToken cancellationToken = default)
     {
         if (requestDto is null)
         {
@@ -28,8 +28,8 @@ public sealed class GetUsersKeysetPaginationService(
             PageSize = requestDto.PageSize!.Value,
             IdentitySelectorExpression = x => x.Id,
             LastIdentity = requestDto.LastIdentity,
-            OrderByExpression = requestDto.OrderBy.HasValue ? x => EF.Property<object>(x, requestDto.OrderBy.Value.ToString()) : null,
-            OrderByDescending = requestDto.OrderByDescending!.Value,
+            OrderByExpression = requestDto.SortBy.HasValue && Enum.IsDefined(requestDto.SortBy.Value) ? x => EF.Property<object>(x, requestDto.SortBy.Value.ToString()) : null,
+            OrderByDescending = requestDto.SortDirection!.Value,
         };
 
         var paginationResult = await appDbContext.Users.AsNoTracking()

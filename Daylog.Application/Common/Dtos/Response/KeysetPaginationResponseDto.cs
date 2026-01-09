@@ -37,10 +37,10 @@ public interface IKeysetPaginationResponseDto<TResponseDto, TIdentity> : IRespon
         => new KeysetPaginationResponseDto<TResponseDto, TIdentity>(0, []);
 
     public static IKeysetPaginationResponseDto<TResponseDto, TIdentity> Empty(KeysetPaginationRequestDtoBase<TIdentity> pagedRequestDtoBase)
-        => FromItems(pagedRequestDtoBase.PageSize ?? 0, []);
+        => FromItems(pagedRequestDtoBase.PageSize!.Value, []);
 
     public static IKeysetPaginationResponseDto<TResponseDto, TIdentity> FromItems(KeysetPaginationRequestDtoBase<TIdentity> pagedRequestDtoBase, IEnumerable<TResponseDto> items)
-        => FromItems(pagedRequestDtoBase.PageSize ?? 0, items);
+        => FromItems(pagedRequestDtoBase.PageSize!.Value, items);
 
     public static IKeysetPaginationResponseDto<TResponseDto, TIdentity> FromItems(int pageSize, IEnumerable<TResponseDto> items)
         => new KeysetPaginationResponseDto<TResponseDto, TIdentity>(pageSize, null, items);

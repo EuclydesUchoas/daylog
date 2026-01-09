@@ -199,37 +199,49 @@
     <value>Usuário com o e-mail especificado não foi encontrado</value>
   </data>
   <data name="Endpoint_CreateUserDescription" xml:space="preserve">
-    <value>Criar um novo usuário.</value>
+    <value>Criar um novo usuário</value>
   </data>
   <data name="Endpoint_CreateUserSummary" xml:space="preserve">
     <value>Criar Usuário</value>
   </data>
   <data name="Endpoint_DeleteUserDescription" xml:space="preserve">
-    <value>Excluir um usuário por ID.</value>
+    <value>Excluir um usuário por ID</value>
   </data>
   <data name="Endpoint_DeleteUserSummary" xml:space="preserve">
     <value>Excluir Usuário</value>
   </data>
   <data name="Endpoint_GetUserDescription" xml:space="preserve">
-    <value>Obter um usuário por ID.</value>
+    <value>Obter um usuário por ID</value>
   </data>
   <data name="Endpoint_GetUsersDescription" xml:space="preserve">
-    <value>Obtém uma lista de todos os usuários.</value>
+    <value>Obtém uma lista de todos os usuários</value>
+  </data>
+  <data name="Endpoint_GetUsersKeysetPaginationDescription" xml:space="preserve">
+    <value>Obtém uma lista de usuários com paginação keyset</value>
+  </data>
+  <data name="Endpoint_GetUsersOffsetPaginationDescription" xml:space="preserve">
+    <value>Obtém uma lista de usuários com paginação offset</value>
   </data>
   <data name="Endpoint_GetUsersSummary" xml:space="preserve">
     <value>Obter Usuários</value>
+  </data>
+  <data name="Endpoint_GetUsersKeysetPaginationSummary" xml:space="preserve">
+    <value>Obter Usuários Com Paginação Keyset</value>
+  </data>
+  <data name="Endpoint_GetUsersOffsetPaginationSummary" xml:space="preserve">
+    <value>Obter Usuários Com Paginação Offset</value>
   </data>
   <data name="Endpoint_GetUserSummary" xml:space="preserve">
     <value>Obter Usuário</value>
   </data>
   <data name="Endpoint_UpdateUserDescription" xml:space="preserve">
-    <value>Atualizar um usuário existente por ID.</value>
+    <value>Atualizar um usuário existente por ID</value>
   </data>
   <data name="Endpoint_UpdateUserSummary" xml:space="preserve">
     <value>Atualizar Usuário</value>
   </data>
   <data name="Documentation_InfoDescription" xml:space="preserve">
-    <value>API para Daylog, uma aplicação de registro diário.</value>
+    <value>API para Daylog, uma aplicação de registro diário</value>
   </data>
   <data name="Documentation_InfoTitle" xml:space="preserve">
     <value>Daylog API</value>

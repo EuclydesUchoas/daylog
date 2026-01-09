@@ -22,12 +22,12 @@ public sealed class GetUsersEndpoint : IEndpoint
     }
 
     public static async Task<Results<Ok<Result<ICollectionResponseDto<UserResponseDto>>>, BadRequest<Result>, NotFound<Result<ICollectionResponseDto<UserResponseDto>>>>> HandleAsync(
-        [AsParameters] GetUsersRequestDto requestDto,
+        [AsParameters] GetUsersRequestDto getUsersRequestDto,
         [FromServices] IGetUsersService getUsersService,
         CancellationToken cancellationToken
         )
     {
-        var result = await getUsersService.HandleAsync(requestDto, cancellationToken);
+        var result = await getUsersService.HandleAsync(getUsersRequestDto, cancellationToken);
 
         if (result.IsSuccess)
         {

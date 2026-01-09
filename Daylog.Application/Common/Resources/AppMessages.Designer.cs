@@ -19,7 +19,7 @@ namespace Daylog.Application.Common.Resources {
     // através de uma ferramenta como ResGen ou Visual Studio.
     // Para adicionar ou remover um associado, edite o arquivo .ResX e execute ResGen novamente
     // com a opção /str, ou recrie o projeto do VS.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class AppMessages {
@@ -106,7 +106,7 @@ namespace Daylog.Application.Common.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a API for Daylog, a daily logging application..
+        ///   Consulta uma cadeia de caracteres localizada semelhante a API for Daylog, a daily logging application.
         /// </summary>
         public static string Documentation_InfoDescription {
             get {
@@ -124,7 +124,7 @@ namespace Daylog.Application.Common.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Create a new user..
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Create a new user.
         /// </summary>
         public static string Endpoint_CreateUserDescription {
             get {
@@ -142,7 +142,7 @@ namespace Daylog.Application.Common.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Delete a user by ID..
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Delete a user by ID.
         /// </summary>
         public static string Endpoint_DeleteUserDescription {
             get {
@@ -160,7 +160,7 @@ namespace Daylog.Application.Common.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Get a user by ID..
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Get a user by ID.
         /// </summary>
         public static string Endpoint_GetUserDescription {
             get {
@@ -174,6 +174,42 @@ namespace Daylog.Application.Common.Resources {
         public static string Endpoint_GetUsersDescription {
             get {
                 return ResourceManager.GetString("Endpoint_GetUsersDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Get a list of users with keyset pagination.
+        /// </summary>
+        public static string Endpoint_GetUsersKeysetPaginationDescription {
+            get {
+                return ResourceManager.GetString("Endpoint_GetUsersKeysetPaginationDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Get Users With Keyset Pagination.
+        /// </summary>
+        public static string Endpoint_GetUsersKeysetPaginationSummary {
+            get {
+                return ResourceManager.GetString("Endpoint_GetUsersKeysetPaginationSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Get a list of users with offset pagination.
+        /// </summary>
+        public static string Endpoint_GetUsersOffsetPaginationDescription {
+            get {
+                return ResourceManager.GetString("Endpoint_GetUsersOffsetPaginationDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Get Users With Offset Pagination.
+        /// </summary>
+        public static string Endpoint_GetUsersOffsetPaginationSummary {
+            get {
+                return ResourceManager.GetString("Endpoint_GetUsersOffsetPaginationSummary", resourceCulture);
             }
         }
         
@@ -196,7 +232,7 @@ namespace Daylog.Application.Common.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Update an existing user by ID..
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Update an existing user by ID.
         /// </summary>
         public static string Endpoint_UpdateUserDescription {
             get {

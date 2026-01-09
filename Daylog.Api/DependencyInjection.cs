@@ -2,9 +2,6 @@
 using Daylog.Application.Common.Resources;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using System.ComponentModel;
-using System.Reflection;
-using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Daylog.Api;
@@ -17,8 +14,11 @@ public static class DependencyInjection
         {
             options.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
             options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-            options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
-            options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+
+            //options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            //options.SerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
+            //options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            options.SerializerOptions.PropertyNameCaseInsensitive = true;
         });
 
         services.AddEndpoints();
@@ -138,6 +138,32 @@ public static class DependencyInjection
                      schema.Format = null;
                      schema.Enum = [.. enumNames.Select(name => new OpenApiString(name) as IOpenApiAny)];
                      schema.Reference = null;
+                 }*/
+
+                 /*if (context.JsonTypeInfo.Type.IsEnum)
+                 {
+                     schema.Type = JsonSchemaType.String;
+                     schema.Enum = Enum.GetNames(context.JsonTypeInfo.Type)
+                         .Select(name => (JsonNode)JsonValue.Create(name)!)
+                         .ToList();
+                 }*/
+
+                 // Check if this is an enum type with JsonStringEnumConverter attribute
+                 /*var type = context.JsonTypeInfo.Type;
+                 if (type.IsEnum)
+                 {
+                     var hasStringEnumConverter = type.GetCustomAttributes(typeof(JsonConverterAttribute), false)
+                         .OfType<JsonConverterAttribute>()
+                         .Any(a => a.ConverterType == typeof(JsonStringEnumConverter));
+
+                     if (hasStringEnumConverter)
+                     {
+                         // Convert to string type with enum values
+                         schema.Type = JsonSchemaType.String;
+                         schema.Enum = Enum.GetNames(type)
+                             .Select(name => (JsonNode)JsonValue.Create(name)!)
+                             .ToList();
+                     }
                  }*/
 
                  return Task.CompletedTask;
