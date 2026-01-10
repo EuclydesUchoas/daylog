@@ -1,4 +1,4 @@
-﻿using Daylog.Application.Common.Resources;
+﻿using Daylog.Shared.Core.Resources;
 using FluentValidation.Results;
 using System.Text.Json.Serialization;
 

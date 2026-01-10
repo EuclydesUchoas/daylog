@@ -1,4 +1,4 @@
-﻿using Daylog.Application.Common.Resources;
+﻿using Daylog.Shared.Core.Resources;
 using Daylog.Application.Common.Results;
 
 namespace Daylog.Application.Users.Results;

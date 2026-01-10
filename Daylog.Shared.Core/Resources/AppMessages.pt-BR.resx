@@ -249,4 +249,13 @@
   <data name="EndpointTags_Users" xml:space="preserve">
     <value>Usuários</value>
   </data>
+  <data name="UserProfile_User" xml:space="preserve">
+    <value>Usuário</value>
+  </data>
+  <data name="UserProfile_Admin" xml:space="preserve">
+    <value>Administrador</value>
+  </data>
+  <data name="UserProfile_SuperAdmin" xml:space="preserve">
+    <value>Super administrador</value>
+  </data>
 </root>

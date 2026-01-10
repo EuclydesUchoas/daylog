@@ -1,4 +1,6 @@
-﻿namespace Daylog.Domain.Users;
+﻿using Daylog.Shared.Core.Resources;
+
+namespace Daylog.Domain.Users;
 
 public sealed class User : Entity, ICreatable, IUpdatable, ISoftDeletable
 {
@@ -10,7 +12,9 @@ public sealed class User : Entity, ICreatable, IUpdatable, ISoftDeletable
 
     public string Password { get; private set; } = null!;
 
-    public UserProfileEnum Profile { get; private set; }
+    public UserProfileEnum ProfileId { get; private set; }
+
+    public string ProfileName => AppMessages.ResourceManager.GetString($"UserProfile_{ProfileId}") ?? string.Empty;
 
     // Creatable
 
@@ -29,7 +33,7 @@ public sealed class User : Entity, ICreatable, IUpdatable, ISoftDeletable
         Id = user.Id;
         Name = user.Name;
         Email = user.Email;
-        Profile = user.Profile;
+        ProfileId = user.ProfileId;
     }
 
     // SoftDeletable
@@ -51,7 +55,7 @@ public sealed class User : Entity, ICreatable, IUpdatable, ISoftDeletable
             Name = name,
             Email = email,
             Password = password,
-            Profile = profile,
+            ProfileId = profile,
         };
     }
 
@@ -62,7 +66,7 @@ public sealed class User : Entity, ICreatable, IUpdatable, ISoftDeletable
             Id = id,
             Name = name,
             Email = email,
-            Profile = profile,
+            ProfileId = profile,
         };
     }
 }

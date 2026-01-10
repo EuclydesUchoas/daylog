@@ -1,5 +1,5 @@
 ﻿using Daylog.Application.Common.Dtos.Response;
-using Daylog.Application.Common.Resources;
+using Daylog.Shared.Core.Resources;
 using Daylog.Application.Common.Results;
 using Daylog.Application.Users.Dtos.Request;
 using Daylog.Application.Users.Dtos.Response;

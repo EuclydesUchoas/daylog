@@ -11,7 +11,7 @@ public static class UserQueryableExtensions
             Id = x.Id,
             Name = x.Name,
             Email = x.Email,
-            Profile = x.Profile,
+            ProfileId = x.ProfileId,
             CreatedAt = x.CreatedAt,
             CreatedByUserId = x.CreatedByUserId,
             UpdatedAt = x.UpdatedAt,

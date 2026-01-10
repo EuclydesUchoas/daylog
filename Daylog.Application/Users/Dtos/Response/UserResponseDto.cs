@@ -1,5 +1,6 @@
 ﻿using Daylog.Application.Abstractions.Dtos;
 using Daylog.Domain.Users;
+using Daylog.Shared.Core.Resources;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Daylog.Application.Users.Dtos.Response;
@@ -12,7 +13,9 @@ public sealed class UserResponseDto : IResponseDto
 
     public required string Email { get; init; }
 
-    public required UserProfileEnum Profile { get; init; }
+    public required UserProfileEnum ProfileId { get; init; }
+
+    public string ProfileName => AppMessages.ResourceManager.GetString($"UserProfile_{ProfileId}") ?? string.Empty;
 
     public required DateTime CreatedAt { get; init; }
 
@@ -35,7 +38,7 @@ public sealed class UserResponseDto : IResponseDto
         Guid id,
         string name,
         string email,
-        UserProfileEnum profile,
+        UserProfileEnum profileId,
         DateTime createdAt,
         Guid? createdByUserId,
         DateTime updatedAt,
@@ -48,7 +51,7 @@ public sealed class UserResponseDto : IResponseDto
         Id = id;
         Name = name;
         Email = email;
-        Profile = profile;
+        ProfileId = profileId;
         CreatedAt = createdAt;
         CreatedByUserId = createdByUserId;
         UpdatedAt = updatedAt;

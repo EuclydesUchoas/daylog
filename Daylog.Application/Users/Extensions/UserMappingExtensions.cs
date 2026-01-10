@@ -11,7 +11,7 @@ public static class UserMappingExtensions
             user.Id,
             user.Name,
             user.Email,
-            user.Profile,
+            user.ProfileId,
             user.CreatedAt,
             user.CreatedByUserId,
             user.UpdatedAt,
@@ -29,7 +29,7 @@ public static class UserMappingExtensions
             createUserRequestDto.Name,
             createUserRequestDto.Email,
             createUserRequestDto.Password,
-            createUserRequestDto.Profile
+            createUserRequestDto.ProfileId
         ) : null;
 
     public static User? ToUser(this UpdateUserRequestDto? updateUserRequestDto)
@@ -37,6 +37,6 @@ public static class UserMappingExtensions
             updateUserRequestDto.Id,
             updateUserRequestDto.Name,
             updateUserRequestDto.Email,
-            updateUserRequestDto.Profile
+            updateUserRequestDto.ProfileId
         ) : null;
 }

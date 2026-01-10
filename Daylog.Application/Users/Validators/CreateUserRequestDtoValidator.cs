@@ -1,4 +1,4 @@
-﻿using Daylog.Application.Common.Resources;
+﻿using Daylog.Shared.Core.Resources;
 using Daylog.Application.Users.Dtos.Request;
 using FluentValidation;
 
@@ -24,7 +24,7 @@ public sealed class CreateUserRequestDtoValidator : AbstractValidator<CreateUser
             .MinimumLength(8)
             .WithMessage(string.Format(AppMessages.User_PasswordLengthTooShort, '8'));
 
-        RuleFor(x => x.Profile)
+        RuleFor(x => x.ProfileId)
             .NotEmpty()
             .WithMessage(AppMessages.User_ProfileIsRequired)
             .IsInEnum()

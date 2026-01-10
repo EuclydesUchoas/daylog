@@ -9,5 +9,5 @@ public sealed class GetUsersOffsetPaginationRequestDto : OffsetPaginationRequest
 
     public string? Email { get; init; }
 
-    public UserProfileEnum? Profile { get; init; }
+    public UserProfileEnum? ProfileId { get; init; }
 }

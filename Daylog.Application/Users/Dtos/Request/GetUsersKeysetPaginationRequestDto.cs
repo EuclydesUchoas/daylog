@@ -10,7 +10,7 @@ public sealed class GetUsersKeysetPaginationRequestDto : KeysetPaginationRequest
     
     public string? Email { get; init; }
 
-    public UserProfileEnum? Profile
+    public UserProfileEnum? ProfileId
     {
         get;
         init => field = value.HasValue && Enum.IsDefined(value.Value) ? value : null;

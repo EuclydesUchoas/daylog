@@ -31,9 +31,11 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
             .HasMaxLength(200)
             .IsRequired();
 
-        builder.Property(x => x.Profile)
-            .HasColumnName("profile")
+        builder.Property(x => x.ProfileId)
+            .HasColumnName("profile_id")
             .IsRequired();
+
+        builder.Ignore(x => x.ProfileName);
 
         /*builder.HasMany(x => x.UserDepartments)
             .WithOne(x => x.User)

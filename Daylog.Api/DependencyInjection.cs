@@ -1,5 +1,6 @@
 ﻿using Daylog.Api.Endpoints;
-using Daylog.Application.Common.Resources;
+using Daylog.Shared.Core.Constants;
+using Daylog.Shared.Core.Resources;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Text.Json.Serialization;
@@ -44,20 +45,13 @@ public static class DependencyInjection
 
     private static IServiceCollection AddRequestLocalization(this IServiceCollection services)
     {
-        string[] supportedCultures = [
-            "en",
-            "en-US",
-            "pt",
-            "pt-BR",
-            ];
-        
         services.AddRequestLocalization(options =>
         {
             options.ApplyCurrentCultureToResponseHeaders = true;
 
-            options.SetDefaultCulture(supportedCultures[0])
-                .AddSupportedCultures(supportedCultures)
-                .AddSupportedUICultures(supportedCultures);
+            options.SetDefaultCulture(Cultures.DefaultCulture)
+                .AddSupportedCultures(Cultures.SupportedCultures)
+                .AddSupportedUICultures(Cultures.SupportedCultures);
         });
 
         return services;

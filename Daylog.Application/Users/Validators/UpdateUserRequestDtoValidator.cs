@@ -1,4 +1,4 @@
-﻿using Daylog.Application.Common.Resources;
+﻿using Daylog.Shared.Core.Resources;
 using Daylog.Application.Users.Dtos.Request;
 using FluentValidation;
 
@@ -22,7 +22,7 @@ public sealed class UpdateUserRequestDtoValidator : AbstractValidator<UpdateUser
             .EmailAddress()
             .WithMessage(AppMessages.User_EmailIsInvalid);
 
-        RuleFor(x => x.Profile)
+        RuleFor(x => x.ProfileId)
             .NotEmpty()
             .WithMessage(AppMessages.User_ProfileIsRequired)
             .IsInEnum()

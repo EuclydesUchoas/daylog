@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Daylog.Application.Common.Resources {
+namespace Daylog.Shared.Core.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Daylog.Application.Common.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Daylog.Application.Common.Resources.AppMessages", typeof(AppMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Daylog.Shared.Core.Resources.AppMessages", typeof(AppMessages).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -453,6 +453,33 @@ namespace Daylog.Application.Common.Resources {
         public static string User_UserWithSpecifiedEmailWasNotFound {
             get {
                 return ResourceManager.GetString("User_UserWithSpecifiedEmailWasNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Administrator.
+        /// </summary>
+        public static string UserProfile_Admin {
+            get {
+                return ResourceManager.GetString("UserProfile_Admin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Super administrator.
+        /// </summary>
+        public static string UserProfile_SuperAdmin {
+            get {
+                return ResourceManager.GetString("UserProfile_SuperAdmin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a User.
+        /// </summary>
+        public static string UserProfile_User {
+            get {
+                return ResourceManager.GetString("UserProfile_User", resourceCulture);
             }
         }
     }
