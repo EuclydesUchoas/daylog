@@ -1,4 +1,4 @@
-﻿using Daylog.Domain.Users;
+﻿using Daylog.Domain.UserProfiles;
 using Daylog.Shared.Core.Constants;
 using Daylog.Shared.Core.Resources;
 using FluentMigrator;

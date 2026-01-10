@@ -27,4 +27,26 @@ public static class Cultures
     public static readonly CultureInfo[] SupportedCultureInfos = SupportedCultures
         .Select(CultureInfo.GetCultureInfo)
         .ToArray();
+
+    public static string CurrentCulture
+    {
+        get
+        {
+            var currentCultureName = CultureInfo.CurrentCulture.Name;
+            if (IsSupportedCulture(currentCultureName))
+            {
+                return currentCultureName;
+            }
+            return DefaultCulture;
+        }
+    }
+
+    public static CultureInfo CurrentCultureInfo
+        => CultureInfo.GetCultureInfo(CurrentCulture);
+
+    public static string CurrentCultureSnakeCase
+        => CurrentCulture.Replace('-', '_');
+
+    public static bool IsSupportedCulture(string culture)
+        => SupportedCultures.Contains(culture);
 }

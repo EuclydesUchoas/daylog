@@ -4,6 +4,7 @@ using Daylog.Application.Users.Dtos.Request;
 using Daylog.Application.Users.Dtos.Response;
 using Daylog.Application.Users.Extensions;
 using Daylog.Application.Users.Services.Contracts;
+using Daylog.Shared.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Daylog.Application.Users.Services;
@@ -29,11 +30,6 @@ public sealed class GetUserByIdService(
             .SelectUserResponseDto()
             .FirstOrDefaultAsync(cancellationToken);
 
-        if (userDto is null)
-        {
-            return Result.Success<UserResponseDto?>(null);
-        }
-
-        return Result.Success<UserResponseDto?>(userDto);
+        return Result.Success(userDto);
     }
 }

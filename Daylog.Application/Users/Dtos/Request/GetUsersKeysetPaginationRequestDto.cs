@@ -1,6 +1,6 @@
 ﻿using Daylog.Application.Abstractions.Dtos;
 using Daylog.Application.Users.Enums;
-using Daylog.Domain.Users;
+using Daylog.Domain.UserProfiles;
 
 namespace Daylog.Application.Users.Dtos.Request;
 

@@ -1,5 +1,5 @@
 ﻿using Daylog.Application.Abstractions.Dtos;
-using Daylog.Domain.Users;
+using Daylog.Domain.UserProfiles;
 using System.Text.Json.Serialization;
 
 namespace Daylog.Application.Users.Dtos.Request;

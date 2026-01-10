@@ -1,5 +1,5 @@
 ﻿using Daylog.Application.Abstractions.Dtos;
-using Daylog.Domain.Users;
+using Daylog.Domain.UserProfiles;
 using Daylog.Shared.Core.Resources;
 using System.Diagnostics.CodeAnalysis;
 
@@ -15,7 +15,19 @@ public sealed class UserResponseDto : IResponseDto
 
     public required UserProfileEnum ProfileId { get; init; }
 
-    public string ProfileName => AppMessages.ResourceManager.GetString($"UserProfile_{ProfileId}") ?? string.Empty;
+    public string ProfileName
+    {
+        get
+        {
+            if (field is null)
+            {
+                string messageKey = $"UserProfile_{ProfileId}";
+                field = AppMessages.ResourceManager.GetString(messageKey) ?? string.Empty;
+            }
+            return field;
+        }
+        init;
+    }
 
     public required DateTime CreatedAt { get; init; }
 

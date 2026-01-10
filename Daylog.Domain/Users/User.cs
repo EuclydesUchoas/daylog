@@ -1,4 +1,5 @@
-﻿using Daylog.Shared.Core.Resources;
+﻿using Daylog.Domain.UserProfiles;
+using Daylog.Shared.Core.Resources;
 
 namespace Daylog.Domain.Users;
 
@@ -14,7 +15,7 @@ public sealed class User : Entity, ICreatable, IUpdatable, ISoftDeletable
 
     public UserProfileEnum ProfileId { get; private set; }
 
-    public string ProfileName => AppMessages.ResourceManager.GetString($"UserProfile_{ProfileId}") ?? string.Empty;
+    public UserProfile Profile { get; private set; } = null!;
 
     // Creatable
 

@@ -1,4 +1,4 @@
-﻿namespace Daylog.Domain.Users;
+﻿namespace Daylog.Domain.UserProfiles;
 
 public enum UserProfileEnum
 {

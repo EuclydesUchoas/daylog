@@ -238,21 +238,6 @@ public static class QueryableExtensions
             sqlServer: () => SearchSqlServer2(query, propertySelector, searchTerm, caseInsensitive, diacriticInsensitive)
             );
 
-        /*using var switcher = new DatabaseProviderSwitcher<IQueryable<TSource>>
-        {
-            PostgreSql = () => SearchPostgreSql2(query, propertySelector, searchTerm, caseInsensitive, diacriticInsensitive),
-            SqlServer = () => SearchSqlServer2(query, propertySelector, searchTerm, caseInsensitive, diacriticInsensitive),
-        };
-
-        query = switcher.Execute(databaseProvider);*/
-
-        /*query = databaseProvider switch
-        {
-            DatabaseProviderEnum.PostgreSql => SearchPostgreSql2(query, propertySelector, searchTerm, caseInsensitive, diacriticInsensitive),
-            DatabaseProviderEnum.SqlServer => SearchSqlServer2(query, propertySelector, searchTerm, caseInsensitive, diacriticInsensitive),
-            _ => throw new NotSupportedException($"The database provider '{databaseProvider}' is not supported."),
-        };*/
-
         return query;
     }
 

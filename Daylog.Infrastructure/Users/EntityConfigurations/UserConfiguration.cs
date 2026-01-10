@@ -35,7 +35,10 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
             .HasColumnName("profile_id")
             .IsRequired();
 
-        builder.Ignore(x => x.ProfileName);
+        builder.HasOne(x => x.Profile)
+            .WithMany()
+            .HasForeignKey(x => x.ProfileId)
+            .IsRequired();
 
         /*builder.HasMany(x => x.UserDepartments)
             .WithOne(x => x.User)
