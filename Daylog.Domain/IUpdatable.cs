@@ -8,5 +8,7 @@ public interface IUpdatable
 
     Guid? UpdatedByUserId { get; }
 
+    User? UpdatedByUser { get; }
+
     void Update(User user);
 }

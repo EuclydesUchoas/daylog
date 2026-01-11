@@ -1,5 +1,4 @@
 ﻿using Daylog.Domain.UserProfiles;
-using Daylog.Shared.Core.Resources;
 
 namespace Daylog.Domain.Users;
 
@@ -23,11 +22,15 @@ public sealed class User : Entity, ICreatable, IUpdatable, ISoftDeletable
 
     public Guid? CreatedByUserId { get; private set; }
 
+    public User? CreatedByUser { get; private set; }
+
     // Updatable
 
     public DateTime UpdatedAt { get; private set; }
 
     public Guid? UpdatedByUserId { get; private set; }
+
+    public User? UpdatedByUser { get; private set; }
 
     public void Update(User user)
     {
@@ -44,6 +47,8 @@ public sealed class User : Entity, ICreatable, IUpdatable, ISoftDeletable
     public DateTime? DeletedAt { get; private set; }
 
     public Guid? DeletedByUserId { get; private set; }
+
+    public User? DeletedByUser { get; private set; }
 
     // Entity Framework
     private User() { }

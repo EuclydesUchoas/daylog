@@ -21,11 +21,14 @@ public static class UserQueryableExtensions
             ProfileName = EF.Property<string>(x.Profile, $"{nameof(UserProfile.Name)}_{culture}"),
             CreatedAt = x.CreatedAt,
             CreatedByUserId = x.CreatedByUserId,
+            CreatedByUserName = x.CreatedByUser!.Name,
             UpdatedAt = x.UpdatedAt,
             UpdatedByUserId = x.UpdatedByUserId,
+            UpdatedByUserName = x.UpdatedByUser!.Name,
             IsDeleted = x.IsDeleted,
             DeletedAt = x.DeletedAt,
-            DeletedByUserId = x.DeletedByUserId
+            DeletedByUserId = x.DeletedByUserId,
+            DeletedByUserName = x.DeletedByUser!.Name
         });
     }
 }

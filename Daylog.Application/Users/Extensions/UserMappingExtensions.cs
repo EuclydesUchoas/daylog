@@ -14,11 +14,14 @@ public static class UserMappingExtensions
             user.ProfileId,
             user.CreatedAt,
             user.CreatedByUserId,
+            user.CreatedByUser?.Name,
             user.UpdatedAt,
             user.UpdatedByUserId,
+            user.UpdatedByUser?.Name,
             user.IsDeleted,
             user.DeletedAt,
-            user.DeletedByUserId
+            user.DeletedByUserId,
+            user.DeletedByUser?.Name
         ) : null;
 
     public static IEnumerable<UserResponseDto> ToUserResponseDto(this IEnumerable<User> users)

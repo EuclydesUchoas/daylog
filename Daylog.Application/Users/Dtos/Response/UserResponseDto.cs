@@ -33,15 +33,21 @@ public sealed class UserResponseDto : IResponseDto
 
     public required Guid? CreatedByUserId { get; init; }
 
+    public required string? CreatedByUserName { get; init; }
+
     public required DateTime UpdatedAt { get; init; }
 
     public required Guid? UpdatedByUserId { get; init; }
+
+    public required string? UpdatedByUserName { get; init; }
 
     public required bool IsDeleted { get; init; }
 
     public required DateTime? DeletedAt { get; init; }
 
     public required Guid? DeletedByUserId { get; init; }
+
+    public required string? DeletedByUserName { get; init; }
 
     public UserResponseDto() { }
 
@@ -53,11 +59,14 @@ public sealed class UserResponseDto : IResponseDto
         UserProfileEnum profileId,
         DateTime createdAt,
         Guid? createdByUserId,
+        string? createdByUserName,
         DateTime updatedAt,
         Guid? updatedByUserId,
+        string? updatedByUserName,
         bool isDeleted,
         DateTime? deletedAt,
-        Guid? deletedByUserId
+        Guid? deletedByUserId,
+        string? deletedByUserName
     )
     {
         Id = id;
@@ -66,10 +75,13 @@ public sealed class UserResponseDto : IResponseDto
         ProfileId = profileId;
         CreatedAt = createdAt;
         CreatedByUserId = createdByUserId;
+        CreatedByUserName = createdByUserName;
         UpdatedAt = updatedAt;
         UpdatedByUserId = updatedByUserId;
+        UpdatedByUserName = updatedByUserName;
         IsDeleted = isDeleted;
         DeletedAt = deletedAt;
         DeletedByUserId = deletedByUserId;
+        DeletedByUserName = deletedByUserName;
     }
 }

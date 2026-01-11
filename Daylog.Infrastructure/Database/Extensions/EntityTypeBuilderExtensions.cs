@@ -17,6 +17,11 @@ internal static class EntityTypeBuilderExtensions
         builder.Property(x => x.CreatedByUserId!)
             .HasColumnName("created_by_user_id")
             .IsRequired(false);
+
+        builder.HasOne(x => x.CreatedByUser)
+            .WithMany()
+            .HasForeignKey(x => x.CreatedByUserId)
+            .IsRequired(false);
     }
 
     internal static void ConfigureUpdatableEntityProperties<TEntity>(this EntityTypeBuilder<TEntity> builder)
@@ -29,6 +34,11 @@ internal static class EntityTypeBuilderExtensions
 
         builder.Property(x => x.UpdatedByUserId!)
             .HasColumnName("updated_by_user_id")
+            .IsRequired(false);
+
+        builder.HasOne(x => x.UpdatedByUser)
+            .WithMany()
+            .HasForeignKey(x => x.UpdatedByUserId)
             .IsRequired(false);
     }
 
@@ -46,6 +56,11 @@ internal static class EntityTypeBuilderExtensions
 
         builder.Property(x => x.DeletedByUserId!)
             .HasColumnName("deleted_by_user_id")
+            .IsRequired(false);
+
+        builder.HasOne(x => x.DeletedByUser)
+            .WithMany()
+            .HasForeignKey(x => x.DeletedByUserId)
             .IsRequired(false);
 
         builder.HasQueryFilter(x => !x.IsDeleted);

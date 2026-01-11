@@ -4,7 +4,6 @@ using Daylog.Application.Users.Dtos.Request;
 using Daylog.Application.Users.Dtos.Response;
 using Daylog.Application.Users.Extensions;
 using Daylog.Application.Users.Services.Contracts;
-using Daylog.Shared.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Daylog.Application.Users.Services;
