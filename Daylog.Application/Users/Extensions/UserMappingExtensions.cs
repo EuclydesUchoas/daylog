@@ -1,4 +1,6 @@
-﻿using Daylog.Application.Users.Dtos.Request;
+﻿using Daylog.Application.Common.Dtos.Response;
+using Daylog.Application.UserProfiles.Dtos.Response;
+using Daylog.Application.Users.Dtos.Request;
 using Daylog.Application.Users.Dtos.Response;
 using Daylog.Domain.Users;
 
@@ -11,17 +13,23 @@ public static class UserMappingExtensions
             user.Id,
             user.Name,
             user.Email,
-            user.ProfileId,
-            user.CreatedAt,
-            user.CreatedByUserId,
-            user.CreatedByUser?.Name,
-            user.UpdatedAt,
-            user.UpdatedByUserId,
-            user.UpdatedByUser?.Name,
-            user.IsDeleted,
-            user.DeletedAt,
-            user.DeletedByUserId,
-            user.DeletedByUser?.Name
+            new UserProfileResponseDto(user.ProfileId),
+            new CreatedInfoResponseDto(
+                user.CreatedAt,
+                user.CreatedByUserId,
+                user.CreatedByUser?.Name
+            ),
+            new UpdatedInfoResponseDto(
+                user.UpdatedAt,
+                user.UpdatedByUserId,
+                user.UpdatedByUser?.Name
+            ),
+            new DeletedInfoResponseDto(
+                user.IsDeleted,
+                user.DeletedAt,
+                user.DeletedByUserId,
+                user.DeletedByUser?.Name
+            )
         ) : null;
 
     public static IEnumerable<UserResponseDto> ToUserResponseDto(this IEnumerable<User> users)

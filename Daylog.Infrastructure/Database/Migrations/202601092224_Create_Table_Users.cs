@@ -26,6 +26,6 @@ public sealed class _202601092224_Create_Table_Users : Migration
             .WithColumn("updated_by_user_id").AsGuid().Nullable().ForeignKey("users", "id").Indexed()
             .WithColumn("is_deleted").AsBoolean().NotNullable().WithDefaultValue(false).Indexed()
             .WithColumn("deleted_at").AsDateTime().Nullable()
-            .WithColumn("deleted_by_user_id").AsGuid().Nullable().Indexed();
+            .WithColumn("deleted_by_user_id").AsGuid().Nullable().ForeignKey("users", "id").Indexed();
     }
 }

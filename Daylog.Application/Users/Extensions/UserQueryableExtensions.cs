@@ -1,4 +1,6 @@
-﻿using Daylog.Application.Users.Dtos.Response;
+﻿using Daylog.Application.Common.Dtos.Response;
+using Daylog.Application.UserProfiles.Dtos.Response;
+using Daylog.Application.Users.Dtos.Response;
 using Daylog.Domain.UserProfiles;
 using Daylog.Domain.Users;
 using Daylog.Shared.Core.Constants;
@@ -17,18 +19,30 @@ public static class UserQueryableExtensions
             Id = x.Id,
             Name = x.Name,
             Email = x.Email,
-            ProfileId = x.ProfileId,
-            ProfileName = EF.Property<string>(x.Profile, $"{nameof(UserProfile.Name)}_{culture}"),
-            CreatedAt = x.CreatedAt,
-            CreatedByUserId = x.CreatedByUserId,
-            CreatedByUserName = x.CreatedByUser!.Name,
-            UpdatedAt = x.UpdatedAt,
-            UpdatedByUserId = x.UpdatedByUserId,
-            UpdatedByUserName = x.UpdatedByUser!.Name,
-            IsDeleted = x.IsDeleted,
-            DeletedAt = x.DeletedAt,
-            DeletedByUserId = x.DeletedByUserId,
-            DeletedByUserName = x.DeletedByUser!.Name
+            Profile = new UserProfileResponseDto
+            {
+                Id = x.Profile.Id,
+                Name = EF.Property<string>(x.Profile, $"{nameof(UserProfile.Name)}_{culture}")
+            },
+            CreatedInfo = new CreatedInfoResponseDto
+            {
+                CreatedAt = x.CreatedAt,
+                CreatedByUserId = x.CreatedByUserId,
+                CreatedByUserName = x.CreatedByUser!.Name
+            },
+            UpdatedInfo = new UpdatedInfoResponseDto
+            {
+                UpdatedAt = x.UpdatedAt,
+                UpdatedByUserId = x.UpdatedByUserId,
+                UpdatedByUserName = x.UpdatedByUser!.Name
+            },
+            DeletedInfo = new DeletedInfoResponseDto
+            {
+                IsDeleted = x.IsDeleted,
+                DeletedAt = x.DeletedAt,
+                DeletedByUserId = x.DeletedByUserId,
+                DeletedByUserName = x.DeletedByUser!.Name,
+            }
         });
     }
 }
