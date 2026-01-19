@@ -14,8 +14,6 @@ public sealed class _202601092159_Populate_Table_User_Profiles : Migration
         // No need to implement down migration for data population
     }
 
-    // MIGRATION TESTE, PORTANTO SERÁ ALTERADA EM SUA VERSÃO OFICIAL
-
     public override void Up()
     {
         var userProfiles = new UserProfileEnum[]

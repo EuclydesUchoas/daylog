@@ -10,8 +10,6 @@ public sealed class _202601092146_Create_Table_User_Profiles : Migration
         Delete.Table("user_profiles");
     }
 
-    // MIGRATION TESTE, PORTANTO SERÁ ALTERADA EM SUA VERSÃO OFICIAL
-
     public override void Up()
     {
         Create.Table("user_profiles")

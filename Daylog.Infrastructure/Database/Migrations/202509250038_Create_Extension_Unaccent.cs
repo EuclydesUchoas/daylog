@@ -17,8 +17,6 @@ public sealed class _202509250038_Create_Extension_Unaccent(
         }
     }
 
-    // MIGRATION TESTE, PORTANTO SERÁ ALTERADA EM SUA VERSÃO OFICIAL
-
     public override void Up()
     {
         if (appConfiguration.DatabaseProvider is DatabaseProviderEnum.PostgreSql)
