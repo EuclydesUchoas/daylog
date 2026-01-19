@@ -18,17 +18,17 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(x => x.Name)
             .HasColumnName("name")
-            .HasMaxLength(100)
+            .HasMaxLength(255)
             .IsRequired();
 
         builder.Property(x => x.Email)
             .HasColumnName("email")
-            .HasMaxLength(100)
+            .HasMaxLength(255)
             .IsRequired();
 
         builder.Property(x => x.Password)
             .HasColumnName("password")
-            .HasMaxLength(200)
+            .HasMaxLength(255)
             .IsRequired();
 
         builder.Property(x => x.ProfileId)

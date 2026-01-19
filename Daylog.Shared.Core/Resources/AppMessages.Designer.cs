@@ -313,24 +313,6 @@ namespace Daylog.Shared.Core.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Department id is required.
-        /// </summary>
-        public static string User_DepartmentIdIsRequired {
-            get {
-                return ResourceManager.GetString("User_DepartmentIdIsRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Departments are required.
-        /// </summary>
-        public static string User_DepartmentsAreRequired {
-            get {
-                return ResourceManager.GetString("User_DepartmentsAreRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a E-mail is invalid.
         /// </summary>
         public static string User_EmailIsInvalid {
@@ -345,6 +327,15 @@ namespace Daylog.Shared.Core.Resources {
         public static string User_EmailIsRequired {
             get {
                 return ResourceManager.GetString("User_EmailIsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a E-mail must be maximum {0} characters long.
+        /// </summary>
+        public static string User_EmailLengthTooLong {
+            get {
+                return ResourceManager.GetString("User_EmailLengthTooLong", resourceCulture);
             }
         }
         
@@ -367,11 +358,29 @@ namespace Daylog.Shared.Core.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Name must be maximum {0} characters long.
+        /// </summary>
+        public static string User_NameLengthTooLong {
+            get {
+                return ResourceManager.GetString("User_NameLengthTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Password is required.
         /// </summary>
         public static string User_PasswordIsRequired {
             get {
                 return ResourceManager.GetString("User_PasswordIsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Password must be maximum {0} characters long.
+        /// </summary>
+        public static string User_PasswordLengthTooLong {
+            get {
+                return ResourceManager.GetString("User_PasswordLengthTooLong", resourceCulture);
             }
         }
         

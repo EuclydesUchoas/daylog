@@ -14,13 +14,17 @@ public sealed class UpdateUserRequestDtoValidator : AbstractValidator<UpdateUser
 
         RuleFor(x => x.Name)
             .NotEmpty()
-            .WithMessage(AppMessages.User_NameIsRequired);
+            .WithMessage(AppMessages.User_NameIsRequired)
+            .MaximumLength(255)
+            .WithMessage(string.Format(AppMessages.User_NameLengthTooLong, 255));
 
         RuleFor(x => x.Email)
             .NotEmpty()
             .WithMessage(AppMessages.User_EmailIsRequired)
             .EmailAddress()
-            .WithMessage(AppMessages.User_EmailIsInvalid);
+            .WithMessage(AppMessages.User_EmailIsInvalid)
+            .MaximumLength(255)
+            .WithMessage(string.Format(AppMessages.User_EmailLengthTooLong, 255));
 
         RuleFor(x => x.ProfileId)
             .NotEmpty()

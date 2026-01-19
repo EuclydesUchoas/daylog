@@ -150,12 +150,6 @@
   <data name="InvalidEndpointReturnType" xml:space="preserve">
     <value>The endpoint '{0}' ({1}.{2}) returns an invalid type. Results must encapsulate Result&lt;T&gt; where T implements IResponseDto</value>
   </data>
-  <data name="User_DepartmentIdIsRequired" xml:space="preserve">
-    <value>Department id is required</value>
-  </data>
-  <data name="User_DepartmentsAreRequired" xml:space="preserve">
-    <value>Departments are required</value>
-  </data>
   <data name="User_EmailIsInvalid" xml:space="preserve">
     <value>E-mail is invalid</value>
   </data>
@@ -257,5 +251,14 @@
   </data>
   <data name="UserProfile_SuperAdmin" xml:space="preserve">
     <value>Super administrator</value>
+  </data>
+  <data name="User_NameLengthTooLong" xml:space="preserve">
+    <value>Name must be maximum {0} characters long</value>
+  </data>
+  <data name="User_PasswordLengthTooLong" xml:space="preserve">
+    <value>Password must be maximum {0} characters long</value>
+  </data>
+  <data name="User_EmailLengthTooLong" xml:space="preserve">
+    <value>E-mail must be maximum {0} characters long</value>
   </data>
 </root>
