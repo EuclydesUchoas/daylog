@@ -2,7 +2,7 @@
 
 namespace Daylog.Domain.Users;
 
-public sealed class User : Entity, ICreatable, IUpdatable, ISoftDeletable
+public sealed class User : Entity, ICreatable, IUpdatable<User>, ISoftDeletable
 {
     public Guid Id { get; private set; }
 
@@ -32,12 +32,12 @@ public sealed class User : Entity, ICreatable, IUpdatable, ISoftDeletable
 
     public User? UpdatedByUser { get; private set; }
 
-    public void Update(User user)
+    public void Update(User entity)
     {
-        Id = user.Id;
-        Name = user.Name;
-        Email = user.Email;
-        ProfileId = user.ProfileId;
+        Id = entity.Id;
+        Name = entity.Name;
+        Email = entity.Email;
+        ProfileId = entity.ProfileId;
     }
 
     // SoftDeletable

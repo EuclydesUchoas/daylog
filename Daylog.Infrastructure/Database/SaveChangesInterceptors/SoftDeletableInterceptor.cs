@@ -30,12 +30,6 @@ internal sealed class SoftDeletableInterceptor(
             entry.Property(x => x.IsDeleted).CurrentValue = true;
             entry.Property(x => x.DeletedAt).CurrentValue = actualDateTime;
             entry.Property(x => x.DeletedByUserId).CurrentValue = userId;
-
-            /*foreach (var entryNavigation in entry.Navigations)
-            {
-                entryNavigation.IsLoaded = false;
-                entryNavigation.IsModified = false;
-            }*/
         }
 
         return base.SavingChangesAsync(eventData, result, cancellationToken);

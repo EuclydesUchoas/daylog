@@ -9,6 +9,10 @@ public interface IUpdatable
     Guid? UpdatedByUserId { get; }
 
     User? UpdatedByUser { get; }
+}
 
-    void Update(User user);
+public interface IUpdatable<TEntity> : IUpdatable
+    where TEntity : Entity
+{
+    void Update(TEntity entity);
 }
