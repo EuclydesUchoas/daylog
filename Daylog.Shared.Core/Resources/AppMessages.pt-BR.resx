@@ -261,4 +261,7 @@
   <data name="User_EmailLengthTooLong" xml:space="preserve">
     <value>E-mail deve ter no máximo {0} caracteres</value>
   </data>
+  <data name="UserCompany_CompanyIdIsRequired" xml:space="preserve">
+    <value>Id da empresa é obrigatório</value>
+  </data>
 </root>

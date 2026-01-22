@@ -15,7 +15,23 @@ public sealed class UserResponseDto : IResponseDto
 
     public required string Email { get; init; }
 
-    public required UserProfileResponseDto Profile { get; init; }
+    public required UserProfileEnum UserProfileId { get; init; }
+
+    public required string UserProfileName
+    {
+        get
+        {
+            if (field is null)
+            {
+                string messageKey = $"UserProfile_{Id}";
+                field = AppMessages.ResourceManager.GetString(messageKey) ?? string.Empty;
+            }
+            return field;
+        }
+        init;
+    }
+
+    public required IEnumerable<UserCompanyResponseDto> UserCompanies { get; init; }
 
     public required CreatedInfoResponseDto CreatedInfo { get; init; }
 
@@ -30,7 +46,9 @@ public sealed class UserResponseDto : IResponseDto
         Guid id,
         string name,
         string email,
-        UserProfileResponseDto profile,
+        UserProfileEnum userProfileId,
+        string userProfileName,
+        IEnumerable<UserCompanyResponseDto> userCompanies,
         CreatedInfoResponseDto createdInfo,
         UpdatedInfoResponseDto updatedInfo,
         DeletedInfoResponseDto deletedInfo
@@ -39,7 +57,9 @@ public sealed class UserResponseDto : IResponseDto
         Id = id;
         Name = name;
         Email = email;
-        Profile = profile;
+        UserProfileId = userProfileId;
+        UserProfileName = userProfileName;
+        UserCompanies = userCompanies;
         CreatedInfo = createdInfo;
         UpdatedInfo = updatedInfo;
         DeletedInfo = deletedInfo;

@@ -12,9 +12,11 @@ public sealed class User : Entity, ICreatable, IUpdatable<User>, ISoftDeletable
 
     public string Password { get; private set; } = null!;
 
-    public UserProfileEnum ProfileId { get; private set; }
+    public UserProfileEnum UserProfileId { get; private set; }
 
-    public UserProfile Profile { get; private set; } = null!;
+    public UserProfile UserProfile { get; private set; } = null!;
+
+    public IEnumerable<UserCompany> UserCompanies { get; private set; } = [];
 
     // Creatable
 
@@ -32,14 +34,6 @@ public sealed class User : Entity, ICreatable, IUpdatable<User>, ISoftDeletable
 
     public User? UpdatedByUser { get; private set; }
 
-    public void Update(User entity)
-    {
-        Id = entity.Id;
-        Name = entity.Name;
-        Email = entity.Email;
-        ProfileId = entity.ProfileId;
-    }
-
     // SoftDeletable
 
     public bool IsDeleted { get; private set; }
@@ -53,7 +47,7 @@ public sealed class User : Entity, ICreatable, IUpdatable<User>, ISoftDeletable
     // Entity Framework
     private User() { }
 
-    public static User New(string name, string email, string password, UserProfileEnum profile)
+    public static User New(string name, string email, string password, UserProfileEnum userProfileId)
     {
         return new User
         {
@@ -61,18 +55,28 @@ public sealed class User : Entity, ICreatable, IUpdatable<User>, ISoftDeletable
             Name = name,
             Email = email,
             Password = password,
-            ProfileId = profile,
+            UserProfileId = userProfileId,
         };
     }
 
-    public static User Existing(Guid id, string name, string email, UserProfileEnum profile)
+    public static User Existing(Guid id, string name, string email, UserProfileEnum userProfileId)
     {
         return new User
         {
             Id = id,
             Name = name,
             Email = email,
-            ProfileId = profile,
+            UserProfileId = userProfileId,
         };
+    }
+
+    // Updatable
+
+    public void Update(User entity)
+    {
+        Id = entity.Id;
+        Name = entity.Name;
+        Email = entity.Email;
+        UserProfileId = entity.UserProfileId;
     }
 }

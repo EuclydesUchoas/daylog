@@ -466,6 +466,15 @@ namespace Daylog.Shared.Core.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Company id is required.
+        /// </summary>
+        public static string UserCompany_CompanyIdIsRequired {
+            get {
+                return ResourceManager.GetString("UserCompany_CompanyIdIsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Administrator.
         /// </summary>
         public static string UserProfile_Admin {

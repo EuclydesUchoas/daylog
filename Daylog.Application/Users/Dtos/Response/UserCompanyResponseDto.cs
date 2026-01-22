@@ -1,0 +1,44 @@
+﻿using Daylog.Application.Abstractions.Dtos;
+using Daylog.Application.Common.Dtos.Response;
+using System.Diagnostics.CodeAnalysis;
+
+namespace Daylog.Application.Users.Dtos.Response;
+
+public sealed class UserCompanyResponseDto : IResponseDto
+{
+    public required Guid UserId { get; init; }
+
+    public required string UserName { get; init; }
+
+    public required Guid CompanyId { get; init; }
+
+    public required string CompanyName { get; init; }
+
+    public required CreatedInfoResponseDto CreatedInfo { get; init; }
+
+    public required UpdatedInfoResponseDto UpdatedInfo { get; init; }
+
+    public required DeletedInfoResponseDto DeletedInfo { get; init; }
+
+    public UserCompanyResponseDto() { }
+
+    [SetsRequiredMembers]
+    public UserCompanyResponseDto(
+        Guid userId,
+        string userName,
+        Guid companyId,
+        string companyName,
+        CreatedInfoResponseDto createdInfo,
+        UpdatedInfoResponseDto updatedInfo,
+        DeletedInfoResponseDto deletedInfo
+        )
+    {
+        UserId = userId;
+        UserName = userName;
+        CompanyId = companyId;
+        CompanyName = companyName;
+        CreatedInfo = createdInfo;
+        UpdatedInfo = updatedInfo;
+        DeletedInfo = deletedInfo;
+    }
+}

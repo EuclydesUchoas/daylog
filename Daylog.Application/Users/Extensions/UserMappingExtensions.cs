@@ -13,7 +13,32 @@ public static class UserMappingExtensions
             user.Id,
             user.Name,
             user.Email,
-            new UserProfileResponseDto(user.ProfileId),
+            user.UserProfileId,
+            user.UserProfile?.Name!,
+            user.UserCompanies.Select(x => 
+                new UserCompanyResponseDto(
+                    x.UserId,
+                    x.User?.Name!,
+                    x.CompanyId,
+                    x.Company?.Name!,
+                    new CreatedInfoResponseDto(
+                        x.CreatedAt,
+                        x.CreatedByUserId,
+                        x.CreatedByUser?.Name
+                    ),
+                    new UpdatedInfoResponseDto(
+                        x.UpdatedAt,
+                        x.UpdatedByUserId,
+                        x.UpdatedByUser?.Name
+                    ),
+                    new DeletedInfoResponseDto(
+                        x.IsDeleted,
+                        x.DeletedAt,
+                        x.DeletedByUserId,
+                        x.DeletedByUser?.Name
+                    )
+                )
+            ),
             new CreatedInfoResponseDto(
                 user.CreatedAt,
                 user.CreatedByUserId,

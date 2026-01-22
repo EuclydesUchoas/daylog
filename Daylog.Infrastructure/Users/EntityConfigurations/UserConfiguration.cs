@@ -31,19 +31,19 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
             .HasMaxLength(255)
             .IsRequired();
 
-        builder.Property(x => x.ProfileId)
+        builder.Property(x => x.UserProfileId)
             .HasColumnName("profile_id")
             .IsRequired();
 
-        builder.HasOne(x => x.Profile)
+        builder.HasOne(x => x.UserProfile)
             .WithMany()
-            .HasForeignKey(x => x.ProfileId)
+            .HasForeignKey(x => x.UserProfileId)
             .IsRequired();
 
-        /*builder.HasMany(x => x.UserDepartments)
+        builder.HasMany(x => x.UserCompanies)
             .WithOne(x => x.User)
             .HasForeignKey(x => x.UserId)
-            .OnDelete(DeleteBehavior.Cascade);*/
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.ConfigureCreatableEntityProperties();
         builder.ConfigureUpdatableEntityProperties();

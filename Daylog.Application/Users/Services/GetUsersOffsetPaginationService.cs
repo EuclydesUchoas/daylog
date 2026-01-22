@@ -25,7 +25,7 @@ public sealed class GetUsersOffsetPaginationService(
         var queryBase = appDbContext.Users.AsNoTracking()
             .Search(x => x.Name, requestDto.Name)
             .Search(x => x.Email, requestDto.Email)
-            .Search(x => x.ProfileId, requestDto.ProfileId)
+            .Search(x => x.UserProfileId, requestDto.ProfileId)
             .SelectUserResponseDto();
 
         if (requestDto.IncludeTotalItems ?? false)

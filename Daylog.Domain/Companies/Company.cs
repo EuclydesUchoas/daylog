@@ -6,6 +6,10 @@ public sealed class Company : Entity, ICreatable, IUpdatable<Company>, ISoftDele
 {
     public Guid Id { get; private set; }
 
+    public string Name { get; private set; } = null!;
+
+    public IEnumerable<UserCompany> UserCompanies { get; private set; } = [];
+
     // Creatable
 
     public DateTime CreatedAt { get; private set; }
@@ -21,11 +25,6 @@ public sealed class Company : Entity, ICreatable, IUpdatable<Company>, ISoftDele
     public Guid? UpdatedByUserId { get; private set; }
 
     public User? UpdatedByUser { get; private set; }
-
-    public void Update(Company entity)
-    {
-        Id = entity.Id;
-    }
 
     // SoftDeletable
 
@@ -54,5 +53,12 @@ public sealed class Company : Entity, ICreatable, IUpdatable<Company>, ISoftDele
         {
             Id = id,
         };
+    }
+
+    // Updatable
+
+    public void Update(Company entity)
+    {
+        Id = entity.Id;
     }
 }

@@ -6,7 +6,7 @@ namespace Daylog.Application.Users.Validators;
 
 public sealed class CreateUserRequestDtoValidator : AbstractValidator<CreateUserRequestDto>
 {
-    public CreateUserRequestDtoValidator()
+    public CreateUserRequestDtoValidator(IValidator<CreateUserCompanyRequestDto> createUserCompanyValidator)
     {
         RuleFor(x => x.Name)
             .NotEmpty()
@@ -35,5 +35,8 @@ public sealed class CreateUserRequestDtoValidator : AbstractValidator<CreateUser
             .WithMessage(AppMessages.User_ProfileIsRequired)
             .IsInEnum()
             .WithMessage(AppMessages.User_ProfileIsInvalid);
+
+        RuleForEach(x => x.UserCompanies)
+            .SetValidator(createUserCompanyValidator);
     }
 }
