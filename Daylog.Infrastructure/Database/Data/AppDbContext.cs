@@ -1,4 +1,5 @@
 ﻿using Daylog.Application.Abstractions.Data;
+using Daylog.Domain.Companies;
 using Daylog.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -10,6 +11,9 @@ namespace Daylog.Infrastructure.Database.Data;
 public sealed class AppDbContext : DbContext, IAppDbContext
 {
     public DbSet<User> Users { get; init; }
+    public DbSet<UserCompany> UserCompanies { get; init; }
+
+    public DbSet<Company> Companies { get; init; }
 
     public AppDbContext(DbContextOptions<AppDbContext> dbContextOptions)
         : base(dbContextOptions)

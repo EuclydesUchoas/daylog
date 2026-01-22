@@ -264,4 +264,7 @@
   <data name="UserCompany_CompanyIdIsRequired" xml:space="preserve">
     <value>Company id is required</value>
   </data>
+  <data name="Company_IdNotExist" xml:space="preserve">
+    <value>Company id not exist: {0}</value>
+  </data>
 </root>

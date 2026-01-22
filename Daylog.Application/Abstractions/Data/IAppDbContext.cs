@@ -1,4 +1,5 @@
-﻿using Daylog.Domain.Users;
+﻿using Daylog.Domain.Companies;
+using Daylog.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
@@ -7,6 +8,9 @@ namespace Daylog.Application.Abstractions.Data;
 public interface IAppDbContext
 {
     DbSet<User> Users { get; }
+    DbSet<UserCompany> UserCompanies { get; }
+
+    DbSet<Company> Companies { get; }
 
     /// <inheritdoc cref="DbContext.Database"/>
     DatabaseFacade Database { get; }

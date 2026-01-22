@@ -46,6 +46,9 @@ public record ResultError
     public static ResultError Validation(IEnumerable<ValidationFailure> validationFailures)
         => new ValidationResultError(validationFailures.Select(x => new ValidationPropertyResultError(x.PropertyName, x.ErrorMessage)).ToArray());
 
+    public static ResultError Validation(IEnumerable<ValidationPropertyResultError> validationFailures)
+        => new ValidationResultError(validationFailures);
+
     public static ResultError Unauthorized(string code, string description)
         => new(code, description, ResultErrorTypeEnum.Unauthorized);
 
@@ -65,9 +68,9 @@ public record ResultError
 public sealed record ValidationResultError : ResultError
 {
     [JsonPropertyOrder(1)] // Serialize base properties first
-    public ValidationPropertyResultError[] ValidationErrors { get; }
+    public IEnumerable<ValidationPropertyResultError> ValidationErrors { get; }
 
-    public ValidationResultError(ValidationPropertyResultError[] errors)
+    public ValidationResultError(IEnumerable<ValidationPropertyResultError> errors)
         : base(ResultErrorCodes.Validation, AppMessages.OneOrMoreValidationErrorsOcurred, ResultErrorTypeEnum.Validation)
     {
         ValidationErrors = errors ?? [];

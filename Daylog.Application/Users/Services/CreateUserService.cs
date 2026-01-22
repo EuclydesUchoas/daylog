@@ -5,6 +5,7 @@ using Daylog.Application.Users.Dtos.Response;
 using Daylog.Application.Users.Extensions;
 using Daylog.Application.Users.Results;
 using Daylog.Application.Users.Services.Contracts;
+using Daylog.Shared.Data.Extensions;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,7 +30,8 @@ public sealed class CreateUserService(
         }
 
         bool emailIsInUse = await appDbContext.Users.AsNoTracking()
-            .AnyAsync(x => x.Email.ToLower() == requestDto.Email.ToLower(), cancellationToken);
+            .Search(x => x.Email, requestDto.Email)
+            .AnyAsync(cancellationToken);
 
         if (emailIsInUse)
         {

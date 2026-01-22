@@ -1,12 +1,14 @@
-﻿using Daylog.Shared.Core.Resources;
+﻿using Daylog.Application.Abstractions.Data;
 using Daylog.Application.Users.Dtos.Request;
+using Daylog.Shared.Core.Resources;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 
 namespace Daylog.Application.Users.Validators;
 
 public sealed class CreateUserRequestDtoValidator : AbstractValidator<CreateUserRequestDto>
 {
-    public CreateUserRequestDtoValidator(IValidator<CreateUserCompanyRequestDto> createUserCompanyValidator)
+    public CreateUserRequestDtoValidator(IValidator<CreateUserCompanyRequestDto> createUserCompanyValidator, IAppDbContext appDbContext)
     {
         RuleFor(x => x.Name)
             .NotEmpty()
@@ -36,7 +38,20 @@ public sealed class CreateUserRequestDtoValidator : AbstractValidator<CreateUser
             .IsInEnum()
             .WithMessage(AppMessages.User_ProfileIsInvalid);
 
+        Guid[]? validCompaniesIds = null;
+
         RuleForEach(x => x.UserCompanies)
-            .SetValidator(createUserCompanyValidator);
+            .SetValidator(createUserCompanyValidator)
+            .MustAsync(async (createUser, createUserCompany, cancellationToken) =>
+            {
+                validCompaniesIds ??= await appDbContext.Companies.AsNoTracking()
+                    .Where(x => x.UserCompanies
+                        .Select(x2 => x2.CompanyId)
+                        .Contains(x.Id))
+                    .Select(x => x.Id)
+                    .ToArrayAsync(cancellationToken);
+                return validCompaniesIds.Contains(createUserCompany.CompanyId);
+            })
+            .WithMessage((x, x2) => string.Format(AppMessages.Company_IdNotExist, x2.CompanyId));
     }
 }

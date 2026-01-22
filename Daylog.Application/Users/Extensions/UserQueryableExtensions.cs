@@ -1,5 +1,4 @@
 ﻿using Daylog.Application.Common.Dtos.Response;
-using Daylog.Application.UserProfiles.Dtos.Response;
 using Daylog.Application.Users.Dtos.Response;
 using Daylog.Domain;
 using Daylog.Domain.UserProfiles;

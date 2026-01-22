@@ -97,6 +97,15 @@ namespace Daylog.Shared.Core.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Company id not exist: {0}.
+        /// </summary>
+        public static string Company_IdNotExist {
+            get {
+                return ResourceManager.GetString("Company_IdNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Data is null.
         /// </summary>
         public static string DataIsNull {
