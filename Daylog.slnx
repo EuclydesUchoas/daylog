@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/aspire/">
+    <Project Path="Daylog.AppHost/Daylog.AppHost.csproj" />
+    <Project Path="Daylog.ServiceDefaults/Daylog.ServiceDefaults.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="Daylog.Api/Daylog.Api.csproj" />
+    <Project Path="Daylog.Application/Daylog.Application.csproj" />
+    <Project Path="Daylog.Domain/Daylog.Domain.csproj" />
+    <Project Path="Daylog.Infrastructure/Daylog.Infrastructure.csproj" />
+    <Project Path="Daylog.Shared.Core/Daylog.Shared.Core.csproj" />
+    <Project Path="Daylog.Shared.Data/Daylog.Shared.Data.csproj" />
+  </Folder>
+  <Folder Name="/tests/" />
+</Solution>
