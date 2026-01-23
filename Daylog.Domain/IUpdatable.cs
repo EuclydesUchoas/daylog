@@ -10,9 +10,3 @@ public interface IUpdatable
 
     User? UpdatedByUser { get; }
 }
-
-public interface IUpdatable<TEntity> : IUpdatable
-    where TEntity : Entity
-{
-    void Update(TEntity entity);
-}

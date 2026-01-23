@@ -2,7 +2,7 @@
 
 namespace Daylog.Domain.Companies;
 
-public sealed class Company : Entity, ICreatable, IUpdatable<Company>, ISoftDeletable
+public sealed class Company : Entity, ICreatable, IUpdatable, ISoftDeletable
 {
     public Guid Id { get; private set; }
 
@@ -26,6 +26,12 @@ public sealed class Company : Entity, ICreatable, IUpdatable<Company>, ISoftDele
 
     public User? UpdatedByUser { get; private set; }
 
+    public void Update(Company company)
+    {
+        Id = company.Id;
+        Name = company.Name;
+    }
+
     // SoftDeletable
 
     public bool IsDeleted { get; private set; }
@@ -39,26 +45,21 @@ public sealed class Company : Entity, ICreatable, IUpdatable<Company>, ISoftDele
     // Entity Framework
     private Company() { }
 
-    public static Company New()
+    public static Company New(string name)
     {
         return new Company
         {
             Id = Guid.CreateVersion7(),
+            Name = name,
         };
     }
 
-    public static Company Existing(Guid id)
+    public static Company Existing(Guid id, string name)
     {
         return new Company
         {
             Id = id,
+            Name = name,
         };
-    }
-
-    // Updatable
-
-    public void Update(Company entity)
-    {
-        Id = entity.Id;
     }
 }
