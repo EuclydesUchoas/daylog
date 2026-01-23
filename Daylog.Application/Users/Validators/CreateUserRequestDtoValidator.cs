@@ -1,15 +1,22 @@
 ﻿using Daylog.Application.Abstractions.Data;
+using Daylog.Application.Common.Extensions;
+using Daylog.Application.Common.Results;
 using Daylog.Application.Users.Dtos.Request;
 using Daylog.Shared.Core.Resources;
 using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 
 namespace Daylog.Application.Users.Validators;
 
 public sealed class CreateUserRequestDtoValidator : AbstractValidator<CreateUserRequestDto>
 {
+    private readonly IAppDbContext _appDbContext;
+
     public CreateUserRequestDtoValidator(IValidator<CreateUserCompanyRequestDto> createUserCompanyValidator, IAppDbContext appDbContext)
     {
+        _appDbContext = appDbContext;
+
         RuleFor(x => x.Name)
             .NotEmpty()
             .WithMessage(AppMessages.User_NameIsRequired)
@@ -38,20 +45,31 @@ public sealed class CreateUserRequestDtoValidator : AbstractValidator<CreateUser
             .IsInEnum()
             .WithMessage(AppMessages.User_ProfileIsInvalid);
 
-        Guid[]? validCompaniesIds = null;
-
         RuleForEach(x => x.UserCompanies)
-            .SetValidator(createUserCompanyValidator)
-            .MustAsync(async (createUser, createUserCompany, cancellationToken) =>
-            {
-                validCompaniesIds ??= await appDbContext.Companies.AsNoTracking()
-                    .Where(x => x.UserCompanies
-                        .Select(x2 => x2.CompanyId)
-                        .Contains(x.Id))
-                    .Select(x => x.Id)
-                    .ToArrayAsync(cancellationToken);
-                return validCompaniesIds.Contains(createUserCompany.CompanyId);
-            })
-            .WithMessage((x, x2) => string.Format(AppMessages.Company_IdNotExist, x2.CompanyId));
+            .SetValidator(createUserCompanyValidator);
+    }
+
+    public override ValidationResult Validate(ValidationContext<CreateUserRequestDto> context)
+    {
+        context.AddExistingCompaniesIdsAsync(GetCompaniesIds(context), _appDbContext).GetAwaiter().GetResult();
+        
+        return base.Validate(context);
+    }
+
+    public override async Task<ValidationResult> ValidateAsync(ValidationContext<CreateUserRequestDto> context, CancellationToken cancellation = default)
+    {
+        await context.AddExistingCompaniesIdsAsync(GetCompaniesIds(context), _appDbContext, cancellation);
+
+        return await base.ValidateAsync(context, cancellation);
+    }
+
+    private static HashSet<Guid> GetCompaniesIds(ValidationContext<CreateUserRequestDto> context)
+    {
+        var createUser = context.InstanceToValidate;
+
+        return createUser.UserCompanies
+            .Select(x => x.CompanyId)
+            .Where(x => x != Guid.Empty)
+            .ToHashSet();
     }
 }

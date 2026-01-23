@@ -32,7 +32,7 @@ public sealed class CreateUserService(
         bool emailIsInUse = await appDbContext.Users.AsNoTracking()
             .Search(x => x.Email, requestDto.Email)
             .AnyAsync(cancellationToken);
-
+        
         if (emailIsInUse)
         {
             return Result.Failure<UserResponseDto>(UserResultErrors.EmailNotUnique);

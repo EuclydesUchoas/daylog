@@ -12,7 +12,7 @@ public sealed class UserProfileResponseDto
     {
         get
         {
-            if (field is null)
+            if (string.IsNullOrEmpty(field))
             {
                 string messageKey = $"UserProfile_{Id}";
                 field = AppMessages.ResourceManager.GetString(messageKey) ?? string.Empty;
