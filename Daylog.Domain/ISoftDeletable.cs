@@ -2,7 +2,7 @@
 
 namespace Daylog.Domain;
 
-public interface ISoftDeletable
+public interface ISoftDeletable : IDeletable
 {
     bool IsDeleted { get; }
 

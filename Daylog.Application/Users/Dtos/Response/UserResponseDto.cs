@@ -14,15 +14,15 @@ public sealed class UserResponseDto : IResponseDto
 
     public required string Email { get; init; }
 
-    public required UserProfileEnum UserProfileId { get; init; }
+    public required UserProfileEnum ProfileId { get; init; }
 
-    public required string UserProfileName
+    public required string ProfileName
     {
         get
         {
             if (string.IsNullOrEmpty(field))
             {
-                string messageKey = $"UserProfile_{Id}";
+                string messageKey = $"UserProfile_{ProfileId}";
                 field = AppMessages.ResourceManager.GetString(messageKey) ?? string.Empty;
             }
             return field;
@@ -30,7 +30,7 @@ public sealed class UserResponseDto : IResponseDto
         init;
     }
 
-    public required IEnumerable<UserCompanyResponseDto> UserCompanies { get; init; }
+    public required IEnumerable<UserCompanyResponseDto> Companies { get; init; }
 
     public required CreatedInfoResponseDto CreatedInfo { get; init; }
 
@@ -45,9 +45,9 @@ public sealed class UserResponseDto : IResponseDto
         Guid id,
         string name,
         string email,
-        UserProfileEnum userProfileId,
-        string userProfileName,
-        IEnumerable<UserCompanyResponseDto> userCompanies,
+        UserProfileEnum profileId,
+        string profileName,
+        IEnumerable<UserCompanyResponseDto> companies,
         CreatedInfoResponseDto createdInfo,
         UpdatedInfoResponseDto updatedInfo,
         DeletedInfoResponseDto deletedInfo
@@ -56,9 +56,9 @@ public sealed class UserResponseDto : IResponseDto
         Id = id;
         Name = name;
         Email = email;
-        UserProfileId = userProfileId;
-        UserProfileName = userProfileName;
-        UserCompanies = userCompanies;
+        ProfileId = profileId;
+        ProfileName = profileName;
+        Companies = companies;
         CreatedInfo = createdInfo;
         UpdatedInfo = updatedInfo;
         DeletedInfo = deletedInfo;

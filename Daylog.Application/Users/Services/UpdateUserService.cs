@@ -5,6 +5,7 @@ using Daylog.Application.Users.Dtos.Response;
 using Daylog.Application.Users.Extensions;
 using Daylog.Application.Users.Results;
 using Daylog.Application.Users.Services.Contracts;
+using Daylog.Shared.Data.Extensions;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,7 +30,9 @@ public sealed class UpdateUserService(
         }
 
         bool emailIsInUse = await appDbContext.Users.AsNoTracking()
-            .AnyAsync(x => x.Email.Trim().ToLower() == requestDto.Email.Trim().ToLower(), cancellationToken);
+            .Where(x => x.Id != requestDto.Id)
+            .Search(x => x.Email, requestDto.Email)
+            .AnyAsync(cancellationToken);
 
         if (emailIsInUse)
         {
@@ -40,6 +43,8 @@ public sealed class UpdateUserService(
         ArgumentNullException.ThrowIfNull(user, nameof(user));
 
         var userDb = await appDbContext.Users // Change Tracking is required for updates
+            .Include(x => x.Companies)
+            .ThenInclude(x => x.Company)
             .FirstOrDefaultAsync(x => x.Id == user.Id, cancellationToken);
             //?? throw new KeyNotFoundException($"User with ID {user.Id} not found.");
 

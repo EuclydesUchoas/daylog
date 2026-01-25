@@ -12,9 +12,9 @@ public static class UserMappingExtensions
             user.Id,
             user.Name,
             user.Email,
-            user.UserProfileId,
-            user.UserProfile?.Name!,
-            user.UserCompanies.Select(x => 
+            user.ProfileId,
+            user.Profile?.Name!,
+            user.Companies.Select(x => 
                 new UserCompanyResponseDto(
                     x.UserId,
                     x.User?.Name!,
@@ -29,15 +29,9 @@ public static class UserMappingExtensions
                         x.UpdatedAt,
                         x.UpdatedByUserId,
                         x.UpdatedByUser?.Name
-                    ),
-                    new DeletedInfoResponseDto(
-                        x.IsDeleted,
-                        x.DeletedAt,
-                        x.DeletedByUserId,
-                        x.DeletedByUser?.Name
                     )
                 )
-            ),
+            ).ToList(),
             new CreatedInfoResponseDto(
                 user.CreatedAt,
                 user.CreatedByUserId,

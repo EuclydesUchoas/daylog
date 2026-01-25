@@ -22,6 +22,8 @@ internal static class EntityTypeBuilderExtensions
             .WithMany()
             .HasForeignKey(x => x.CreatedByUserId)
             .IsRequired(false);
+
+        builder.HasIndex(x => x.CreatedByUserId);
     }
 
     internal static void ConfigureUpdatableEntityProperties<TEntity>(this EntityTypeBuilder<TEntity> builder)
@@ -40,6 +42,8 @@ internal static class EntityTypeBuilderExtensions
             .WithMany()
             .HasForeignKey(x => x.UpdatedByUserId)
             .IsRequired(false);
+
+        builder.HasIndex(x => x.UpdatedByUserId);
     }
 
     internal static void ConfigureSoftDeletableEntityProperties<TEntity>(this EntityTypeBuilder<TEntity> builder)
@@ -62,6 +66,9 @@ internal static class EntityTypeBuilderExtensions
             .WithMany()
             .HasForeignKey(x => x.DeletedByUserId)
             .IsRequired(false);
+
+        builder.HasIndex(x => x.IsDeleted);
+        builder.HasIndex(x => x.DeletedByUserId);
 
         builder.HasQueryFilter(x => !x.IsDeleted);
     }

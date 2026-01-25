@@ -21,7 +21,7 @@ internal sealed class CompanyConfiguration : IEntityTypeConfiguration<Company>
             .HasMaxLength(255)
             .IsRequired();
 
-        builder.HasMany(x => x.UserCompanies)
+        builder.HasMany(x => x.Users)
             .WithOne(x => x.Company)
             .HasForeignKey(x => x.CompanyId)
             .OnDelete(DeleteBehavior.Cascade);

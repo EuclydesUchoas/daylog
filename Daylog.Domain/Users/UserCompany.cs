@@ -2,7 +2,7 @@
 
 namespace Daylog.Domain.Users;
 
-public sealed class UserCompany : Entity, ICreatable, IUpdatable, ISoftDeletable
+public sealed class UserCompany : Entity, ICreatable, IUpdatable, IDeletable
 {
     public Guid UserId { get; private set; }
 
@@ -27,14 +27,4 @@ public sealed class UserCompany : Entity, ICreatable, IUpdatable, ISoftDeletable
     public Guid? UpdatedByUserId { get; private set; }
 
     public User? UpdatedByUser { get; private set; }
-
-    // SoftDeletable
-
-    public bool IsDeleted { get; private set; }
-
-    public DateTime? DeletedAt { get; private set; }
-
-    public Guid? DeletedByUserId { get; private set; }
-
-    public User? DeletedByUser { get; private set; }
 }

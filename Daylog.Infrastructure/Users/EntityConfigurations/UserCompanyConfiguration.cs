@@ -21,17 +21,18 @@ internal sealed class UserCompanyConfiguration : IEntityTypeConfiguration<UserCo
             .IsRequired();
 
         builder.HasOne(x => x.User)
-            .WithMany(x => x.UserCompanies)
+            .WithMany(x => x.Companies)
             .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(x => x.Company)
-            .WithMany(x => x.UserCompanies)
+            .WithMany(x => x.Users)
             .HasForeignKey(x => x.CompanyId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        builder.HasQueryFilter(x => !x.User.IsDeleted);
+
         builder.ConfigureCreatableEntityProperties();
         builder.ConfigureUpdatableEntityProperties();
-        builder.ConfigureSoftDeletableEntityProperties();
     }
 }

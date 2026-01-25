@@ -8,7 +8,7 @@ public sealed class Company : Entity, ICreatable, IUpdatable, ISoftDeletable
 
     public string Name { get; private set; } = null!;
 
-    public IEnumerable<UserCompany> UserCompanies { get; private set; } = [];
+    public ICollection<UserCompany> Users { get; private set; } = [];
 
     // Creatable
 

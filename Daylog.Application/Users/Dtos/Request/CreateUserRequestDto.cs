@@ -8,5 +8,5 @@ public sealed record CreateUserRequestDto(
     string Email,
     string Password,
     UserProfileEnum ProfileId,
-    IEnumerable<CreateUserCompanyRequestDto> UserCompanies
+    IEnumerable<CreateUserCompanyRequestDto> Companies
     ) : IRequestDto;

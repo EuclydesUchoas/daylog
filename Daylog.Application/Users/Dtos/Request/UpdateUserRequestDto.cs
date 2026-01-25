@@ -8,5 +8,6 @@ public sealed record UpdateUserRequestDto(
     [property: JsonIgnore] Guid Id, // Id will be set from the route parameter, not from the body
     string Name,
     string Email,
-    UserProfileEnum ProfileId
+    UserProfileEnum ProfileId,
+    IEnumerable<CreateUserCompanyRequestDto> Companies
     ) : IRequestDto;

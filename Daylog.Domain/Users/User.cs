@@ -12,11 +12,11 @@ public sealed class User : Entity, ICreatable, IUpdatable, ISoftDeletable
 
     public string Password { get; private set; } = null!;
 
-    public UserProfileEnum UserProfileId { get; private set; }
+    public UserProfileEnum ProfileId { get; private set; }
 
-    public UserProfile UserProfile { get; private set; } = null!;
+    public UserProfile Profile { get; private set; } = null!;
 
-    public IEnumerable<UserCompany> UserCompanies { get; private set; } = [];
+    public ICollection<UserCompany> Companies { get; private set; } = [];
 
     // Creatable
 
@@ -39,7 +39,7 @@ public sealed class User : Entity, ICreatable, IUpdatable, ISoftDeletable
         Id = user.Id;
         Name = user.Name;
         Email = user.Email;
-        UserProfileId = user.UserProfileId;
+        ProfileId = user.ProfileId;
     }
 
     // SoftDeletable
@@ -55,7 +55,7 @@ public sealed class User : Entity, ICreatable, IUpdatable, ISoftDeletable
     // Entity Framework
     private User() { }
 
-    public static User New(string name, string email, string password, UserProfileEnum userProfileId)
+    public static User New(string name, string email, string password, UserProfileEnum profileId)
     {
         return new User
         {
@@ -63,18 +63,18 @@ public sealed class User : Entity, ICreatable, IUpdatable, ISoftDeletable
             Name = name,
             Email = email,
             Password = password,
-            UserProfileId = userProfileId,
+            ProfileId = profileId,
         };
     }
 
-    public static User Existing(Guid id, string name, string email, UserProfileEnum userProfileId)
+    public static User Existing(Guid id, string name, string email, UserProfileEnum profileId)
     {
         return new User
         {
             Id = id,
             Name = name,
             Email = email,
-            UserProfileId = userProfileId,
+            ProfileId = profileId,
         };
     }
 }

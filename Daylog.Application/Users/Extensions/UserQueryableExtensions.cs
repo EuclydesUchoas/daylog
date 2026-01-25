@@ -20,9 +20,9 @@ public static class UserQueryableExtensions
             Id = x.Id,
             Name = x.Name,
             Email = x.Email,
-            UserProfileId = x.UserProfileId,
-            UserProfileName = EF.Property<string>(x.UserProfile, $"{nameof(UserProfile.Name)}_{culture}"),
-            UserCompanies = x.UserCompanies.Select(x2 => new UserCompanyResponseDto
+            ProfileId = x.ProfileId,
+            ProfileName = EF.Property<string>(x.Profile, $"{nameof(UserProfile.Name)}_{culture}"),
+            Companies = x.Companies.Select(x2 => new UserCompanyResponseDto
             {
                 UserId = x2.UserId,
                 UserName = x2.User.Name,
@@ -39,13 +39,6 @@ public static class UserQueryableExtensions
                     UpdatedAt = x2.UpdatedAt,
                     UpdatedByUserId = x2.UpdatedByUserId,
                     UpdatedByUserName = x2.UpdatedByUser!.Name
-                },
-                DeletedInfo = new DeletedInfoResponseDto
-                {
-                    IsDeleted = x2.IsDeleted,
-                    DeletedAt = x2.DeletedAt,
-                    DeletedByUserId = x2.DeletedByUserId,
-                    DeletedByUserName = x2.DeletedByUser!.Name,
                 }
             }),
             CreatedInfo = new CreatedInfoResponseDto
@@ -69,15 +62,4 @@ public static class UserQueryableExtensions
             }
         });
     }
-}
-
-public static class AuditExpressions
-{
-    public static Expression<Func<ICreatable, CreatedInfoResponseDto>> CreatedInfo =
-        x => new CreatedInfoResponseDto
-        {
-            CreatedAt = x.CreatedAt,
-            CreatedByUserId = x.CreatedByUserId,
-            CreatedByUserName = x.CreatedByUser!.Name
-        };
 }

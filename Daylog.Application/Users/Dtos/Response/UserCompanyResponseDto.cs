@@ -18,8 +18,6 @@ public sealed class UserCompanyResponseDto : IResponseDto
 
     public required UpdatedInfoResponseDto UpdatedInfo { get; init; }
 
-    public required DeletedInfoResponseDto DeletedInfo { get; init; }
-
     public UserCompanyResponseDto() { }
 
     [SetsRequiredMembers]
@@ -29,8 +27,7 @@ public sealed class UserCompanyResponseDto : IResponseDto
         Guid companyId,
         string companyName,
         CreatedInfoResponseDto createdInfo,
-        UpdatedInfoResponseDto updatedInfo,
-        DeletedInfoResponseDto deletedInfo
+        UpdatedInfoResponseDto updatedInfo
         )
     {
         UserId = userId;
@@ -39,6 +36,5 @@ public sealed class UserCompanyResponseDto : IResponseDto
         CompanyName = companyName;
         CreatedInfo = createdInfo;
         UpdatedInfo = updatedInfo;
-        DeletedInfo = deletedInfo;
     }
 }

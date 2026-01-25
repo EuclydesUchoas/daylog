@@ -27,6 +27,11 @@ internal sealed class OperationValidationInterceptor : SaveChangesInterceptor
             {
                 throw new InvalidOperationException($"Entity '{entry.Entity.GetType().Name}' must implement IUpdatable interface to be modified.");
             }
+
+            if (entry.State is EntityState.Modified && entry.Entity is not IDeletable)
+            {
+                throw new InvalidOperationException($"Entity '{entry.Entity.GetType().Name}' must implement IDeletable interface to be deleted.");
+            }
         }
 
         return base.SavingChangesAsync(eventData, result, cancellationToken);

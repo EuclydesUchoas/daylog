@@ -45,7 +45,7 @@ public sealed class CreateUserRequestDtoValidator : AbstractValidator<CreateUser
             .IsInEnum()
             .WithMessage(AppMessages.User_ProfileIsInvalid);
 
-        RuleForEach(x => x.UserCompanies)
+        RuleForEach(x => x.Companies)
             .SetValidator(createUserCompanyValidator);
     }
 
@@ -67,7 +67,7 @@ public sealed class CreateUserRequestDtoValidator : AbstractValidator<CreateUser
     {
         var createUser = context.InstanceToValidate;
 
-        return createUser.UserCompanies
+        return createUser.Companies
             .Select(x => x.CompanyId)
             .Where(x => x != Guid.Empty)
             .ToHashSet();
