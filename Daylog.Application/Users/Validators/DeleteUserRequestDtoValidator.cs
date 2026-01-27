@@ -10,6 +10,6 @@ public sealed class DeleteUserRequestDtoValidator : AbstractValidator<DeleteUser
     {
         RuleFor(x => x.Id)
             .NotEmpty()
-            .WithMessage(AppMessages.User_IdIsRequired);
+            .WithMessage(AppMessages.User_UserIsRequired);
     }
 }

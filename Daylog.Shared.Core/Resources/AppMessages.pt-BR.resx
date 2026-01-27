@@ -156,8 +156,8 @@
   <data name="User_EmailIsRequired" xml:space="preserve">
     <value>E-mail é obrigatório</value>
   </data>
-  <data name="User_IdIsRequired" xml:space="preserve">
-    <value>Id é obrigatório</value>
+  <data name="User_UserIsRequired" xml:space="preserve">
+    <value>User é obrigatório</value>
   </data>
   <data name="User_NameIsRequired" xml:space="preserve">
     <value>Nome é obrigatório</value>
@@ -261,10 +261,10 @@
   <data name="User_EmailLengthTooLong" xml:space="preserve">
     <value>E-mail deve ter no máximo {0} caracteres</value>
   </data>
-  <data name="UserCompany_CompanyIdIsRequired" xml:space="preserve">
-    <value>Id da empresa é obrigatório</value>
+  <data name="UserCompany_CompanyIsRequired" xml:space="preserve">
+    <value>Empresa é obrigatório</value>
   </data>
-  <data name="Company_IdNotExist" xml:space="preserve">
-    <value>Id da empresa não existe: {0}</value>
+  <data name="Company_CompanyNotExists" xml:space="preserve">
+    <value>Empresa não existe: {0}</value>
   </data>
 </root>

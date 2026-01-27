@@ -13,8 +13,8 @@ public sealed class CreateUserCompanyRequestDtoValidator : AbstractValidator<Cre
     {
         RuleFor(x => x.CompanyId)
             .NotEmpty()
-            .WithMessage(AppMessages.UserCompany_CompanyIdIsRequired)
+            .WithMessage(AppMessages.UserCompany_CompanyIsRequired)
             .ExistsCompanyId(appDbContext)
-            .WithMessage(x => string.Format(AppMessages.Company_IdNotExist, x.CompanyId));
+            .WithMessage(x => string.Format(AppMessages.Company_CompanyNotExists, x.CompanyId));
     }
 }

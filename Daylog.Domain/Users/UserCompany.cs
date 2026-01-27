@@ -27,4 +27,24 @@ public sealed class UserCompany : Entity, ICreatable, IUpdatable, IDeletable
     public Guid? UpdatedByUserId { get; private set; }
 
     public User? UpdatedByUser { get; private set; }
+
+    // Entity Framework
+    private UserCompany() { }
+
+    public static UserCompany New(Guid companyId)
+    {
+        return new UserCompany
+        {
+            CompanyId = companyId,
+        };
+    }
+
+    public static UserCompany Existing(Guid userId, Guid companyId)
+    {
+        return new UserCompany
+        {
+            UserId = userId,
+            CompanyId = companyId,
+        };
+    }
 }

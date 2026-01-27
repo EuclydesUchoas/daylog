@@ -97,11 +97,11 @@ namespace Daylog.Shared.Core.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Company id not exist: {0}.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Company not exists: {0}.
         /// </summary>
-        public static string Company_IdNotExist {
+        public static string Company_CompanyNotExists {
             get {
-                return ResourceManager.GetString("Company_IdNotExist", resourceCulture);
+                return ResourceManager.GetString("Company_CompanyNotExists", resourceCulture);
             }
         }
         
@@ -349,15 +349,6 @@ namespace Daylog.Shared.Core.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Id is required.
-        /// </summary>
-        public static string User_IdIsRequired {
-            get {
-                return ResourceManager.GetString("User_IdIsRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Name is required.
         /// </summary>
         public static string User_NameIsRequired {
@@ -439,6 +430,15 @@ namespace Daylog.Shared.Core.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a User is required.
+        /// </summary>
+        public static string User_UserIsRequired {
+            get {
+                return ResourceManager.GetString("User_UserIsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a User not found.
         /// </summary>
         public static string User_UserNotFound {
@@ -475,11 +475,11 @@ namespace Daylog.Shared.Core.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Company id is required.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Company is required.
         /// </summary>
-        public static string UserCompany_CompanyIdIsRequired {
+        public static string UserCompany_CompanyIsRequired {
             get {
-                return ResourceManager.GetString("UserCompany_CompanyIdIsRequired", resourceCulture);
+                return ResourceManager.GetString("UserCompany_CompanyIsRequired", resourceCulture);
             }
         }
         

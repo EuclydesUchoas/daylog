@@ -1,4 +1,5 @@
 ﻿using Daylog.Application.Common.Dtos.Response;
+using Daylog.Application.Common.Extensions;
 using Daylog.Application.Users.Dtos.Request;
 using Daylog.Application.Users.Dtos.Response;
 using Daylog.Domain.Users;
@@ -20,34 +21,13 @@ public static class UserMappingExtensions
                     x.User?.Name!,
                     x.CompanyId,
                     x.Company?.Name!,
-                    new CreatedInfoResponseDto(
-                        x.CreatedAt,
-                        x.CreatedByUserId,
-                        x.CreatedByUser?.Name
-                    ),
-                    new UpdatedInfoResponseDto(
-                        x.UpdatedAt,
-                        x.UpdatedByUserId,
-                        x.UpdatedByUser?.Name
-                    )
+                    x.ToCreatedInfoResponseDto()!,
+                    x.ToUpdatedInfoResponseDto()!
                 )
             ).ToList(),
-            new CreatedInfoResponseDto(
-                user.CreatedAt,
-                user.CreatedByUserId,
-                user.CreatedByUser?.Name
-            ),
-            new UpdatedInfoResponseDto(
-                user.UpdatedAt,
-                user.UpdatedByUserId,
-                user.UpdatedByUser?.Name
-            ),
-            new DeletedInfoResponseDto(
-                user.IsDeleted,
-                user.DeletedAt,
-                user.DeletedByUserId,
-                user.DeletedByUser?.Name
-            )
+            user.ToCreatedInfoResponseDto()!,
+            user.ToUpdatedInfoResponseDto()!,
+            user.ToDeletedInfoResponseDto()!
         ) : null;
 
     public static IEnumerable<UserResponseDto> ToUserResponseDto(this IEnumerable<User> users)
@@ -58,7 +38,13 @@ public static class UserMappingExtensions
             createUserRequestDto.Name,
             createUserRequestDto.Email,
             createUserRequestDto.Password,
-            createUserRequestDto.ProfileId
+            createUserRequestDto.ProfileId,
+            createUserRequestDto.Companies.Select(x => x.ToUserCompany()!).ToList()
+        ) : null;
+
+    public static UserCompany? ToUserCompany(this CreateUserCompanyRequestDto? createUserCompanyRequestDto)
+        => createUserCompanyRequestDto is not null ? UserCompany.New(
+            createUserCompanyRequestDto.CompanyId
         ) : null;
 
     public static User? ToUser(this UpdateUserRequestDto? updateUserRequestDto)
@@ -66,6 +52,7 @@ public static class UserMappingExtensions
             updateUserRequestDto.Id,
             updateUserRequestDto.Name,
             updateUserRequestDto.Email,
-            updateUserRequestDto.ProfileId
+            updateUserRequestDto.ProfileId,
+            updateUserRequestDto.Companies.Select(x => x.ToUserCompany()!).ToList()
         ) : null;
 }
