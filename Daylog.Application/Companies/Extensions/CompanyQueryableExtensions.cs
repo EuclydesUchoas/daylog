@@ -17,8 +17,6 @@ public static class CompanyQueryableExtensions
             {
                 UserId = x2.UserId,
                 UserName = x2.User.Name,
-                CompanyId = x2.CompanyId,
-                CompanyName = x2.Company.Name,
                 CreatedInfo = new CreatedInfoResponseDto
                 {
                     CreatedAt = x2.CreatedAt,

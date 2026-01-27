@@ -48,8 +48,6 @@ public static class UserMappingExtensions
 
     public static UserCompanyResponseDto? ToUserCompanyResponseDto(this UserCompany? userCompany)
         => userCompany is not null ? new UserCompanyResponseDto(
-            userCompany.UserId,
-            userCompany.User?.Name!,
             userCompany.CompanyId,
             userCompany.Company?.Name!,
             userCompany.ToCreatedInfoResponseDto()!,

@@ -34,8 +34,6 @@ public static class CompanyMappingExtensions
 
     public static CompanyUserResponseDto? ToCompanyUserResponseDto(this UserCompany? userCompany)
         => userCompany is not null ? new CompanyUserResponseDto(
-            userCompany.CompanyId,
-            userCompany.Company?.Name!,
             userCompany.UserId,
             userCompany.User?.Name!,
             userCompany.ToCreatedInfoResponseDto()!,

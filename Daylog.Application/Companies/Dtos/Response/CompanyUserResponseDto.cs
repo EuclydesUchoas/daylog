@@ -6,10 +6,6 @@ namespace Daylog.Application.Companies.Dtos.Response;
 
 public sealed class CompanyUserResponseDto : IResponseDto
 {
-    public required Guid CompanyId { get; init; }
-
-    public required string CompanyName { get; init; }
-
     public required Guid UserId { get; init; }
 
     public required string UserName { get; init; }
@@ -22,8 +18,6 @@ public sealed class CompanyUserResponseDto : IResponseDto
 
     [SetsRequiredMembers]
     public CompanyUserResponseDto(
-        Guid companyId,
-        string companyName,
         Guid userId,
         string userName,
         CreatedInfoResponseDto createdInfo,
@@ -32,8 +26,6 @@ public sealed class CompanyUserResponseDto : IResponseDto
     {
         UserId = userId;
         UserName = userName;
-        CompanyId = companyId;
-        CompanyName = companyName;
         CreatedInfo = createdInfo;
         UpdatedInfo = updatedInfo;
     }

@@ -22,8 +22,6 @@ public static class UserQueryableExtensions
             ProfileName = EF.Property<string>(x.Profile, $"{nameof(UserProfile.Name)}_{culture}"),
             Companies = x.Companies.Select(x2 => new UserCompanyResponseDto
             {
-                UserId = x2.UserId,
-                UserName = x2.User.Name,
                 CompanyId = x2.CompanyId,
                 CompanyName = x2.Company.Name,
                 CreatedInfo = new CreatedInfoResponseDto
