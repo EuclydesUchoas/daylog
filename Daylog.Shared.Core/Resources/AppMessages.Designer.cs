@@ -106,6 +106,33 @@ namespace Daylog.Shared.Core.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Name is required.
+        /// </summary>
+        public static string Company_NameIsRequired {
+            get {
+                return ResourceManager.GetString("Company_NameIsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Name must be maximum {0} characters long.
+        /// </summary>
+        public static string Company_NameLengthTooLong {
+            get {
+                return ResourceManager.GetString("Company_NameLengthTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a User is required.
+        /// </summary>
+        public static string CompanyUser_UserIsRequired {
+            get {
+                return ResourceManager.GetString("CompanyUser_UserIsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Data is null.
         /// </summary>
         public static string DataIsNull {
@@ -129,6 +156,24 @@ namespace Daylog.Shared.Core.Resources {
         public static string Documentation_InfoTitle {
             get {
                 return ResourceManager.GetString("Documentation_InfoTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Create a new company.
+        /// </summary>
+        public static string Endpoint_CreateCompanyDescription {
+            get {
+                return ResourceManager.GetString("Endpoint_CreateCompanyDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Create Company.
+        /// </summary>
+        public static string Endpoint_CreateCompanySummary {
+            get {
+                return ResourceManager.GetString("Endpoint_CreateCompanySummary", resourceCulture);
             }
         }
         
@@ -165,6 +210,24 @@ namespace Daylog.Shared.Core.Resources {
         public static string Endpoint_DeleteUserSummary {
             get {
                 return ResourceManager.GetString("Endpoint_DeleteUserSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Get a list of all companies.
+        /// </summary>
+        public static string Endpoint_GetCompaniesDescription {
+            get {
+                return ResourceManager.GetString("Endpoint_GetCompaniesDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Get Companies.
+        /// </summary>
+        public static string Endpoint_GetCompaniesSummary {
+            get {
+                return ResourceManager.GetString("Endpoint_GetCompaniesSummary", resourceCulture);
             }
         }
         
@@ -435,6 +498,15 @@ namespace Daylog.Shared.Core.Resources {
         public static string User_UserIsRequired {
             get {
                 return ResourceManager.GetString("User_UserIsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a User not exists: {0}.
+        /// </summary>
+        public static string User_UserNotExists {
+            get {
+                return ResourceManager.GetString("User_UserNotExists", resourceCulture);
             }
         }
         

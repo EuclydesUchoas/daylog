@@ -1,26 +1,19 @@
 ﻿using Daylog.Application.Common.Dtos.Response;
-using Daylog.Application.Users.Dtos.Response;
-using Daylog.Domain.UserProfiles;
-using Daylog.Domain.Users;
-using Daylog.Shared.Core.Constants;
+using Daylog.Application.Companies.Dtos.Response;
+using Daylog.Domain.Companies;
 using Microsoft.EntityFrameworkCore;
 
-namespace Daylog.Application.Users.Extensions;
+namespace Daylog.Application.Companies.Extensions;
 
-public static class UserQueryableExtensions
+public static class CompanyQueryableExtensions
 {
-    public static IQueryable<UserResponseDto> SelectUserResponseDto(this IQueryable<User> users)
+    public static IQueryable<CompanyResponseDto> SelectCompanyResponseDto(this IQueryable<Company> companies)
     {
-        string culture = Cultures.CurrentCultureSnakeCase;
-
-        return users.Select(x => new UserResponseDto
+        return companies.Select(x => new CompanyResponseDto
         {
             Id = x.Id,
             Name = x.Name,
-            Email = x.Email,
-            ProfileId = x.ProfileId,
-            ProfileName = EF.Property<string>(x.Profile, $"{nameof(UserProfile.Name)}_{culture}"),
-            Companies = x.Companies.Select(x2 => new UserCompanyResponseDto
+            Users = x.Users.Select(x2 => new CompanyUserResponseDto
             {
                 UserId = x2.UserId,
                 UserName = x2.User.Name,

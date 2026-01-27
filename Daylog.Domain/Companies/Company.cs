@@ -45,21 +45,23 @@ public sealed class Company : Entity, ICreatable, IUpdatable, ISoftDeletable
     // Entity Framework
     private Company() { }
 
-    public static Company New(string name)
+    public static Company New(string name, ICollection<UserCompany> users)
     {
         return new Company
         {
             Id = Guid.CreateVersion7(),
             Name = name,
+            Users = users,
         };
     }
 
-    public static Company Existing(Guid id, string name)
+    public static Company Existing(Guid id, string name, ICollection<UserCompany> users)
     {
         return new Company
         {
             Id = id,
             Name = name,
+            Users = users,
         };
     }
 }

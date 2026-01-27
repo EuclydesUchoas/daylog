@@ -31,7 +31,15 @@ public sealed class UserCompany : Entity, ICreatable, IUpdatable, IDeletable
     // Entity Framework
     private UserCompany() { }
 
-    public static UserCompany New(Guid companyId)
+    public static UserCompany NewByUserId(Guid userId)
+    {
+        return new UserCompany
+        {
+            UserId = userId,
+        };
+    }
+
+    public static UserCompany NewByCompanyId(Guid companyId)
     {
         return new UserCompany
         {

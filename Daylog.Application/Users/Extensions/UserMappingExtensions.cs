@@ -1,5 +1,4 @@
-﻿using Daylog.Application.Common.Dtos.Response;
-using Daylog.Application.Common.Extensions;
+﻿using Daylog.Application.Common.Extensions;
 using Daylog.Application.Users.Dtos.Request;
 using Daylog.Application.Users.Dtos.Response;
 using Daylog.Domain.Users;
@@ -15,16 +14,7 @@ public static class UserMappingExtensions
             user.Email,
             user.ProfileId,
             user.Profile?.Name!,
-            user.Companies.Select(x => 
-                new UserCompanyResponseDto(
-                    x.UserId,
-                    x.User?.Name!,
-                    x.CompanyId,
-                    x.Company?.Name!,
-                    x.ToCreatedInfoResponseDto()!,
-                    x.ToUpdatedInfoResponseDto()!
-                )
-            ).ToList(),
+            user.Companies.Select(x => x.ToUserCompanyResponseDto()!).ToList(),
             user.ToCreatedInfoResponseDto()!,
             user.ToUpdatedInfoResponseDto()!,
             user.ToDeletedInfoResponseDto()!
@@ -42,11 +32,6 @@ public static class UserMappingExtensions
             createUserRequestDto.Companies.Select(x => x.ToUserCompany()!).ToList()
         ) : null;
 
-    public static UserCompany? ToUserCompany(this CreateUserCompanyRequestDto? createUserCompanyRequestDto)
-        => createUserCompanyRequestDto is not null ? UserCompany.New(
-            createUserCompanyRequestDto.CompanyId
-        ) : null;
-
     public static User? ToUser(this UpdateUserRequestDto? updateUserRequestDto)
         => updateUserRequestDto is not null ? User.Existing(
             updateUserRequestDto.Id,
@@ -54,5 +39,20 @@ public static class UserMappingExtensions
             updateUserRequestDto.Email,
             updateUserRequestDto.ProfileId,
             updateUserRequestDto.Companies.Select(x => x.ToUserCompany()!).ToList()
+        ) : null;
+
+    public static UserCompany? ToUserCompany(this CreateUserCompanyRequestDto? createUserCompanyRequestDto)
+        => createUserCompanyRequestDto is not null ? UserCompany.NewByCompanyId(
+            createUserCompanyRequestDto.CompanyId
+        ) : null;
+
+    public static UserCompanyResponseDto? ToUserCompanyResponseDto(this UserCompany? userCompany)
+        => userCompany is not null ? new UserCompanyResponseDto(
+            userCompany.UserId,
+            userCompany.User?.Name!,
+            userCompany.CompanyId,
+            userCompany.Company?.Name!,
+            userCompany.ToCreatedInfoResponseDto()!,
+            userCompany.ToUpdatedInfoResponseDto()!
         ) : null;
 }

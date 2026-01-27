@@ -162,6 +162,9 @@
   <data name="User_NameIsRequired" xml:space="preserve">
     <value>Nome é obrigatório</value>
   </data>
+  <data name="Company_NameIsRequired" xml:space="preserve">
+    <value>Nome é obrigatório</value>
+  </data>
   <data name="User_PasswordIsRequired" xml:space="preserve">
     <value>Senha é obrigatória</value>
   </data>
@@ -195,6 +198,9 @@
   <data name="Endpoint_CreateUserDescription" xml:space="preserve">
     <value>Criar um novo usuário</value>
   </data>
+  <data name="Endpoint_CreateCompanyDescription" xml:space="preserve">
+    <value>Criar uma nova empresa</value>
+  </data>
   <data name="Endpoint_CreateUserSummary" xml:space="preserve">
     <value>Criar Usuário</value>
   </data>
@@ -210,6 +216,9 @@
   <data name="Endpoint_GetUsersDescription" xml:space="preserve">
     <value>Obtém uma lista de todos os usuários</value>
   </data>
+  <data name="Endpoint_GetCompaniesDescription" xml:space="preserve">
+    <value>Obtém uma lista de todas as empresas</value>
+  </data>
   <data name="Endpoint_GetUsersKeysetPaginationDescription" xml:space="preserve">
     <value>Obtém uma lista de usuários com paginação keyset</value>
   </data>
@@ -218,6 +227,9 @@
   </data>
   <data name="Endpoint_GetUsersSummary" xml:space="preserve">
     <value>Obter Usuários</value>
+  </data>
+  <data name="Endpoint_GetCompaniesSummary" xml:space="preserve">
+    <value>Obter Empresas</value>
   </data>
   <data name="Endpoint_GetUsersKeysetPaginationSummary" xml:space="preserve">
     <value>Obter Usuários Com Paginação Keyset</value>
@@ -255,6 +267,9 @@
   <data name="User_NameLengthTooLong" xml:space="preserve">
     <value>Nome deve ter no máximo {0} caracteres</value>
   </data>
+  <data name="Company_NameLengthTooLong" xml:space="preserve">
+    <value>Nome deve ter no máximo {0} caracteres</value>
+  </data>
   <data name="User_PasswordLengthTooLong" xml:space="preserve">
     <value>Password deve ter no máximo {0} caracteres</value>
   </data>
@@ -264,7 +279,16 @@
   <data name="UserCompany_CompanyIsRequired" xml:space="preserve">
     <value>Empresa é obrigatório</value>
   </data>
+  <data name="CompanyUser_UserIsRequired" xml:space="preserve">
+    <value>Usuário é obrigatório</value>
+  </data>
   <data name="Company_CompanyNotExists" xml:space="preserve">
     <value>Empresa não existe: {0}</value>
+  </data>
+  <data name="User_UserNotExists" xml:space="preserve">
+    <value>Usuário não existe: {0}</value>
+  </data>
+  <data name="Endpoint_CreateCompanySummary" xml:space="preserve">
+    <value>Criar Empresa</value>
   </data>
 </root>

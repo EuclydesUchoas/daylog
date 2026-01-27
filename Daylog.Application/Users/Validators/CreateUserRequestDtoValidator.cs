@@ -1,6 +1,5 @@
 ﻿using Daylog.Application.Abstractions.Data;
 using Daylog.Application.Common.Extensions;
-using Daylog.Application.Common.Results;
 using Daylog.Application.Users.Dtos.Request;
 using Daylog.Shared.Core.Resources;
 using FluentValidation;
@@ -51,19 +50,19 @@ public sealed class CreateUserRequestDtoValidator : AbstractValidator<CreateUser
 
     public override ValidationResult Validate(ValidationContext<CreateUserRequestDto> context)
     {
-        context.AddExistingCompaniesIdsAsync(GetCompaniesIds(context), _appDbContext).GetAwaiter().GetResult();
+        context.AddExistingCompaniesIdsAsync(GetValidCompaniesIds(context), _appDbContext).GetAwaiter().GetResult();
         
         return base.Validate(context);
     }
 
     public override async Task<ValidationResult> ValidateAsync(ValidationContext<CreateUserRequestDto> context, CancellationToken cancellation = default)
     {
-        await context.AddExistingCompaniesIdsAsync(GetCompaniesIds(context), _appDbContext, cancellation);
+        await context.AddExistingCompaniesIdsAsync(GetValidCompaniesIds(context), _appDbContext, cancellation);
 
         return await base.ValidateAsync(context, cancellation);
     }
 
-    private static HashSet<Guid> GetCompaniesIds(ValidationContext<CreateUserRequestDto> context)
+    private static HashSet<Guid> GetValidCompaniesIds(ValidationContext<CreateUserRequestDto> context)
     {
         var createUser = context.InstanceToValidate;
 

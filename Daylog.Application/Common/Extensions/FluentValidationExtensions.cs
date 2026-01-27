@@ -7,7 +7,45 @@ namespace Daylog.Application.Common.Extensions;
 
 public static class FluentValidationExtensions
 {
+    private const string _existingUsersIdsKey = "ExistingUsersIds";
     private const string _existingCompaniesIdsKey = "ExistingCompaniesIds";
+
+    public static async Task AddExistingUsersIdsAsync<T>(this ValidationContext<T> context, HashSet<Guid> usersIds, IAppDbContext appDbContext, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+        ArgumentNullException.ThrowIfNull(usersIds);
+        ArgumentNullException.ThrowIfNull(appDbContext);
+
+        var validUsersIds = await appDbContext.Users.AsNoTracking()
+            .Where(x => usersIds.Contains(x.Id))
+            .Select(x => x.Id)
+            .ToHashSetAsync(cancellationToken);
+
+        if (context.RootContextData.TryGetValue(_existingUsersIdsKey, out object? validUsersIdsObj))
+        {
+            (validUsersIdsObj as HashSet<Guid>)!.UnionWith(validUsersIds);
+            return;
+        }
+
+        context.RootContextData.Add(_existingUsersIdsKey, validUsersIds);
+    }
+
+    public static IRuleBuilderOptions<T, Guid> ExistsUserId<T>(this IRuleBuilder<T, Guid> ruleBuilder, IAppDbContext appDbContext)
+    {
+        ArgumentNullException.ThrowIfNull(ruleBuilder);
+        ArgumentNullException.ThrowIfNull(appDbContext);
+
+        return ruleBuilder.SetAsyncValidator(new AsyncPredicateValidator<T, Guid>(async (createUserCompany, userId, context, cancellationToken) =>
+        {
+            if (context.RootContextData.TryGetValue(_existingUsersIdsKey, out object? validUsersIds))
+            {
+                return (validUsersIds as HashSet<Guid>)!.Contains(userId);
+            }
+
+            return await appDbContext.Users.AsNoTracking()
+                .AnyAsync(x => x.Id == userId, cancellationToken);
+        }));
+    }
 
     public static async Task AddExistingCompaniesIdsAsync<T>(this ValidationContext<T> context, HashSet<Guid> companiesIds, IAppDbContext appDbContext, CancellationToken cancellationToken = default)
     {
