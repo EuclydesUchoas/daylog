@@ -21,7 +21,7 @@ public sealed class GetUsersEndpoint : IEndpoint
             .WithTags(EndpointTags.Users);
     }
 
-    public static async Task<Results<Ok<Result<ICollectionResponseDto<UserResponseDto>>>, BadRequest<Result>, NotFound<Result<ICollectionResponseDto<UserResponseDto>>>>> HandleAsync(
+    public static async Task<Results<Ok<Result<ICollectionResponseDto<UserResponseDto>>>, BadRequest<Result>>> HandleAsync(
         [AsParameters] GetUsersRequestDto getUsersRequestDto,
         [FromServices] IGetUsersService getUsersService,
         CancellationToken cancellationToken
@@ -31,9 +31,7 @@ public sealed class GetUsersEndpoint : IEndpoint
 
         if (result.IsSuccess)
         {
-            return (result.Data?.Items?.Any() ?? false)
-                ? TypedResults.Ok(result)
-                : TypedResults.NotFound(result);
+            return TypedResults.Ok(result);
         }
 
         return TypedResults.BadRequest(result.Base);
