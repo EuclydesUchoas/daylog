@@ -1,7 +1,8 @@
 <p-toast></p-toast>
 
 <!-- responsiveLayout="scroll" -->
-<p-table [value]="(users$ | async)!" [loading]="loading()" [paginator]="true" [rows]="10">
+<!-- <p-table [value]="(users$ | async)!" [loading]="loading()" [paginator]="true" [rows]="10"> -->
+<p-table [value]="users()" [loading]="loading()" [paginator]="true" [rows]="10">
   <ng-template pTemplate="header">
     <tr>
       <th>Nome</th>

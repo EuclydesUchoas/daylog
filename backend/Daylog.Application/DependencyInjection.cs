@@ -1,4 +1,6 @@
-﻿using Daylog.Application.Abstractions.Services;
+﻿using Daylog.Application.Abstractions.Authentication;
+using Daylog.Application.Abstractions.Services;
+using Daylog.Application.Authentication;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,6 +17,8 @@ public static class DependencyInjection
             .WithScopedLifetime());
 
         services.AddValidatorsFromAssembly(ApplicationAssemblyReference.Assembly, includeInternalTypes: true);
+
+        services.AddScoped<IPasswordHasher, PasswordHasher>();
 
         return services;
     }

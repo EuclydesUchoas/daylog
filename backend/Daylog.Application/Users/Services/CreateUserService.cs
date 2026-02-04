@@ -1,4 +1,5 @@
-﻿using Daylog.Application.Abstractions.Data;
+﻿using Daylog.Application.Abstractions.Authentication;
+using Daylog.Application.Abstractions.Data;
 using Daylog.Application.Common.Results;
 using Daylog.Application.Users.Dtos.Request;
 using Daylog.Application.Users.Dtos.Response;
@@ -13,7 +14,8 @@ namespace Daylog.Application.Users.Services;
 
 public sealed class CreateUserService(
     IValidator<CreateUserRequestDto> validator,
-    IAppDbContext appDbContext
+    IAppDbContext appDbContext,
+    IPasswordHasher passwordHasher
     ) : ICreateUserService
 {
     public async Task<Result<UserResponseDto>> HandleAsync(CreateUserRequestDto requestDto, CancellationToken cancellationToken = default)
@@ -37,6 +39,11 @@ public sealed class CreateUserService(
         {
             return Result.Failure<UserResponseDto>(UserResultErrors.EmailNotUnique);
         }
+
+        requestDto = requestDto with
+        {
+            Password = passwordHasher.Hash(requestDto.Password)
+        };
 
         var user = requestDto.ToUser();
         ArgumentNullException.ThrowIfNull(user, nameof(user));

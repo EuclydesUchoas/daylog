@@ -88,6 +88,15 @@ namespace Daylog.Shared.Core.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Invalid credentials.
+        /// </summary>
+        public static string Auth_InvalidCredentials {
+            get {
+                return ResourceManager.GetString("Auth_InvalidCredentials", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a A validation error ocurred.
         /// </summary>
         public static string AValidationErrorOcurred {
@@ -300,6 +309,24 @@ namespace Daylog.Shared.Core.Resources {
         public static string Endpoint_GetUserSummary {
             get {
                 return ResourceManager.GetString("Endpoint_GetUserSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Login with credentials.
+        /// </summary>
+        public static string Endpoint_LoginDescription {
+            get {
+                return ResourceManager.GetString("Endpoint_LoginDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Login.
+        /// </summary>
+        public static string Endpoint_LoginSummary {
+            get {
+                return ResourceManager.GetString("Endpoint_LoginSummary", resourceCulture);
             }
         }
         

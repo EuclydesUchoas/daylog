@@ -187,7 +187,7 @@ public static class DependencyInjection
         string jwtIssuer = appConfiguration.JwtIssuer;
         string jwtAudience = appConfiguration.JwtAudience;
         int jwtTokenExpirationInMinutes = appConfiguration.JwtTokenExpirationInMinutes;
-
+        
         services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
@@ -195,9 +195,13 @@ public static class DependencyInjection
                 options.RequireHttpsMetadata = false;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)),
+                    ValidateIssuer = true,
                     ValidIssuer = jwtIssuer,
+                    ValidateAudience = true,
                     ValidAudience = jwtAudience,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)),
+                    ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero,
                 };
             });
