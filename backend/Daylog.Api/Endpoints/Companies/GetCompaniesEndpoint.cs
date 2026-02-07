@@ -17,7 +17,7 @@ public sealed class GetCompaniesEndpoint : IEndpoint
             .MapGet("v1/companies", HandleAsync)
             .WithSummary(nameof(AppMessages.Endpoint_GetCompaniesSummary))
             .WithDescription(nameof(AppMessages.Endpoint_GetCompaniesDescription))
-            .AllowAnonymous()
+            .RequireAuthorization()
             .WithTags(EndpointTags.Companies);
     }
 

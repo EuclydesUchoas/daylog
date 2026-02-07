@@ -46,7 +46,8 @@
         "DAYLOG_JWT__SECRETKEY": "eab8a88260b037f6343f12c34ad8b96f",
         "DAYLOG_JWT__ISSUER": "daylog-api",
         "DAYLOG_JWT__AUDIENCE": "daylog-developers",
-        "DAYLOG_JWT__TOKENEXPIRATIONINMINUTES": "60"
+        "DAYLOG_JWT__TOKENEXPIRATIONINMINUTES": "60",
+        "DAYLOG_JWT__REFRESHTOKENEXPIRATIONINHOURS": "168"
       }
     }
   }

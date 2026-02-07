@@ -15,7 +15,7 @@ public sealed class DeleteUserEndpoint : IEndpoint
             .MapDelete("v1/users/{id}", HandleAsync)
             .WithSummary(nameof(AppMessages.Endpoint_DeleteUserSummary))
             .WithDescription(nameof(AppMessages.Endpoint_DeleteUserDescription))
-            .AllowAnonymous()
+            .RequireAuthorization()
             .WithTags(EndpointTags.Users);
     }
 

@@ -16,7 +16,7 @@ public sealed class CreateCompanyEndpoint : IEndpoint
             .MapPost("v1/companies", HandleAsync)
             .WithSummary(nameof(AppMessages.Endpoint_CreateCompanySummary))
             .WithDescription(nameof(AppMessages.Endpoint_CreateCompanyDescription))
-            .AllowAnonymous()
+            .RequireAuthorization()
             .WithTags(EndpointTags.Companies);
     }
 

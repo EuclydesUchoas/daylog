@@ -255,6 +255,12 @@
   <data name="EndpointTags_Users" xml:space="preserve">
     <value>Users</value>
   </data>
+  <data name="EndpointTags_Companies" xml:space="preserve">
+    <value>Companies</value>
+  </data>
+  <data name="EndpointTags_Authentication" xml:space="preserve">
+    <value>Authentication</value>
+  </data>
   <data name="UserProfile_User" xml:space="preserve">
     <value>User</value>
   </data>
@@ -299,5 +305,8 @@
   </data>
   <data name="Auth_InvalidCredentials" xml:space="preserve">
     <value>Invalid credentials</value>
+  </data>
+  <data name="Documentation_AuthenticationDescription" xml:space="preserve">
+    <value>JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token in the text input below.</value>
   </data>
 </root>

@@ -17,7 +17,7 @@ public sealed class GetUsersOffsetPaginationEndpoint : IEndpoint
             .MapGet("v1/users/offset", HandleAsync)
             .WithSummary(nameof(AppMessages.Endpoint_GetUsersOffsetPaginationSummary))
             .WithDescription(nameof(AppMessages.Endpoint_GetUsersOffsetPaginationDescription))
-            .AllowAnonymous()
+            .RequireAuthorization()
             .WithTags(EndpointTags.Users);
     }
 

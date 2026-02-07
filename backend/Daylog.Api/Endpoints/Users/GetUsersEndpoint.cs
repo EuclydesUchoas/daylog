@@ -1,9 +1,10 @@
 ﻿using Daylog.Application.Common.Dtos.Response;
-using Daylog.Shared.Core.Resources;
 using Daylog.Application.Common.Results;
 using Daylog.Application.Users.Dtos.Request;
 using Daylog.Application.Users.Dtos.Response;
 using Daylog.Application.Users.Services.Contracts;
+using Daylog.Shared.Core.Resources;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,7 +18,7 @@ public sealed class GetUsersEndpoint : IEndpoint
             .MapGet("v1/users", HandleAsync)
             .WithSummary(nameof(AppMessages.Endpoint_GetUsersSummary))
             .WithDescription(nameof(AppMessages.Endpoint_GetUsersDescription))
-            .AllowAnonymous()
+            .RequireAuthorization()
             .WithTags(EndpointTags.Users);
     }
 

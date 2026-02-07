@@ -17,7 +17,7 @@ public sealed class GetUsersKeysetPaginationEndpoint : IEndpoint
             .MapGet("v1/users/keyset", HandleAsync)
             .WithSummary(nameof(AppMessages.Endpoint_GetUsersKeysetPaginationSummary))
             .WithDescription(nameof(AppMessages.Endpoint_GetUsersKeysetPaginationDescription))
-            .AllowAnonymous()
+            .RequireAuthorization()
             .WithTags(EndpointTags.Users);
     }
 

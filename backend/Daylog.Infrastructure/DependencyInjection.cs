@@ -41,6 +41,9 @@ public static class DependencyInjection
 
         services.AddSingleton<IDatabaseFactory, DatabaseFactory>();
 
+        services.AddScoped<ITokenService, JwtTokenService>();
+        services.AddScoped<IPasswordHasher, PasswordHasher>();
+
         return services;
     }
 
@@ -67,6 +70,7 @@ public static class DependencyInjection
                 Issuer = appConfiguration.JwtIssuer,
                 Audience = appConfiguration.JwtAudience,
                 TokenExpirationInMinutes = appConfiguration.JwtTokenExpirationInMinutes,
+                RefreshTokenExpirationInHours = appConfiguration.JwtRefreshTokenExpirationInHours,
             }));
 
         return services;

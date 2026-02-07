@@ -16,7 +16,7 @@ public sealed class GetUserEndpoint : IEndpoint
             .MapGet("v1/users/{id}", HandleAsync)
             .WithSummary(nameof(AppMessages.Endpoint_GetUserSummary))
             .WithDescription(nameof(AppMessages.Endpoint_GetUserDescription))
-            .AllowAnonymous()
+            .RequireAuthorization()
             .WithTags(EndpointTags.Users);
     }
 

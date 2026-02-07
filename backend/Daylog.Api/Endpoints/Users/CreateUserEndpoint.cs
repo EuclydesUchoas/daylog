@@ -16,7 +16,7 @@ public sealed class CreateUserEndpoint : IEndpoint
             .MapPost("v1/users", HandleAsync)
             .WithSummary(nameof(AppMessages.Endpoint_CreateUserSummary))
             .WithDescription(nameof(AppMessages.Endpoint_CreateUserDescription))
-            .AllowAnonymous()
+            .RequireAuthorization()
             .WithTags(EndpointTags.Users);
     }
 

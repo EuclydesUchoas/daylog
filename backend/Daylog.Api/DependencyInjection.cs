@@ -1,8 +1,13 @@
 ﻿using Daylog.Api.Endpoints;
 using Daylog.Shared.Core.Constants;
 using Daylog.Shared.Core.Resources;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Net.Http.Headers;
+using Microsoft.OpenApi;
+using System.Collections.Immutable;
+using System.Reflection.Metadata;
 using System.Text.Json.Serialization;
 
 namespace Daylog.Api;
@@ -61,10 +66,25 @@ public static class DependencyInjection
     {
         // Add services to the container.
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-        
+
+        services.AddOutputCache(options =>
+        {
+            // Default cache duration
+            options.DefaultExpirationTimeSpan = TimeSpan.FromMinutes(10);
+
+            // Define a policy that varies cache by CurrentCulture, in combination with RequestLocalizationMiddleware
+            options.AddPolicy("OpenApiByLanguage", policy =>
+            {
+                policy.Expire(TimeSpan.FromMinutes(15))
+                    .SetCacheKeyPrefix(_ => Cultures.CurrentCulture);
+                    //.VaryByValue(_ => new KeyValuePair<string, string>("Accept-Language", Cultures.CurrentCulture));
+                    //.SetVaryByHeader("Accept-Language");
+            });
+        });
+
         services.AddOpenApi(options =>
          {
-             options.AddDocumentTransformer((document, context, _) =>
+             options.AddDocumentTransformer((document, _, _) =>
              {
                  document.Info = new()
                  {
@@ -73,13 +93,44 @@ public static class DependencyInjection
                      Description = AppMessages.Documentation_InfoDescription,
                  };
 
+                 // Add the security scheme at the document level
+                 var securitySchemes = new Dictionary<string, IOpenApiSecurityScheme>
+                 {
+                     [JwtBearerDefaults.AuthenticationScheme] = new OpenApiSecurityScheme
+                     {
+                         Type = SecuritySchemeType.ApiKey, // ApiKey required 'Bearer' prefix in the header value, and Http doesn't require it
+                         Description = AppMessages.Documentation_AuthenticationDescription,
+                         Name = HeaderNames.Authorization, // "Authorization",
+                         Scheme = JwtBearerDefaults.AuthenticationScheme, // "bearer" refers to the header name here
+                         In = ParameterLocation.Header,
+                         BearerFormat = "JWT" // Json Web Token
+                     }
+                 };
+                 document.Components ??= new();
+                 document.Components.SecuritySchemes = securitySchemes;
+
+                 // Apply it as a requirement for all operations
+                 foreach (var operation in document.Paths.Values.SelectMany(path => path.Operations ?? []))
+                 {
+                     operation.Value.Security ??= [];
+                     operation.Value.Security.Add(new OpenApiSecurityRequirement
+                     {
+                         [new OpenApiSecuritySchemeReference(JwtBearerDefaults.AuthenticationScheme, document)] = []
+                     });
+                 }
+
                  if (document.Tags is not null)
                  {
+                     // Sort tags alphabetically
+                     document.Tags = document.Tags
+                        .OrderBy(x => x.Name)
+                        .ToHashSet();
+
                      foreach (var tag in document.Tags)
                      {
                          if (!string.IsNullOrWhiteSpace(tag?.Name))
                          {
-                             string? tagDescription = AppMessages.ResourceManager.GetString(tag.Name);
+                             string? tagDescription = AppMessages.ResourceManager.GetString($"EndpointTags_{tag.Name}");
                              if (!string.IsNullOrWhiteSpace(tagDescription))
                              {
                                  tag.Description = tagDescription;
@@ -91,7 +142,7 @@ public static class DependencyInjection
                  return Task.CompletedTask;
              });
 
-             options.AddOperationTransformer((operation, context, _) =>
+             options.AddOperationTransformer((operation, _, _) =>
              {
                  if (!string.IsNullOrWhiteSpace(operation.Summary))
                  {
@@ -122,7 +173,7 @@ public static class DependencyInjection
                  return Task.CompletedTask;
              });
 
-             options.AddSchemaTransformer((schema, context, _) =>
+             options.AddSchemaTransformer((schema, _, _) =>
              {
                  // Convert enum schemas to string representation, but not works properly
                  /*if (context.JsonTypeInfo.Type.IsEnum)

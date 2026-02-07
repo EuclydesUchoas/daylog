@@ -1,7 +1,7 @@
 ﻿using Daylog.Application.Abstractions.Authentication;
 using System.Security.Cryptography;
 
-namespace Daylog.Application.Authentication;
+namespace Daylog.Infrastructure.Authentication;
 
 public sealed class PasswordHasher : IPasswordHasher
 {
@@ -24,14 +24,6 @@ public sealed class PasswordHasher : IPasswordHasher
     public bool Verify(string password, string hashedPassword)
     {
         var hashBytes = Convert.FromBase64String(hashedPassword);
-
-        /*var salt = new byte[_saltSize];
-        Buffer.BlockCopy(hashBytes, 0, salt, 0, _saltSize);
-        var hash = new byte[_hashSize];
-        Buffer.BlockCopy(hashBytes, _saltSize, hash, 0, _hashSize);
-        var computedHash = Rfc2898DeriveBytes.Pbkdf2(password, salt, _iterations, _hashAlgorithm, _hashSize);
-        return CryptographicOperations.FixedTimeEquals(hash, computedHash);*/
-
         var salt = new byte[_saltSize];
         Buffer.BlockCopy(hashBytes, 0, salt, 0, _saltSize);
         var storedHash = new byte[_hashSize];

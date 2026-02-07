@@ -151,6 +151,15 @@ namespace Daylog.Shared.Core.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a JWT Authorization header using the Bearer scheme. Enter &apos;Bearer&apos; [space] and then your token in the text input below..
+        /// </summary>
+        public static string Documentation_AuthenticationDescription {
+            get {
+                return ResourceManager.GetString("Documentation_AuthenticationDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a API for Daylog, a daily logging application.
         /// </summary>
         public static string Documentation_InfoDescription {
@@ -345,6 +354,24 @@ namespace Daylog.Shared.Core.Resources {
         public static string Endpoint_UpdateUserSummary {
             get {
                 return ResourceManager.GetString("Endpoint_UpdateUserSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Authentication.
+        /// </summary>
+        public static string EndpointTags_Authentication {
+            get {
+                return ResourceManager.GetString("EndpointTags_Authentication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Companies.
+        /// </summary>
+        public static string EndpointTags_Companies {
+            get {
+                return ResourceManager.GetString("EndpointTags_Companies", resourceCulture);
             }
         }
         

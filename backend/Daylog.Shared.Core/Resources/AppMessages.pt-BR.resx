@@ -255,6 +255,12 @@
   <data name="EndpointTags_Users" xml:space="preserve">
     <value>Usuários</value>
   </data>
+  <data name="EndpointTags_Companies" xml:space="preserve">
+    <value>Empresas</value>
+  </data>
+  <data name="EndpointTags_Authentication" xml:space="preserve">
+    <value>Autenticação</value>
+  </data>
   <data name="UserProfile_User" xml:space="preserve">
     <value>Usuário</value>
   </data>
@@ -299,5 +305,8 @@
   </data>
   <data name="Auth_InvalidCredentials" xml:space="preserve">
     <value>Credenciais inválidas</value>
+  </data>
+  <data name="Documentation_AuthenticationDescription" xml:space="preserve">
+    <value>Cabeçalho de autorização JWT usando o esquema Bearer. Digite 'Bearer' [espaço] e, em seguida, seu token no campo de texto abaixo.</value>
   </data>
 </root>

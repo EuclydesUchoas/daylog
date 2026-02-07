@@ -20,7 +20,8 @@ public sealed class LoginEndpoint : IEndpoint
             .WithTags(EndpointTags.Authentication);
     }
 
-    public static async Task<Results<Ok<Result<LoginResponseDto>>, JsonHttpResult<Result>, BadRequest<Result>>> HandleAsync(
+    // UnauthorizedHttpResult is not working with the current version of .NET, so we need to return JsonHttpResult with 401 status code instead.
+    public static async Task<Results<Ok<Result<LoginResponseDto>>, UnauthorizedHttpResult, BadRequest<Result>, JsonHttpResult<Result>>> HandleAsync(
         [FromBody] LoginRequestDto loginRequestDto,
         [FromServices] ILoginService loginService,
         CancellationToken cancellationToken

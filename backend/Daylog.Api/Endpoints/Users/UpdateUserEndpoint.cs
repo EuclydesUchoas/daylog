@@ -16,7 +16,7 @@ public sealed class UpdateUserEndpoint : IEndpoint
             .MapPut("v1/users/{id}", HandleAsync)
             .WithSummary(nameof(AppMessages.Endpoint_UpdateUserSummary))
             .WithDescription(nameof(AppMessages.Endpoint_UpdateUserDescription))
-            .AllowAnonymous()
+            .RequireAuthorization()
             .WithTags(EndpointTags.Users);
     }
 

@@ -39,4 +39,9 @@ public interface IAppConfiguration
     /// Gets the expiration time for JWT tokens in minutes.
     /// </summary>
     int JwtTokenExpirationInMinutes { get; }
+
+    /// <summary>
+    /// Gets the expiration time for JWT refresh tokens in hours.
+    /// </summary>
+    int JwtRefreshTokenExpirationInHours { get; }
 }

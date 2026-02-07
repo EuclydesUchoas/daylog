@@ -8,7 +8,10 @@ public static class WebApplicationExtensions
 {
     public static WebApplication UseDocumentation(this WebApplication app)
     {
-        app.MapOpenApi();
+        app.UseOutputCache();
+
+        app.MapOpenApi()
+            .CacheOutput("OpenApiByLanguage");
 
         var appConfiguration = app.Services.GetRequiredService<IAppConfiguration>();
         var documentationProvider = appConfiguration.DocumentationProvider;

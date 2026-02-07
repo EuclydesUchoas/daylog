@@ -9,4 +9,6 @@ public sealed class JwtOptions
     public required string Audience { get; init; } = null!;
 
     public required int TokenExpirationInMinutes { get; init; }
+
+    public required int RefreshTokenExpirationInHours { get; init; }
 }

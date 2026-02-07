@@ -18,8 +18,6 @@ public static class DependencyInjection
 
         services.AddValidatorsFromAssembly(ApplicationAssemblyReference.Assembly, includeInternalTypes: true);
 
-        services.AddScoped<IPasswordHasher, PasswordHasher>();
-
         return services;
     }
 }

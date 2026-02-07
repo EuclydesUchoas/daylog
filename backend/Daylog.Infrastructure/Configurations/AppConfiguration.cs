@@ -35,6 +35,8 @@ public sealed class AppConfiguration : IAppConfiguration
     const string KeyPathJwtAudience = $"{KeyJwt}:{KeyJwtAudience}";
     const string KeyJwtTokenExpirationInMinutes = "TokenExpirationInMinutes";
     const string KeyPathJwtTokenExpirationInMinutes = $"{KeyJwt}:{KeyJwtTokenExpirationInMinutes}";
+    const string KeyJwtRefreshTokenExpirationInHours = "RefreshTokenExpirationInHours";
+    const string KeyPathJwtRefreshTokenExpirationInHours = $"{KeyJwt}:{KeyJwtRefreshTokenExpirationInHours}";
 
     // Environment variable names
     const string EnvVarPrefix = "DAYLOG_";
@@ -76,6 +78,8 @@ public sealed class AppConfiguration : IAppConfiguration
 
     public int JwtTokenExpirationInMinutes { get; }
 
+    public int JwtRefreshTokenExpirationInHours { get; }
+
     public AppConfiguration(IConfiguration configuration)
     {
         _configuration = configuration;
@@ -88,6 +92,7 @@ public sealed class AppConfiguration : IAppConfiguration
         JwtIssuer = LoadJwtIssuer()!;
         JwtAudience = LoadJwtAudience()!;
         JwtTokenExpirationInMinutes = LoadJwtTokenExpirationInMinutes();
+        JwtRefreshTokenExpirationInHours = LoadJwtRefreshTokenExpirationInHours();
 
         AssertConfigurationIsValid();
 
@@ -114,6 +119,10 @@ public sealed class AppConfiguration : IAppConfiguration
         if (JwtTokenExpirationInMinutes <= 0)
         {
             throw new ArgumentException("JWT token expiration time is not configured properly.", nameof(JwtTokenExpirationInMinutes));
+        }
+        if (JwtRefreshTokenExpirationInHours <= 0)
+        {
+            throw new ArgumentException("JWT refresh token expiration time is not configured properly.", nameof(JwtRefreshTokenExpirationInHours));
         }
     }
 
@@ -238,5 +247,21 @@ public sealed class AppConfiguration : IAppConfiguration
         }
 
         return jwtTokenExpirationInMinutes;
+    }
+
+    private int LoadJwtRefreshTokenExpirationInHours()
+    {
+        if (!TryGetConfigurationValue(_configuration, KeyPathJwtRefreshTokenExpirationInHours, out string? jwtRefreshTokenExpirationInHoursString))
+        {
+            return 0;
+        }
+
+        if (!int.TryParse(jwtRefreshTokenExpirationInHoursString, out int jwtRefreshTokenExpirationInHours)
+            || jwtRefreshTokenExpirationInHours <= 0)
+        {
+            return 0;
+        }
+
+        return jwtRefreshTokenExpirationInHours;
     }
 }
