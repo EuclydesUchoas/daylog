@@ -3,7 +3,9 @@ using Daylog.Api.Extensions;
 using Daylog.Api.Middlewares;
 using Daylog.Application;
 using Daylog.Infrastructure;
+using Daylog.Infrastructure.BackgroundJobs;
 using Daylog.Infrastructure.Database.Factories;
+using Hangfire;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
@@ -20,7 +22,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("localhost-allow-frontend", policy =>
     {
         policy
-            .WithOrigins("http://localhost:4200")
+            .WithOrigins("http://localhost:4200", "https://localhost:7176")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();
@@ -56,17 +58,20 @@ app.MapHealthChecks("/health", new HealthCheckOptions
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
 
+app.UseHangfireDashboard("/hangfire-dashboard");
+
 app
     .UseHttpsRedirection()
     .UseSerilogRequestLogging();
 
-app
-    .UseMiddleware<ExceptionMiddleware>();
+app.UseMiddleware<ExceptionMiddleware>();
 
 app
     .UseAuthentication()
     .UseAuthorization();
 
 app.MapEndpoints();
+
+app.RunHangfireJobs();
 
 app.Run();

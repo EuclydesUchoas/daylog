@@ -1,4 +1,5 @@
 ﻿using Daylog.Domain.Companies;
+using Daylog.Domain.RefreshTokens;
 using Daylog.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -11,6 +12,8 @@ public interface IAppDbContext
     DbSet<UserCompany> UserCompanies { get; }
 
     DbSet<Company> Companies { get; }
+
+    DbSet<RefreshToken> RefreshTokens { get; }
 
     /// <inheritdoc cref="DbContext.Database"/>
     DatabaseFacade Database { get; }

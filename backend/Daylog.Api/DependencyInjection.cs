@@ -6,8 +6,6 @@ using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi;
-using System.Collections.Immutable;
-using System.Reflection.Metadata;
 using System.Text.Json.Serialization;
 
 namespace Daylog.Api;

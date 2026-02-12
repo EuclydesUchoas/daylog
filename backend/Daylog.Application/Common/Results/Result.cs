@@ -37,6 +37,13 @@ public class Result
 
     public static Result<TData> Failure<TData>(ResultError error) 
         => new(default, false, error);
+
+    public override string ToString()
+    {
+        return IsSuccess 
+            ? $"Success" 
+            : $"Failure: {Error}";
+    }
 }
 
 public sealed class Result<TData> : Result

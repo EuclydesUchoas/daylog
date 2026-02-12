@@ -1,7 +1,6 @@
 ﻿using Daylog.Application.Common.Dtos.Response;
 using Daylog.Application.Companies.Dtos.Response;
 using Daylog.Domain.Companies;
-using Microsoft.EntityFrameworkCore;
 
 namespace Daylog.Application.Companies.Extensions;
 

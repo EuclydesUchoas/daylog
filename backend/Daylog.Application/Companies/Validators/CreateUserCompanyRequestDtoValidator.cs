@@ -3,7 +3,6 @@ using Daylog.Application.Common.Extensions;
 using Daylog.Application.Companies.Dtos.Request;
 using Daylog.Shared.Core.Resources;
 using FluentValidation;
-using Microsoft.EntityFrameworkCore;
 
 namespace Daylog.Application.Companies.Validators;
 

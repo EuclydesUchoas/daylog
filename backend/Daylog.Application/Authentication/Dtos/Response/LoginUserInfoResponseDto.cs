@@ -1,6 +1,5 @@
 ﻿using Daylog.Application.Abstractions.Dtos;
 using Daylog.Application.UserProfiles.Dtos.Response;
-using Daylog.Domain.UserProfiles;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Daylog.Application.Authentication.Dtos.Response;

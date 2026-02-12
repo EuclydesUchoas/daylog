@@ -15,7 +15,8 @@ namespace Daylog.Application.Authentication.Services;
 public sealed class LoginService(
     IAppDbContext appDbContext,
     IPasswordHasher passwordHasher,
-    ITokenService tokenService
+    ITokenService tokenService,
+    ICreateRefreshTokenService createRefreshTokenService
     ) : ILoginService
 {
     public async Task<Result<LoginResponseDto>> HandleAsync(LoginRequestDto requestDto, CancellationToken cancellationToken = default)
@@ -36,7 +37,7 @@ public sealed class LoginService(
                     Name = x.Name,
                     Profile = new UserProfileResponseDto
                     {
-                        Id = x.Profile.Id,
+                        Id = x.Profile.Id
                     }
                 },
                 x.Password,
@@ -52,17 +53,35 @@ public sealed class LoginService(
             userAuth.UserInfo.Id,
             userAuth.UserInfo.Email,
             userAuth.UserInfo.Name,
-            userAuth.UserInfo.Profile.Id
+            userAuth.UserInfo.Profile
             );
 
         var accessToken = tokenService.GenerateToken(userAuthInfo);
         var refreshToken = tokenService.GenerateRefreshToken();
 
-        // Temporary implementation
+        var createRefreshToken = new CreateRefreshTokenRequestDto(
+            userAuth.UserInfo.Id,
+            refreshToken.Token,
+            refreshToken.ExpiresAt
+            );
+
+        var createRefreshTokenResult = await createRefreshTokenService.HandleAsync(createRefreshToken, cancellationToken);
+
+        if (createRefreshTokenResult.IsFailure)
+        {
+            return Result.Failure<LoginResponseDto>(createRefreshTokenResult.Error);
+        }
+
+        var tokens = new TokensResponseDto
+        {
+            AccessToken = new TokenInfoResponseDto(accessToken.Token, accessToken.ExpiresAt),
+            RefreshToken = new TokenInfoResponseDto(refreshToken.Token, refreshToken.ExpiresAt)
+        };
+
         var response = new LoginResponseDto
         {
-            AccessToken = new LoginTokenInfoResponseDto(accessToken.Token, accessToken.ExpiresAt),
-            RefreshToken = new LoginTokenInfoResponseDto(refreshToken.Token, refreshToken.ExpiresAt)
+            UserInfo = userAuth.UserInfo,
+            Tokens = tokens
         };
 
         return Result.Success(response);

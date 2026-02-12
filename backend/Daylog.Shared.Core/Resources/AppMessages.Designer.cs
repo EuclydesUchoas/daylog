@@ -340,6 +340,24 @@ namespace Daylog.Shared.Core.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Refresh tokens.
+        /// </summary>
+        public static string Endpoint_RefreshTokensDescription {
+            get {
+                return ResourceManager.GetString("Endpoint_RefreshTokensDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Refresh Tokens.
+        /// </summary>
+        public static string Endpoint_RefreshTokensSummary {
+            get {
+                return ResourceManager.GetString("Endpoint_RefreshTokensSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Update an existing user by ID.
         /// </summary>
         public static string Endpoint_UpdateUserDescription {

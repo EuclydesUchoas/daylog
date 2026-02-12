@@ -4,7 +4,6 @@ using Daylog.Application.Users.Dtos.Request;
 using Daylog.Shared.Core.Resources;
 using FluentValidation;
 using FluentValidation.Results;
-using Microsoft.EntityFrameworkCore;
 
 namespace Daylog.Application.Users.Validators;
 

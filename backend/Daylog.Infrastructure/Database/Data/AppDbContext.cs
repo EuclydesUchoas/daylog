@@ -1,5 +1,6 @@
 ﻿using Daylog.Application.Abstractions.Data;
 using Daylog.Domain.Companies;
+using Daylog.Domain.RefreshTokens;
 using Daylog.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -14,6 +15,8 @@ public sealed class AppDbContext : DbContext, IAppDbContext
     public DbSet<UserCompany> UserCompanies { get; init; }
 
     public DbSet<Company> Companies { get; init; }
+
+    public DbSet<RefreshToken> RefreshTokens { get; init; }
 
     public AppDbContext(DbContextOptions<AppDbContext> dbContextOptions)
         : base(dbContextOptions)

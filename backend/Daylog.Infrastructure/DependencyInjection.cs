@@ -1,13 +1,20 @@
-﻿using Daylog.Application.Abstractions.Authentication;
+﻿using Daylog.Application;
+using Daylog.Application.Abstractions.Authentication;
+using Daylog.Application.Abstractions.BackgroundJobs;
 using Daylog.Application.Abstractions.Configurations;
 using Daylog.Application.Abstractions.Data;
+using Daylog.Application.Abstractions.Services;
 using Daylog.Infrastructure.Authentication;
+using Daylog.Infrastructure.BackgroundJobs;
+using Daylog.Infrastructure.BackgroundJobs.RecurringJobs;
 using Daylog.Infrastructure.Configurations;
 using Daylog.Infrastructure.Database.Data;
 using Daylog.Infrastructure.Database.Factories;
 using Daylog.Infrastructure.Database.SaveChangesInterceptors;
 using Daylog.Shared.Data;
 using FluentMigrator.Runner;
+using Hangfire;
+using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -28,6 +35,7 @@ public static class DependencyInjection
             .AddAppDbContext(appConfiguration)
             .AddMigrationRunner(appConfiguration)
             .AddHealthChecksInternal(appConfiguration)
+            .AddHangfireInternal(appConfiguration)
             .AddAuthenticationInternal(appConfiguration)
             .AddAuthorizationInternal();
 
@@ -43,6 +51,14 @@ public static class DependencyInjection
 
         services.AddScoped<ITokenService, JwtTokenService>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
+
+        services.AddSingleton<IBackgroundJobManager, BackgroundJobManager>();
+
+        services.Scan(scan => scan
+            .FromAssemblies(InfrastructureAssemblyReference.Assembly)
+            .AddClasses(classes => classes.AssignableToAny(typeof(IRecurringJob<>), typeof(IRecurringJob)), publicOnly: false)
+            .AsImplementedInterfaces()
+            .WithScopedLifetime());
 
         return services;
     }
@@ -94,21 +110,6 @@ public static class DependencyInjection
                 sqlServer: () => options.UseSqlServer(connectionString)
                 );
 
-            /*using var switcher = new DatabaseProviderSwitcher<DdContextOptionsBuilder>
-            {
-                PostgreSql = () => options.UseNpgsql(connectionString),
-                SqlServer = () => options.UseSqlServer(connectionString),
-            };
-
-            switcher.Execute(databaseProvider);*/
-
-            /*_ = databaseProvider switch
-            {
-                DatabaseProviderEnum.PostgreSql => options.UseNpgsql(connectionString),
-                DatabaseProviderEnum.SqlServer => options.UseSqlServer(connectionString),
-                _ => throw new NotSupportedException($"Database provider '{databaseProvider}' is not supported."),
-            };*/
-
             options
                 //.UseSnakeCaseNamingConvention()
                 .AddInterceptors(
@@ -137,21 +138,6 @@ public static class DependencyInjection
                     sqlServer: () => runner.AddSqlServer()
                     );
 
-                /*using var switcher = new DatabaseProviderSwitcher<IMigrationRunnerBuilder>
-                {
-                    PostgreSql = () => runner.AddPostgres(),
-                    SqlServer = () => runner.AddSqlServer(),
-                };
-
-                switcher.Execute(databaseProvider);*/
-
-                /*_ = databaseProvider switch
-                {
-                    DatabaseProviderEnum.PostgreSql => runner.AddPostgres(),
-                    DatabaseProviderEnum.SqlServer => runner.AddSqlServer(),
-                    _ => throw new NotSupportedException($"Database provider '{databaseProvider}' is not supported."),
-                };*/
-
                 runner
                     .WithGlobalConnectionString(connectionString)
                     .WithMigrationsIn(InfrastructureAssemblyReference.Assembly);
@@ -174,13 +160,36 @@ public static class DependencyInjection
             sqlServer: () => healthCheckBuilder.AddSqlServer(connectionString)
             );
 
-        /*using var switcher = new DatabaseProviderSwitcher<IHealthChecksBuilder>
-        {
-            PostgreSql = () => healthCheckBuilder.AddNpgSql(connectionString),
-            SqlServer = () => healthCheckBuilder.AddSqlServer(connectionString),
-        };
+        return services;
+    }
 
-        switcher.Execute(databaseProvider);*/
+    private static IServiceCollection AddHangfireInternal(this IServiceCollection services, IAppConfiguration appConfiguration)
+    {
+        var databaseProvider = appConfiguration.DatabaseProvider;
+        string connectionString = appConfiguration.DatabaseConnectionString;
+
+        services.AddHangfire(config =>
+        {
+            config.UseFilter(new AutomaticRetryAttribute { Attempts = 0, OnAttemptsExceeded = AttemptsExceededAction.Fail });
+            config.UseFilter(new AutomaticRetryAttribute { Attempts = 0, OnAttemptsExceeded = AttemptsExceededAction.Delete });
+
+            DatabaseProviderSwitch.For(
+                databaseProvider,
+                postgresql: () => config.UsePostgreSqlStorage(options =>
+                {
+                    options.UseNpgsqlConnection(connectionString);
+                }),
+                sqlServer: () => config.UseSqlServerStorage(connectionString)
+                );
+        });
+
+        services.AddHangfireServer(options =>
+        {
+            options.ServerName = "daylog";
+            options.Queues = [
+                "default",
+                ];
+        });
 
         return services;
     }

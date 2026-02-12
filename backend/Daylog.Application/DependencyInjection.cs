@@ -1,6 +1,4 @@
-﻿using Daylog.Application.Abstractions.Authentication;
-using Daylog.Application.Abstractions.Services;
-using Daylog.Application.Authentication;
+﻿using Daylog.Application.Abstractions.Services;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 

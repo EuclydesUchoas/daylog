@@ -63,6 +63,11 @@ public record ResultError
 
     public static ResultError Internal(string code, string description)
         => new(code, description, ResultErrorTypeEnum.Internal);
+
+    public override string ToString()
+    {
+        return $"Code: {Code}, Description: {Description}, Type: {Type}";
+    }
 }
 
 public sealed record ValidationResultError : ResultError

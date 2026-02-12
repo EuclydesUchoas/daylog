@@ -309,4 +309,10 @@
   <data name="Documentation_AuthenticationDescription" xml:space="preserve">
     <value>JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token in the text input below.</value>
   </data>
+  <data name="Endpoint_RefreshTokensSummary" xml:space="preserve">
+    <value>Refresh Tokens</value>
+  </data>
+  <data name="Endpoint_RefreshTokensDescription" xml:space="preserve">
+    <value>Refresh tokens</value>
+  </data>
 </root>

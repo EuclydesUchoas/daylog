@@ -25,7 +25,7 @@ public sealed class JwtTokenService(
             new Claim(ClaimTypes.NameIdentifier, userAuthInfo.Id.ToString()),
             new Claim(ClaimTypes.Email, userAuthInfo.Email),
             new Claim(ClaimTypes.Name, userAuthInfo.Name),
-            new Claim(ClaimTypes.Role, userAuthInfo.ProfileId.ToString())
+            new Claim(ClaimTypes.Role, userAuthInfo.Profile.Id.ToString())
         };
 
         var token = new JwtSecurityToken(
@@ -58,9 +58,11 @@ public sealed class JwtTokenService(
     public TokenInfo GenerateRefreshToken()
     {
         var bytes = RandomNumberGenerator.GetBytes(64);
-        return new TokenInfo(
+        var tokenInfo = new TokenInfo(
             Convert.ToBase64String(bytes),
             DateTime.UtcNow.AddHours(appConfiguration.JwtRefreshTokenExpirationInHours)
             );
+
+        return tokenInfo;
     }
 }
