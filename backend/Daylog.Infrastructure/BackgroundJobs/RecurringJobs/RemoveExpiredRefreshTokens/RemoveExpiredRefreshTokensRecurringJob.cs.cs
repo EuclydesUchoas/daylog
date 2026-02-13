@@ -1,7 +1,7 @@
 ﻿using Daylog.Application.Authentication.Dtos.Request;
 using Daylog.Application.Authentication.Services.Contracts;
 
-namespace Daylog.Infrastructure.BackgroundJobs.RecurringJobs;
+namespace Daylog.Infrastructure.BackgroundJobs.RecurringJobs.RemoveExpiredRefreshTokens;
 
 internal sealed class RemoveExpiredRefreshTokensRecurringJob(
     IDeleteExpiredRefreshTokensService deleteExpiredRefreshTokensService
@@ -10,7 +10,7 @@ internal sealed class RemoveExpiredRefreshTokensRecurringJob(
     public async Task<object> ExecuteAsync(CancellationToken cancellationToken = default)
     {
         var request = new DeleteExpiredRefreshTokensRequestDto(DateTime.UtcNow);
-
+        
         var response = await deleteExpiredRefreshTokensService.HandleAsync(request, cancellationToken);
 
         if (response.IsFailure)

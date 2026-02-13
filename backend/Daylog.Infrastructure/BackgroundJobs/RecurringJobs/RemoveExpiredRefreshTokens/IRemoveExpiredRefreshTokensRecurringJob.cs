@@ -1,0 +1,3 @@
+﻿namespace Daylog.Infrastructure.BackgroundJobs.RecurringJobs.RemoveExpiredRefreshTokens;
+
+internal interface IRemoveExpiredRefreshTokensRecurringJob : IRecurringJob;

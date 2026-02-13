@@ -72,6 +72,6 @@ app
 
 app.MapEndpoints();
 
-app.RunHangfireJobs();
+app.RunBackgroundJobs();
 
 app.Run();

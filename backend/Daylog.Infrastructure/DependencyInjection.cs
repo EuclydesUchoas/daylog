@@ -1,6 +1,7 @@
 ﻿using Daylog.Application;
 using Daylog.Application.Abstractions.Authentication;
 using Daylog.Application.Abstractions.BackgroundJobs;
+using Daylog.Application.Abstractions.BackgroundJobs.RecurringJobs;
 using Daylog.Application.Abstractions.Configurations;
 using Daylog.Application.Abstractions.Data;
 using Daylog.Application.Abstractions.Services;
@@ -11,10 +12,14 @@ using Daylog.Infrastructure.Configurations;
 using Daylog.Infrastructure.Database.Data;
 using Daylog.Infrastructure.Database.Factories;
 using Daylog.Infrastructure.Database.SaveChangesInterceptors;
+using Daylog.Infrastructure.HangfireCustomFilters;
 using Daylog.Shared.Data;
 using FluentMigrator.Runner;
 using Hangfire;
+using Hangfire.Common;
 using Hangfire.PostgreSql;
+using Hangfire.States;
+using Hangfire.Storage;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -52,11 +57,12 @@ public static class DependencyInjection
         services.AddScoped<ITokenService, JwtTokenService>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
 
-        services.AddSingleton<IBackgroundJobManager, BackgroundJobManager>();
-
         services.Scan(scan => scan
             .FromAssemblies(InfrastructureAssemblyReference.Assembly)
-            .AddClasses(classes => classes.AssignableToAny(typeof(IRecurringJob<>), typeof(IRecurringJob)), publicOnly: false)
+            .AddClasses(classes => classes.AssignableToAny(
+                typeof(IRecurringJobScheduler<>), typeof(IRecurringJobScheduler),
+                typeof(IRecurringJob<>), typeof(IRecurringJob)),
+                publicOnly: false)
             .AsImplementedInterfaces()
             .WithScopedLifetime());
 
@@ -170,8 +176,10 @@ public static class DependencyInjection
 
         services.AddHangfire(config =>
         {
+            config.UseFilter(new FinalFailedStateFilter());
             config.UseFilter(new AutomaticRetryAttribute { Attempts = 0, OnAttemptsExceeded = AttemptsExceededAction.Fail });
-            config.UseFilter(new AutomaticRetryAttribute { Attempts = 0, OnAttemptsExceeded = AttemptsExceededAction.Delete });
+            //config.UseFilter(new AutomaticRetryAttribute { Attempts = 0, OnAttemptsExceeded = AttemptsExceededAction.Delete, DelaysInSeconds = [86_400] });
+            //config.UseFilter(new ProlongExpirationTimeAttribute());
 
             DatabaseProviderSwitch.For(
                 databaseProvider,
