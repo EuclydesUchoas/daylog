@@ -60,7 +60,7 @@ public static class DependencyInjection
         services.Scan(scan => scan
             .FromAssemblies(InfrastructureAssemblyReference.Assembly)
             .AddClasses(classes => classes.AssignableToAny(
-                typeof(IRecurringJobScheduler<>), typeof(IRecurringJobScheduler),
+                typeof(IRecurringJobDispatcher<>), typeof(IRecurringJobDispatcher),
                 typeof(IRecurringJob<>), typeof(IRecurringJob)),
                 publicOnly: false)
             .AsImplementedInterfaces()

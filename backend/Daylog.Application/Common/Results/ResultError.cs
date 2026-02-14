@@ -66,7 +66,7 @@ public record ResultError
 
     public override string ToString()
     {
-        return $"Code: {Code}, Description: {Description}, Type: {Type}";
+        return $"{AppMessages.ResultError_Code}: {Code}, {AppMessages.ResultError_Description}: {Description}, {AppMessages.ResultError_Type}: {Type}";
     }
 }
 

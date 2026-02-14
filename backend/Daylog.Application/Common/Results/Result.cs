@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using Daylog.Shared.Core.Resources;
+using System.Text.Json.Serialization;
 
 namespace Daylog.Application.Common.Results;
 
@@ -14,12 +15,12 @@ public class Result
     {
         if (isSuccess && error is not null && error != ResultError.None)
         {
-            throw new InvalidOperationException("A successful result cannot have an error");
+            throw new InvalidOperationException(AppMessages.Result_SuccessCannotHaveError);
         }
 
         if (!isSuccess && (error is null || error == ResultError.None))
         {
-            throw new InvalidOperationException("A failure result must have an error");
+            throw new InvalidOperationException(AppMessages.Result_FailureMustHaveError);
         }
 
         IsSuccess = isSuccess;
@@ -38,11 +39,26 @@ public class Result
     public static Result<TData> Failure<TData>(ResultError error) 
         => new(default, false, error);
 
+    /// <summary>
+    /// Throws a <see cref="ResultFailureException"/> if the result is a failure.
+    /// </summary>
+    /// <exception cref="ResultFailureException">Thrown when the result is a failure.</exception>
+    /// <remarks>
+    /// This method is useful for quickly propagating errors in a fluent style.
+    /// </remarks>
+    public void ThrowIfFailure()
+    {
+        if (IsFailure)
+        {
+            throw new ResultFailureException(Error.ToString());
+        }
+    }
+
     public override string ToString()
     {
         return IsSuccess 
-            ? $"Success" 
-            : $"Failure: {Error}";
+            ? AppMessages.Result_Success
+            : $"{AppMessages.Result_Failure}: {Error}";
     }
 }
 
@@ -67,3 +83,5 @@ public sealed class Result<TData> : Result
     public Result Base
         => IsSuccess ? Success() : Failure(Error);
 }
+
+file sealed class ResultFailureException(string? message) : Exception(message);

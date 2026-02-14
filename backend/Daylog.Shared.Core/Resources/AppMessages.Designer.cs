@@ -457,6 +457,78 @@ namespace Daylog.Shared.Core.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Removed {0} expired refresh tokens.
+        /// </summary>
+        public static string RecurringJob_RemovedExpiredRefreshTokens {
+            get {
+                return ResourceManager.GetString("RecurringJob_RemovedExpiredRefreshTokens", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Failure.
+        /// </summary>
+        public static string Result_Failure {
+            get {
+                return ResourceManager.GetString("Result_Failure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a A failure result must have an error.
+        /// </summary>
+        public static string Result_FailureMustHaveError {
+            get {
+                return ResourceManager.GetString("Result_FailureMustHaveError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Success.
+        /// </summary>
+        public static string Result_Success {
+            get {
+                return ResourceManager.GetString("Result_Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a A successful result cannot have an error.
+        /// </summary>
+        public static string Result_SuccessCannotHaveError {
+            get {
+                return ResourceManager.GetString("Result_SuccessCannotHaveError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Code.
+        /// </summary>
+        public static string ResultError_Code {
+            get {
+                return ResourceManager.GetString("ResultError_Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Description.
+        /// </summary>
+        public static string ResultError_Description {
+            get {
+                return ResourceManager.GetString("ResultError_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Type.
+        /// </summary>
+        public static string ResultError_Type {
+            get {
+                return ResourceManager.GetString("ResultError_Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a E-mail is invalid.
         /// </summary>
         public static string User_EmailIsInvalid {

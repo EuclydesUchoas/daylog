@@ -3,6 +3,7 @@ using Daylog.Application.Authentication.Dtos.Request;
 using Daylog.Application.Authentication.Dtos.Response;
 using Daylog.Application.Authentication.Services.Contracts;
 using Daylog.Application.Common.Results;
+using Daylog.Shared.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Daylog.Application.Authentication.Services;
@@ -22,7 +23,8 @@ public sealed class DeleteExpiredRefreshTokensService(
         {
             DeletedTokensCount = await appDbContext.RefreshTokens.AsNoTracking()
                 .IgnoreQueryFilters()
-                .Where(x => x.ExpiresAt < requestDto.CurrentDateTime)
+                .WhereIf(x => x.UserId == requestDto.UserId!.Value, requestDto.UserId.HasValue)
+                .Where(x => x.ExpiresAt < requestDto.ExpireLimit)
                 .ExecuteDeleteAsync(cancellationToken)
         };
 

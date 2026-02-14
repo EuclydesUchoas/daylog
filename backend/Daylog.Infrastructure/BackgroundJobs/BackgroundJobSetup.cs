@@ -16,7 +16,7 @@ public static class BackgroundJobSetup
     {
         var scope = applicationBuilder.ApplicationServices.CreateScope();
 
-        var removeExpiredRefreshTokensRecurringJobScheduler = scope.ServiceProvider.GetRequiredService<IRemoveExpiredRefreshTokensRecurringJobScheduler>();
-        removeExpiredRefreshTokensRecurringJobScheduler.ExecuteAsync();
+        var removeExpiredRefreshTokensRecurringJobDispatcher = scope.ServiceProvider.GetRequiredService<IRemoveExpiredRefreshTokensRecurringJobDispatcher>();
+        removeExpiredRefreshTokensRecurringJobDispatcher.ExecuteAsync();
     }
 }

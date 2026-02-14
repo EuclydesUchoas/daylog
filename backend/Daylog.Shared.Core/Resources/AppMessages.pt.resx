@@ -315,4 +315,28 @@
   <data name="Endpoint_RefreshTokensDescription" xml:space="preserve">
     <value>Atualizar tokens</value>
   </data>
+  <data name="Result_Success" xml:space="preserve">
+    <value>Sucesso</value>
+  </data>
+  <data name="Result_Failure" xml:space="preserve">
+    <value>Falha</value>
+  </data>
+  <data name="Result_SuccessCannotHaveError" xml:space="preserve">
+    <value>Um resultado bem-sucedido não pode conter um erro</value>
+  </data>
+  <data name="Result_FailureMustHaveError" xml:space="preserve">
+    <value>Um resultado de falha deve conter um erro</value>
+  </data>
+  <data name="ResultError_Code" xml:space="preserve">
+    <value>Código</value>
+  </data>
+  <data name="ResultError_Description" xml:space="preserve">
+    <value>Descrição</value>
+  </data>
+  <data name="ResultError_Type" xml:space="preserve">
+    <value>Tipo</value>
+  </data>
+  <data name="RecurringJob_RemovedExpiredRefreshTokens" xml:space="preserve">
+    <value>Removido {0} tokens de atualização expirados</value>
+  </data>
 </root>

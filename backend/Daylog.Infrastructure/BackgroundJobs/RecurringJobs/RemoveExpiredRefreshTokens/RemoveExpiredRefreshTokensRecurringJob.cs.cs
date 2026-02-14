@@ -1,5 +1,6 @@
 ﻿using Daylog.Application.Authentication.Dtos.Request;
 using Daylog.Application.Authentication.Services.Contracts;
+using Daylog.Shared.Core.Resources;
 
 namespace Daylog.Infrastructure.BackgroundJobs.RecurringJobs.RemoveExpiredRefreshTokens;
 
@@ -9,15 +10,12 @@ internal sealed class RemoveExpiredRefreshTokensRecurringJob(
 {
     public async Task<object> ExecuteAsync(CancellationToken cancellationToken = default)
     {
-        var request = new DeleteExpiredRefreshTokensRequestDto(DateTime.UtcNow);
+        var request = new DeleteExpiredRefreshTokensRequestDto(null, DateTime.UtcNow);
         
         var response = await deleteExpiredRefreshTokensService.HandleAsync(request, cancellationToken);
 
-        if (response.IsFailure)
-        {
-            throw new InvalidOperationException(response.Error.ToString());
-        }
-
-        return $"Removed {response.Data!.DeletedTokensCount} expired refresh tokens.";
+        response.ThrowIfFailure();
+        
+        return string.Format(AppMessages.RecurringJob_RemovedExpiredRefreshTokens, response.Data!.DeletedTokensCount);
     }
 }
