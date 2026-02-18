@@ -1,6 +1,7 @@
 ﻿using Daylog.Application.Abstractions.Authentication;
 using Daylog.Application.Abstractions.Configurations;
 using Daylog.Application.Authentication.Models;
+using Daylog.Shared.Core.Temporal;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -10,7 +11,8 @@ using System.Text;
 namespace Daylog.Infrastructure.Authentication;
 
 public sealed class JwtTokenService(
-    IAppConfiguration appConfiguration
+    IAppConfiguration appConfiguration,
+    IDateTimeProvider dateTimeProvider
     ) : ITokenService
 {
     private readonly JwtSecurityTokenHandler _tokenHandler = new();
@@ -32,14 +34,14 @@ public sealed class JwtTokenService(
             issuer: appConfiguration.JwtIssuer,
             audience: appConfiguration.JwtAudience,
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(appConfiguration.JwtTokenExpirationInMinutes),
+            expires: dateTimeProvider.UtcNow.AddMinutes(appConfiguration.JwtTokenExpirationInMinutes),
             signingCredentials: credentials
         );
 
         /*var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.UtcNow.AddMinutes(appConfiguration.JwtTokenExpirationInMinutes),
+            Expires = dateTimeProvider.UtcNow.AddMinutes(appConfiguration.JwtTokenExpirationInMinutes),
             SigningCredentials = credentials,
             Issuer = appConfiguration.JwtIssuer,
             Audience = appConfiguration.JwtAudience,
@@ -60,7 +62,7 @@ public sealed class JwtTokenService(
         var bytes = RandomNumberGenerator.GetBytes(64);
         var tokenInfo = new TokenInfo(
             Convert.ToBase64String(bytes),
-            DateTime.UtcNow.AddHours(appConfiguration.JwtRefreshTokenExpirationInHours)
+            dateTimeProvider.UtcNow.AddHours(appConfiguration.JwtRefreshTokenExpirationInHours)
             );
 
         return tokenInfo;

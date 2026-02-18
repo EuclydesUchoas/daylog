@@ -1,12 +1,14 @@
 ﻿using Daylog.Application.Abstractions.Authentication;
 using Daylog.Domain;
+using Daylog.Shared.Core.Temporal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Daylog.Infrastructure.Database.SaveChangesInterceptors;
 
 internal sealed class CreatableInterceptor(
-    IUserContext userContext
+    IUserContext userContext,
+    IDateTimeProvider dateTimeProvider
     ) : SaveChangesInterceptor
 {
     public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
@@ -20,7 +22,7 @@ internal sealed class CreatableInterceptor(
             .Entries<ICreatable>()
             .Where(e => e.State is EntityState.Added);
 
-        var actualDateTime = DateTime.UtcNow;
+        var actualDateTime = dateTimeProvider.UtcNow;
         var userId = userContext.UserId;
 
         foreach (var entry in entries)

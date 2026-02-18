@@ -1,4 +1,5 @@
 ﻿using Daylog.Domain.Users;
+using Daylog.Shared.Core.Temporal;
 
 namespace Daylog.Domain.RefreshTokens;
 
@@ -82,21 +83,21 @@ public sealed class RefreshToken : Entity, ICreatable, IUpdatable, IDeletable
         ExpiresAt = newExpiresAt;
     }
 
-    public void Revoke(Guid revokedByUserId, DateTime? revokedAt = null)
+    public void Revoke(Guid revokedByUserId, IDateTimeProvider dateTimeProvider)
     {
         IsRevoked = true;
         RevokedByUserId = revokedByUserId;
-        RevokedAt = revokedAt.GetValueOrDefault(DateTime.UtcNow);
+        RevokedAt = dateTimeProvider.UtcNow;
         RevokedByUser = null;
     }
 
-    public bool IsExpired(DateTime? currentDateTime = null)
+    public bool IsExpired(IDateTimeProvider dateTimeProvider)
     {
-        return ExpiresAt < currentDateTime.GetValueOrDefault(DateTime.UtcNow);
+        return ExpiresAt < dateTimeProvider.UtcNow;
     }
 
-    public bool IsValid(DateTime? currentDateTime = null)
+    public bool IsValid(IDateTimeProvider dateTimeProvider)
     {
-        return !IsRevoked && !IsExpired(currentDateTime);
+        return !IsRevoked && !IsExpired(dateTimeProvider);
     }
 }

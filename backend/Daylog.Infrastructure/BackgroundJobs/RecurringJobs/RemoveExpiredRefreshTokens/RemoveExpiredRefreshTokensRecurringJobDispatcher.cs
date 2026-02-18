@@ -1,7 +1,6 @@
 ﻿using Daylog.Application.Abstractions.BackgroundJobs.RecurringJobs.RemoveExpiredRefreshTokens;
 using Daylog.Application.Common.Results;
 using Hangfire;
-using System.Globalization;
 
 namespace Daylog.Infrastructure.BackgroundJobs.RecurringJobs.RemoveExpiredRefreshTokens;
 

@@ -6,6 +6,7 @@ using Daylog.Application.Authentication.Models;
 using Daylog.Application.Authentication.Services.Contracts;
 using Daylog.Application.Common.Results;
 using Daylog.Application.UserProfiles.Dtos.Response;
+using Daylog.Shared.Core.Temporal;
 using Microsoft.EntityFrameworkCore;
 
 namespace Daylog.Application.Authentication.Services;
@@ -13,7 +14,8 @@ namespace Daylog.Application.Authentication.Services;
 public sealed class RefreshTokensService(
     IAppDbContext appDbContext,
     ITokenService tokenService,
-    ICreateRefreshTokenService createRefreshTokenService
+    ICreateRefreshTokenService createRefreshTokenService,
+    IDateTimeProvider dateTimeProvider
     ) : IRefreshTokensService
 {
     public async Task<Result<TokensResponseDto>> HandleAsync(RefreshTokensRequestDto requestDto, CancellationToken cancellationToken = default)
@@ -37,7 +39,7 @@ public sealed class RefreshTokensService(
             return Result.Failure<TokensResponseDto>(ResultError.Unauthorized("refresh_token_revoked", "Refresh token has been revoked."));
         }
 
-        if (refreshToken.IsExpired())
+        if (refreshToken.IsExpired(dateTimeProvider))
         {
             return Result.Failure<TokensResponseDto>(ResultError.Unauthorized("refresh_token_expired", "Refresh token has expired."));
         }
@@ -73,7 +75,8 @@ public sealed class RefreshTokensService(
         /*refreshToken.ChangeToken(newRefreshToken.Token, newRefreshToken.ExpiresAt);
         await appDbContext.SaveChangesAsync(cancellationToken);*/
 
-        //refreshToken.Revoke(refreshToken.UserId);
+        /*refreshToken.Revoke(refreshToken.UserId);
+        await appDbContext.SaveChangesAsync(cancellationToken);*/
 
         var createRefreshToken = new CreateRefreshTokenRequestDto(
             userAuth.Id,

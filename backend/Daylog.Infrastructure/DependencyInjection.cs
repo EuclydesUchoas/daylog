@@ -1,25 +1,20 @@
-﻿using Daylog.Application;
-using Daylog.Application.Abstractions.Authentication;
-using Daylog.Application.Abstractions.BackgroundJobs;
+﻿using Daylog.Application.Abstractions.Authentication;
 using Daylog.Application.Abstractions.BackgroundJobs.RecurringJobs;
 using Daylog.Application.Abstractions.Configurations;
 using Daylog.Application.Abstractions.Data;
-using Daylog.Application.Abstractions.Services;
 using Daylog.Infrastructure.Authentication;
-using Daylog.Infrastructure.BackgroundJobs;
 using Daylog.Infrastructure.BackgroundJobs.RecurringJobs;
 using Daylog.Infrastructure.Configurations;
 using Daylog.Infrastructure.Database.Data;
 using Daylog.Infrastructure.Database.Factories;
 using Daylog.Infrastructure.Database.SaveChangesInterceptors;
 using Daylog.Infrastructure.HangfireCustomFilters;
+using Daylog.Infrastructure.Temporal;
+using Daylog.Shared.Core.Temporal;
 using Daylog.Shared.Data;
 using FluentMigrator.Runner;
 using Hangfire;
-using Hangfire.Common;
 using Hangfire.PostgreSql;
-using Hangfire.States;
-using Hangfire.Storage;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -53,6 +48,8 @@ public static class DependencyInjection
         services.AddSingleton<IAppConfiguration>(appConfiguration);
 
         services.AddSingleton<IDatabaseFactory, DatabaseFactory>();
+
+        services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
         services.AddScoped<ITokenService, JwtTokenService>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
