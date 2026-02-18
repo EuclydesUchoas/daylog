@@ -69,14 +69,14 @@ public sealed class RefreshTokensService(
             userAuth.Profile
             );
 
-        var accessToken = tokenService.GenerateToken(userAuthInfo);
+        var newAccessToken = tokenService.GenerateToken(userAuthInfo);
         var newRefreshToken = tokenService.GenerateRefreshToken();
 
         /*refreshToken.ChangeToken(newRefreshToken.Token, newRefreshToken.ExpiresAt);
         await appDbContext.SaveChangesAsync(cancellationToken);*/
 
-        /*refreshToken.Revoke(refreshToken.UserId);
-        await appDbContext.SaveChangesAsync(cancellationToken);*/
+        refreshToken.Revoke(refreshToken.UserId, dateTimeProvider);
+        await appDbContext.SaveChangesAsync(cancellationToken);
 
         var createRefreshToken = new CreateRefreshTokenRequestDto(
             userAuth.Id,
@@ -92,7 +92,7 @@ public sealed class RefreshTokensService(
         }
 
         var tokens = new TokensResponseDto(
-            new TokenInfoResponseDto(accessToken.Token, accessToken.ExpiresAt),
+            new TokenInfoResponseDto(newAccessToken.Token, newAccessToken.ExpiresAt),
             new TokenInfoResponseDto(newRefreshToken.Token, newRefreshToken.ExpiresAt)
             );
 
