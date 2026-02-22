@@ -306,6 +306,18 @@
   <data name="Auth_InvalidCredentials" xml:space="preserve">
     <value>Invalid credentials</value>
   </data>
+  <data name="Auth_RefreshTokenExpired" xml:space="preserve">
+    <value>Refresh token has expired</value>
+  </data>
+  <data name="Auth_RefreshTokenUserNotFound" xml:space="preserve">
+    <value>User associated with the refresh token not found</value>
+  </data>
+  <data name="Auth_RefreshTokenRevoked" xml:space="preserve">
+    <value>Refresh token has been revoked</value>
+  </data>
+  <data name="Auth_RefreshTokenNotFound" xml:space="preserve">
+    <value>Refresh token not found</value>
+  </data>
   <data name="Documentation_AuthenticationDescription" xml:space="preserve">
     <value>JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token in the text input below.</value>
   </data>

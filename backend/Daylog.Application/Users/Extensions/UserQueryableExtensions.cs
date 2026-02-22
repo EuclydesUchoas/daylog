@@ -1,5 +1,6 @@
 ﻿using Daylog.Application.Common.Dtos.Response;
 using Daylog.Application.Users.Dtos.Response;
+using Daylog.Domain;
 using Daylog.Domain.UserProfiles;
 using Daylog.Domain.Users;
 using Daylog.Shared.Core.Constants;
@@ -39,7 +40,7 @@ public static class UserQueryableExtensions
             }),
             CreatedInfo = new CreatedInfoResponseDto
             {
-                CreatedAt = x.CreatedAt,
+                CreatedAt = ((ICreatable)x).CreatedAt,
                 CreatedByUserId = x.CreatedByUserId,
                 CreatedByUserName = x.CreatedByUser!.Name
             },

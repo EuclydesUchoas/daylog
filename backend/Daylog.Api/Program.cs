@@ -25,7 +25,8 @@ builder.Services.AddCors(options =>
             .WithOrigins("http://localhost:4200", "https://localhost:7176")
             .AllowAnyHeader()
             .AllowAnyMethod()
-            .AllowCredentials();
+            .AllowCredentials()
+            .SetPreflightMaxAge(TimeSpan.FromMinutes(10));
     });
 });
 

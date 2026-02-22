@@ -97,6 +97,42 @@ namespace Daylog.Shared.Core.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Refresh token has expired.
+        /// </summary>
+        public static string Auth_RefreshTokenExpired {
+            get {
+                return ResourceManager.GetString("Auth_RefreshTokenExpired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Refresh token not found.
+        /// </summary>
+        public static string Auth_RefreshTokenNotFound {
+            get {
+                return ResourceManager.GetString("Auth_RefreshTokenNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Refresh token has been revoked.
+        /// </summary>
+        public static string Auth_RefreshTokenRevoked {
+            get {
+                return ResourceManager.GetString("Auth_RefreshTokenRevoked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a User associated with the refresh token not found.
+        /// </summary>
+        public static string Auth_RefreshTokenUserNotFound {
+            get {
+                return ResourceManager.GetString("Auth_RefreshTokenUserNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a A validation error ocurred.
         /// </summary>
         public static string AValidationErrorOcurred {

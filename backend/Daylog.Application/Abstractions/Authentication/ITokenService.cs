@@ -4,7 +4,7 @@ namespace Daylog.Application.Abstractions.Authentication;
 
 public interface ITokenService
 {
-    TokenInfo GenerateToken(UserAuthInfo userAuthInfo);
+    AccessTokenInfo GenerateToken(UserAuthInfo userAuthInfo);
 
-    TokenInfo GenerateRefreshToken();
+    RefreshTokenInfo GenerateRefreshToken();
 }

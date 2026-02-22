@@ -3,16 +3,16 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Daylog.Application.Authentication.Dtos.Response;
 
-public sealed class TokenInfoResponseDto : IResponseDto
+public sealed class AccessTokenInfoResponseDto : IResponseDto
 {
     public required string Token { get; init; }
 
     public required DateTime ExpiresAt { get; init; }
 
-    public TokenInfoResponseDto() { }
+    public AccessTokenInfoResponseDto() { }
 
     [SetsRequiredMembers]
-    public TokenInfoResponseDto(string token, DateTime expiresAt)
+    public AccessTokenInfoResponseDto(string token, DateTime expiresAt)
     {
         Token = token;
         ExpiresAt = expiresAt;

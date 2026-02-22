@@ -17,7 +17,7 @@ public sealed class JwtTokenService(
 {
     private readonly JwtSecurityTokenHandler _tokenHandler = new();
 
-    public TokenInfo GenerateToken(UserAuthInfo userAuthInfo)
+    public AccessTokenInfo GenerateToken(UserAuthInfo userAuthInfo)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appConfiguration.JwtSecretKey));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -49,7 +49,7 @@ public sealed class JwtTokenService(
 
         var token = _tokenHandler.CreateToken(tokenDescriptor);*/
 
-        var tokenInfo = new TokenInfo(
+        var tokenInfo = new AccessTokenInfo(
             _tokenHandler.WriteToken(token),
             token.ValidTo
             );
@@ -57,10 +57,10 @@ public sealed class JwtTokenService(
         return tokenInfo;
     }
 
-    public TokenInfo GenerateRefreshToken()
+    public RefreshTokenInfo GenerateRefreshToken()
     {
         var bytes = RandomNumberGenerator.GetBytes(64);
-        var tokenInfo = new TokenInfo(
+        var tokenInfo = new RefreshTokenInfo(
             Convert.ToBase64String(bytes),
             dateTimeProvider.UtcNow.AddHours(appConfiguration.JwtRefreshTokenExpirationInHours)
             );

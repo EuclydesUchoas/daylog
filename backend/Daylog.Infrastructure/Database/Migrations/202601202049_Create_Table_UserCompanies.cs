@@ -1,4 +1,5 @@
-﻿using FluentMigrator;
+﻿using Daylog.Infrastructure.Database.Extensions;
+using FluentMigrator;
 
 namespace Daylog.Infrastructure.Database.Migrations;
 
@@ -16,10 +17,8 @@ public sealed class _202601202049_Create_Table_UserCompanies : Migration
             .WithColumn("user_id").AsGuid().NotNullable().PrimaryKey().ForeignKey("users", "id")
             .WithColumn("company_id").AsGuid().NotNullable().PrimaryKey().ForeignKey("companies", "id")
             // Creatable
-            .WithColumn("created_at").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentUTCDateTime)
-            .WithColumn("created_by_user_id").AsGuid().Nullable().ForeignKey("users", "id").Indexed()
+            .WithCreatableColumns()
             // Updatable
-            .WithColumn("updated_at").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentUTCDateTime)
-            .WithColumn("updated_by_user_id").AsGuid().Nullable().ForeignKey("users", "id").Indexed();
+            .WithUpdatableColumns();
     }
 }

@@ -2,7 +2,9 @@
 using Daylog.Application.Abstractions.Data;
 using Daylog.Application.Authentication.Dtos.Request;
 using Daylog.Application.Authentication.Dtos.Response;
+using Daylog.Application.Authentication.Extensions;
 using Daylog.Application.Authentication.Models;
+using Daylog.Application.Authentication.Results;
 using Daylog.Application.Authentication.Services.Contracts;
 using Daylog.Application.Common.Results;
 using Daylog.Application.UserProfiles.Dtos.Response;
@@ -31,17 +33,17 @@ public sealed class RefreshTokensService(
 
         if (refreshToken is null)
         {
-            return Result.Failure<TokensResponseDto>(ResultError.Unauthorized("refresh_token_not_found", "Refresh token not found."));
-        }
-
-        if (refreshToken.IsRevoked)
-        {
-            return Result.Failure<TokensResponseDto>(ResultError.Unauthorized("refresh_token_revoked", "Refresh token has been revoked."));
+            return Result.Failure<TokensResponseDto>(AuthResultErrors.RefreshTokenNotFound);
         }
 
         if (refreshToken.IsExpired(dateTimeProvider))
         {
-            return Result.Failure<TokensResponseDto>(ResultError.Unauthorized("refresh_token_expired", "Refresh token has expired."));
+            return Result.Failure<TokensResponseDto>(AuthResultErrors.RefreshTokenExpired);
+        }
+
+        if (refreshToken.IsRevoked)
+        {
+            return Result.Failure<TokensResponseDto>(AuthResultErrors.RefreshTokenRevoked);
         }
 
         var userAuth = await appDbContext.Users.AsNoTracking()
@@ -59,17 +61,10 @@ public sealed class RefreshTokensService(
 
         if (userAuth is null)
         {
-            return Result.Failure<TokensResponseDto>(ResultError.Unauthorized("user_not_found", "User associated with the refresh token not found."));
+            return Result.Failure<TokensResponseDto>(AuthResultErrors.RefreshTokenUserNotFound);
         }
 
-        var userAuthInfo = new UserAuthInfo(
-            userAuth.Id,
-            userAuth.Email,
-            userAuth.Name,
-            userAuth.Profile
-            );
-
-        var newAccessToken = tokenService.GenerateToken(userAuthInfo);
+        var newAccessToken = tokenService.GenerateToken(userAuth);
         var newRefreshToken = tokenService.GenerateRefreshToken();
 
         /*refreshToken.ChangeToken(newRefreshToken.Token, newRefreshToken.ExpiresAt);
@@ -78,22 +73,18 @@ public sealed class RefreshTokensService(
         refreshToken.Revoke(refreshToken.UserId, dateTimeProvider);
         await appDbContext.SaveChangesAsync(cancellationToken);
 
-        var createRefreshToken = new CreateRefreshTokenRequestDto(
-            userAuth.Id,
-            newRefreshToken.Token,
-            newRefreshToken.ExpiresAt
-            );
+        var createRefreshToken = newRefreshToken.ToCreateRefreshTokenRequestDto(userAuth.Id);
 
         var createRefreshTokenResult = await createRefreshTokenService.HandleAsync(createRefreshToken, cancellationToken);
-
+        
         if (createRefreshTokenResult.IsFailure)
         {
-            return Result.Failure<TokensResponseDto>(createRefreshTokenResult.Error);
+            return createRefreshTokenResult.Cast<TokensResponseDto>();
         }
 
         var tokens = new TokensResponseDto(
-            new TokenInfoResponseDto(newAccessToken.Token, newAccessToken.ExpiresAt),
-            new TokenInfoResponseDto(newRefreshToken.Token, newRefreshToken.ExpiresAt)
+            newAccessToken.ToAccessTokenInfoResponseDto(),
+            newRefreshToken.ToRefreshTokenInfoResponseDto()
             );
 
         return Result.Success(tokens);

@@ -20,7 +20,7 @@ public sealed class GetUsersService(
         {
             return Result.Failure<ICollectionResponseDto<UserResponseDto>>(ResultError.NullData);
         }
-
+        
         var usersDtos = await appDbContext.Users.AsNoTracking()
             .SelectUserResponseDto()
             .ToListAsync(cancellationToken);

@@ -57,7 +57,7 @@ public sealed class UpdateUserService(
 
         await appDbContext.SaveChangesAsync(cancellationToken);
 
-        var userDto = userDb.ToUserResponseDto()!;
+        var userDto = userDb.ToUserResponseDto();
 
         return Result.Success(userDto);
     }

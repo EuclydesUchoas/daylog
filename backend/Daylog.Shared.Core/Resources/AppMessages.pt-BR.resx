@@ -306,6 +306,18 @@
   <data name="Auth_InvalidCredentials" xml:space="preserve">
     <value>Credenciais inválidas</value>
   </data>
+  <data name="Auth_RefreshTokenExpired" xml:space="preserve">
+    <value>Refresh token expirou</value>
+  </data>
+  <data name="Auth_RefreshTokenUserNotFound" xml:space="preserve">
+    <value>Usuário associado ao refresh token não foi encontrado</value>
+  </data>
+  <data name="Auth_RefreshTokenRevoked" xml:space="preserve">
+    <value>Refresh token foi revogado</value>
+  </data>
+  <data name="Auth_RefreshTokenNotFound" xml:space="preserve">
+    <value>Refresh token não encontrado</value>
+  </data>
   <data name="Documentation_AuthenticationDescription" xml:space="preserve">
     <value>Cabeçalho de autorização JWT usando o esquema Bearer. Digite 'Bearer' [espaço] e, em seguida, seu token no campo de texto abaixo.</value>
   </data>

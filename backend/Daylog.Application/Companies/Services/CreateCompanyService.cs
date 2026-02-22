@@ -33,7 +33,7 @@ public sealed class CreateCompanyService(
 
         await appDbContext.SaveChangesAsync(cancellationToken);
 
-        var responseDto = company.ToCompanyResponseDto()!;
+        var responseDto = company.ToCompanyResponseDto();
 
         return Result.Success(responseDto);
     }

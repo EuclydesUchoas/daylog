@@ -73,11 +73,25 @@ public sealed class Result<TData> : Result
         Data = data;
     }
 
-    public Result<TDataOut> Cast<TDataOut>(Func<TData, TDataOut> dataConverter)
-        => Cast(this, dataConverter);
+    /// <summary>
+    /// Creates a new result instance with the specified output type, preserving the success state and error information.
+    /// </summary>
+    /// <typeparam name="TDataOut">The type of the output data for the result.</typeparam>
+    /// <returns>
+    /// A new instance of the result containing the default value for the specified output type, along with the current
+    /// success state and error information.
+    /// </returns>
+    public Result<TDataOut> Cast<TDataOut>()
+        => new(default, IsSuccess, Error);
 
-    public Result<TDataOut> Cast<TDataIn, TDataOut>(Result<TDataIn> result, Func<TDataIn, TDataOut> dataConverter)
-        => new(dataConverter(result.Data!), result.IsSuccess, result.Error);
+    /// <summary>
+    /// Converts the current result's data to a specified type using the provided conversion function.
+    /// </summary>
+    /// <typeparam name="TDataOut">The type to which the current data is converted.</typeparam>
+    /// <param name="dataConverter">A function that defines how to convert the current data to the desired output type.</param>
+    /// <returns>A new Result containing the converted data, along with the original success status and error information.</returns>
+    public Result<TDataOut> Cast<TDataOut>(Func<TData, TDataOut> dataConverter)
+        => new(dataConverter(Data!), IsSuccess, Error);
 
     [JsonIgnore]
     public Result Base

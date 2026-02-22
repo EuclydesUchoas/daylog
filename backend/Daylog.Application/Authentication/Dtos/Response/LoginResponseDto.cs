@@ -5,16 +5,16 @@ namespace Daylog.Application.Authentication.Dtos.Response;
 
 public sealed class LoginResponseDto : IResponseDto
 {
-    public required LoginUserInfoResponseDto UserInfo { get; init; }
-
     public required TokensResponseDto Tokens { get; init; }
+
+    public required LoginUserInfoResponseDto UserInfo { get; init; }
 
     public LoginResponseDto() { }
 
     [SetsRequiredMembers]
-    public LoginResponseDto(LoginUserInfoResponseDto userInfo, TokensResponseDto tokens)
+    public LoginResponseDto(TokensResponseDto tokens, LoginUserInfoResponseDto userInfo)
     {
-        UserInfo = userInfo;
         Tokens = tokens;
+        UserInfo = userInfo;
     }
 }

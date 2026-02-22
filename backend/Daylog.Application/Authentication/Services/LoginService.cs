@@ -2,6 +2,7 @@
 using Daylog.Application.Abstractions.Data;
 using Daylog.Application.Authentication.Dtos.Request;
 using Daylog.Application.Authentication.Dtos.Response;
+using Daylog.Application.Authentication.Extensions;
 using Daylog.Application.Authentication.Models;
 using Daylog.Application.Authentication.Results;
 using Daylog.Application.Authentication.Services.Contracts;
@@ -59,11 +60,7 @@ public sealed class LoginService(
         var accessToken = tokenService.GenerateToken(userAuthInfo);
         var refreshToken = tokenService.GenerateRefreshToken();
 
-        var createRefreshToken = new CreateRefreshTokenRequestDto(
-            userAuth.UserInfo.Id,
-            refreshToken.Token,
-            refreshToken.ExpiresAt
-            );
+        var createRefreshToken = refreshToken.ToCreateRefreshTokenRequestDto(userAuthInfo.Id);
 
         var createRefreshTokenResult = await createRefreshTokenService.HandleAsync(createRefreshToken, cancellationToken);
 
@@ -72,16 +69,15 @@ public sealed class LoginService(
             return Result.Failure<LoginResponseDto>(createRefreshTokenResult.Error);
         }
 
-        var tokens = new TokensResponseDto
-        {
-            AccessToken = new TokenInfoResponseDto(accessToken.Token, accessToken.ExpiresAt),
-            RefreshToken = new TokenInfoResponseDto(refreshToken.Token, refreshToken.ExpiresAt)
-        };
+        var tokens = new TokensResponseDto(
+            accessToken.ToAccessTokenInfoResponseDto(),
+            refreshToken.ToRefreshTokenInfoResponseDto()
+            );
 
         var response = new LoginResponseDto
         {
+            Tokens = tokens,
             UserInfo = userAuth.UserInfo,
-            Tokens = tokens
         };
 
         return Result.Success(response);

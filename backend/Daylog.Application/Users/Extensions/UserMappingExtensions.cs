@@ -2,11 +2,13 @@
 using Daylog.Application.Users.Dtos.Request;
 using Daylog.Application.Users.Dtos.Response;
 using Daylog.Domain.Users;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Daylog.Application.Users.Extensions;
 
 public static class UserMappingExtensions
 {
+    [return: NotNullIfNotNull(nameof(user))]
     public static UserResponseDto? ToUserResponseDto(this User? user)
         => user is not null ? new UserResponseDto(
             user.Id,
@@ -14,43 +16,33 @@ public static class UserMappingExtensions
             user.Email,
             user.ProfileId,
             user.Profile?.Name!,
-            user.Companies.Select(x => x.ToUserCompanyResponseDto()!).ToList(),
-            user.ToCreatedInfoResponseDto()!,
-            user.ToUpdatedInfoResponseDto()!,
-            user.ToDeletedInfoResponseDto()!
+            user.Companies.Select(x => x.ToUserCompanyResponseDto()).ToList(),
+            user.ToCreatedInfoResponseDto(),
+            user.ToUpdatedInfoResponseDto(),
+            user.ToDeletedInfoResponseDto()
         ) : null;
 
+    [return: NotNullIfNotNull(nameof(users))]
     public static IEnumerable<UserResponseDto> ToUserResponseDto(this IEnumerable<User> users)
-        => users.Select(x => x.ToUserResponseDto()!);
+        => users.Select(x => x.ToUserResponseDto());
 
+    [return: NotNullIfNotNull(nameof(createUserRequestDto))]
     public static User? ToUser(this CreateUserRequestDto? createUserRequestDto)
         => createUserRequestDto is not null ? User.New(
             createUserRequestDto.Name,
             createUserRequestDto.Email,
             createUserRequestDto.Password,
             createUserRequestDto.ProfileId,
-            createUserRequestDto.Companies.Select(x => x.ToUserCompany()!).ToList()
+            createUserRequestDto.Companies.Select(x => x.ToUserCompany()).ToList()
         ) : null;
 
+    [return: NotNullIfNotNull(nameof(updateUserRequestDto))]
     public static User? ToUser(this UpdateUserRequestDto? updateUserRequestDto)
         => updateUserRequestDto is not null ? User.Existing(
             updateUserRequestDto.Id,
             updateUserRequestDto.Name,
             updateUserRequestDto.Email,
             updateUserRequestDto.ProfileId,
-            updateUserRequestDto.Companies.Select(x => x.ToUserCompany()!).ToList()
-        ) : null;
-
-    public static UserCompany? ToUserCompany(this CreateUserCompanyRequestDto? createUserCompanyRequestDto)
-        => createUserCompanyRequestDto is not null ? UserCompany.NewByCompanyId(
-            createUserCompanyRequestDto.CompanyId
-        ) : null;
-
-    public static UserCompanyResponseDto? ToUserCompanyResponseDto(this UserCompany? userCompany)
-        => userCompany is not null ? new UserCompanyResponseDto(
-            userCompany.CompanyId,
-            userCompany.Company?.Name!,
-            userCompany.ToCreatedInfoResponseDto()!,
-            userCompany.ToUpdatedInfoResponseDto()!
+            updateUserRequestDto.Companies.Select(x => x.ToUserCompany()).ToList()
         ) : null;
 }

@@ -12,9 +12,9 @@ public static class FluentValidationExtensions
 
     public static async Task AddExistingUsersIdsAsync<T>(this ValidationContext<T> context, HashSet<Guid> usersIds, IAppDbContext appDbContext, CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(context);
-        ArgumentNullException.ThrowIfNull(usersIds);
-        ArgumentNullException.ThrowIfNull(appDbContext);
+        ArgumentNullException.ThrowIfNull(context, nameof(context));
+        ArgumentNullException.ThrowIfNull(usersIds, nameof(usersIds));
+        ArgumentNullException.ThrowIfNull(appDbContext, nameof(appDbContext));
 
         var validUsersIds = await appDbContext.Users.AsNoTracking()
             .Where(x => usersIds.Contains(x.Id))
@@ -32,8 +32,8 @@ public static class FluentValidationExtensions
 
     public static IRuleBuilderOptions<T, Guid> ExistsUserId<T>(this IRuleBuilder<T, Guid> ruleBuilder, IAppDbContext appDbContext)
     {
-        ArgumentNullException.ThrowIfNull(ruleBuilder);
-        ArgumentNullException.ThrowIfNull(appDbContext);
+        ArgumentNullException.ThrowIfNull(ruleBuilder, nameof(ruleBuilder));
+        ArgumentNullException.ThrowIfNull(appDbContext, nameof(appDbContext));
 
         return ruleBuilder.SetAsyncValidator(new AsyncPredicateValidator<T, Guid>(async (createUserCompany, userId, context, cancellationToken) =>
         {
@@ -49,9 +49,9 @@ public static class FluentValidationExtensions
 
     public static async Task AddExistingCompaniesIdsAsync<T>(this ValidationContext<T> context, HashSet<Guid> companiesIds, IAppDbContext appDbContext, CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(context);
-        ArgumentNullException.ThrowIfNull(companiesIds);
-        ArgumentNullException.ThrowIfNull(appDbContext);
+        ArgumentNullException.ThrowIfNull(context, nameof(context));
+        ArgumentNullException.ThrowIfNull(companiesIds, nameof(companiesIds));
+        ArgumentNullException.ThrowIfNull(appDbContext, nameof(appDbContext));
 
         var validCompaniesIds = await appDbContext.Companies.AsNoTracking()
             .Where(x => companiesIds.Contains(x.Id))
@@ -69,8 +69,8 @@ public static class FluentValidationExtensions
 
     public static IRuleBuilderOptions<T, Guid> ExistsCompanyId<T>(this IRuleBuilder<T, Guid> ruleBuilder, IAppDbContext appDbContext)
     {
-        ArgumentNullException.ThrowIfNull(ruleBuilder);
-        ArgumentNullException.ThrowIfNull(appDbContext);
+        ArgumentNullException.ThrowIfNull(ruleBuilder, nameof(ruleBuilder));
+        ArgumentNullException.ThrowIfNull(appDbContext, nameof(appDbContext));
 
         return ruleBuilder.SetAsyncValidator(new AsyncPredicateValidator<T, Guid>(async (createUserCompany, companyId, context, cancellationToken) =>
         {

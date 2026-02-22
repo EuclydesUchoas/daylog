@@ -52,7 +52,7 @@ public sealed class CreateUserService(
 
         await appDbContext.SaveChangesAsync(cancellationToken);
 
-        var responseDto = user.ToUserResponseDto()!;
+        var responseDto = user.ToUserResponseDto();
 
         return Result.Success(responseDto);
     }
