@@ -10,6 +10,8 @@ public sealed class User : Entity, ICreatable, IUpdatable, ISoftDeletable
 
     public string Email { get; private set; } = null!;
 
+    public string Login { get; private set; } = null!;
+
     public string Password { get; private set; } = null!;
 
     public UserProfileEnum ProfileId { get; private set; }
@@ -55,7 +57,7 @@ public sealed class User : Entity, ICreatable, IUpdatable, ISoftDeletable
     // Entity Framework
     private User() { }
 
-    public static User New(string name, string email, string password, UserProfileEnum profileId, ICollection<UserCompany> companies)
+    public static User New(string name, string email, string login, string password, UserProfileEnum profileId, ICollection<UserCompany> companies)
     {
         return new User
         {
@@ -68,7 +70,7 @@ public sealed class User : Entity, ICreatable, IUpdatable, ISoftDeletable
         };
     }
 
-    public static User Existing(Guid id, string name, string email, UserProfileEnum profileId, ICollection<UserCompany> companies)
+    public static User Existing(Guid id, string name, string email, string login, UserProfileEnum profileId, ICollection<UserCompany> companies)
     {
         return new User
         {
